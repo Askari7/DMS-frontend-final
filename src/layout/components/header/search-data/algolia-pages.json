@@ -1,0 +1,406 @@
+[{
+        "title": "Components",
+        "url": "/components/components-page"
+    },
+
+    {
+        "title": "Dashboard Analytics",
+        "url": "/main/dashboard/analytics"
+    },
+    {
+        "title": "Dashboard Ecommerce",
+        "url": "/main/dashboard/ecommerce"
+    },
+    {
+        "title": "Dashboard NFT",
+        "url": "/main/dashboard/nft"
+    },
+
+    {
+        "title": "Advance Cards",
+        "url": "/main/widgets/cards/advance"
+    },
+    {
+        "title": "Statistics Cards",
+        "url": "/main/widgets/cards/statistics"
+    },
+    {
+        "title": "Analytics Cards",
+        "url": "/main/widgets/cards/analytics"
+    },
+    {
+        "title": "Charts",
+        "url": "/main/widgets/charts"
+    },
+    {
+        "title": "Selectbox",
+        "url": "/main/widgets/selectbox"
+    },
+    {
+        "title": "Illustration Set",
+        "url": "/main/widgets/illustration-set"
+    },
+    {
+        "title": "Crypto Icons",
+        "url": "/main/widgets/crypto-icons"
+    },
+    {
+        "title": "User Icons",
+        "url": "/main/widgets/user-icons"
+    },
+    {
+        "title": "Flags",
+        "url": "/main/widgets/flags"
+    },
+
+    {
+        "title": "Divider",
+        "url": "/main/layouts/divider"
+    },
+    {
+        "title": "Grid System",
+        "url": "/main/layouts/grid-system"
+    },
+
+    {
+        "title": "Calendar App",
+        "url": "/apps/calendar"
+    },
+
+    {
+        "title": "Contact",
+        "url": "/apps/contact"
+    },
+
+    {
+        "title": "Ecommerce Shop",
+        "url": "/apps/ecommerce/shop"
+    },
+    {
+        "title": "Ecommerce Wishlist",
+        "url": "/apps/ecommerce/wishlist"
+    },
+    {
+        "title": "Ecommerce Detail",
+        "url": "/apps/ecommerce/product-detail/0"
+    },
+    {
+        "title": "Ecommerce Checkout",
+        "url": "/apps/ecommerce/checkout"
+    },
+    {
+        "title": "Ecommerce Inventory",
+        "url": "/apps/ecommerce/inventory"
+    },
+
+    {
+        "title": "404 Error Page",
+        "url": "/pages/error-404"
+    },
+    {
+        "title": "403 Error Page",
+        "url": "/pages/error-403"
+    },
+    {
+        "title": "500 Error Page",
+        "url": "/pages/error-500"
+    },
+    {
+        "title": "503 Error Page",
+        "url": "/pages/error-503"
+    },
+    {
+        "title": "502 Error Page",
+        "url": "/pages/error-502"
+    },
+    {
+        "title": "Maintenance",
+        "url": "/pages/maintenance"
+    },
+    {
+        "title": "Coming Soon",
+        "url": "/pages/coming-soon"
+    },
+
+    {
+        "title": "Pricing",
+        "url": "/pages/pricing"
+    },
+
+    {
+        "title": "Profile",
+        "url": "/pages/profile/personel-information"
+    },
+    {
+        "title": "Profile Notification",
+        "url": "/pages/profile/notifications"
+    },
+    {
+        "title": "Profile Activity",
+        "url": "/pages/profile/activity"
+    },
+    {
+        "title": "Profile Security",
+        "url": "/pages/profile/security"
+    },
+    {
+        "title": "Profile Password Change",
+        "url": "/pages/profile/password-change"
+    },
+    {
+        "title": "Profile Social",
+        "url": "/pages/profile/connect-with-social"
+    },
+
+    {
+        "title": "Invoice",
+        "url": "/pages/invoice"
+    },
+
+    {
+        "title": "FAQ",
+        "url": "/pages/faq"
+    },
+
+    {
+        "title": "Knowledge Base 1",
+        "url": "/pages/knowledge-base/knowledge-base-1"
+    },
+    {
+        "title": "Knowledge Base 2",
+        "url": "/pages/knowledge-base/knowledge-base-2"
+    },
+
+    {
+        "title": "Landing",
+        "url": "/pages/landing"
+    },
+
+    {
+        "title": "Blank",
+        "url": "/pages/blank-page"
+    },
+
+    {
+        "title": "Login",
+        "url": "/pages/authentication/login"
+    },
+    {
+        "title": "Register",
+        "url": "/pages/authentication/register"
+    },
+    {
+        "title": "Recover Password",
+        "url": "/pages/authentication/recover-password"
+    },
+    {
+        "title": "Reset Password",
+        "url": "/pages/authentication/reset-password"
+    },
+    {
+        "title": "Login Modern",
+        "url": "/pages/authentication-modern/login"
+    },
+    {
+        "title": "Register Modern",
+        "url": "/pages/authentication-modern/register"
+    },
+    {
+        "title": "Recover Password Modern",
+        "url": "/pages/authentication/recover-password"
+    },
+    {
+        "title": "Reset Password Modern",
+        "url": "/pages/authentication-modern/reset-password"
+    },
+
+    {
+        "title": "Welcome",
+        "url": "/pages/welcome"
+    },
+    {
+        "title": "Password is changed",
+        "url": "/pages/password-is-changed"
+    },
+    {
+        "title": "Deactivated",
+        "url": "/pages/deactivated"
+    },
+    {
+        "title": "Lock",
+        "url": "/pages/lock"
+    },
+
+    {
+        "title": "StyleGuide",
+        "url": "/components/general/style-guide"
+    },
+    {
+        "title": "Buttons",
+        "url": "/components/general/buttons"
+    },
+    {
+        "title": "Icons",
+        "url": "/components/general/icons"
+    },
+
+    {
+        "title": "Breadcrumb",
+        "url": "/components/navigation/breadcrumb"
+    },
+    {
+        "title": "Dropdown",
+        "url": "/components/navigation/dropdown"
+    },
+    {
+        "title": "Menu",
+        "url": "/components/navigation/menu"
+    },
+    {
+        "title": "Pagination",
+        "url": "/components/navigation/pagination"
+    },
+    {
+        "title": "Steps",
+        "url": "/components/navigation/steps"
+    },
+
+    {
+        "title": "Checkbox",
+        "url": "/components/data-entry/checkbox"
+    },
+    {
+        "title": "Date Picker",
+        "url": "/components/data-entry/datepicker"
+    },
+    {
+        "title": "Form",
+        "url": "/components/data-entry/form"
+    },
+    {
+        "title": "Inputs",
+        "url": "/components/data-entry/inputs"
+    },
+    {
+        "title": "Input Number",
+        "url": "/components/data-entry/input-number"
+    },
+    {
+        "title": "Radio",
+        "url": "/components/data-entry/radio"
+    },
+    {
+        "title": "Rate",
+        "url": "/components/data-entry/rate"
+    },
+    {
+        "title": "Select",
+        "url": "/components/data-entry/select"
+    },
+    {
+        "title": "Slider",
+        "url": "/components/data-entry/slider"
+    },
+    {
+        "title": "Switch",
+        "url": "/components/data-entry/switch"
+    },
+    {
+        "title": "Upload",
+        "url": "/components/data-entry/upload"
+    },
+
+    {
+        "title": "Avatar",
+        "url": "/components/data-display/avatar"
+    },
+    {
+        "title": "Badge",
+        "url": "/components/data-display/badge"
+    },
+    {
+        "title": "Calendar",
+        "url": "/components/data-display/calendar"
+    },
+    {
+        "title": "Card",
+        "url": "/components/data-display/card"
+    },
+    {
+        "title": "Collapse",
+        "url": "/components/data-display/collapse"
+    },
+    {
+        "title": "Comment",
+        "url": "/components/data-display/comment"
+    },
+    {
+        "title": "Empty",
+        "url": "/components/data-display/empty"
+    },
+    {
+        "title": "List",
+        "url": "/components/data-display/list"
+    },
+    {
+        "title": "Popover",
+        "url": "/components/data-display/popover"
+    },
+    {
+        "title": "Table",
+        "url": "/components/data-display/table"
+    },
+    {
+        "title": "Tabs",
+        "url": "/components/data-display/tabs"
+    },
+    {
+        "title": "Tag",
+        "url": "/components/data-display/tag"
+    },
+    {
+        "title": "Timeline",
+        "url": "/components/data-display/timeline"
+    },
+    {
+        "title": "Tooltip",
+        "url": "/components/data-display/tooltip"
+    },
+
+    {
+        "title": "Alert",
+        "url": "/components/feedback/alert"
+    },
+    {
+        "title": "Drawer",
+        "url": "/components/feedback/drawer"
+    },
+    {
+        "title": "Modal",
+        "url": "/components/feedback/modal"
+    },
+    {
+        "title": "Message",
+        "url": "/components/feedback/message"
+    },
+    {
+        "title": "Notification",
+        "url": "/components/feedback/notification"
+    },
+    {
+        "title": "Popconfirm",
+        "url": "/components/feedback/popconfirm"
+    },
+    {
+        "title": "Progress",
+        "url": "/components/feedback/progress"
+    },
+    {
+        "title": "Result",
+        "url": "/components/feedback/result"
+    },
+    {
+        "title": "Skeleton",
+        "url": "/components/feedback/skeleton"
+    }
+]
