@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
-import {Row,Col,Divider,Form,Space,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,Radio} from "antd";
+
+import {Row,Col,Divider,Form,Space,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
+} from "antd";
+import { Radio } from "antd";
 import axios from "axios";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,14 +36,15 @@ export default function Document() {
   const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
 
   const history = useHistory();
+
   const columns = [
     {
-      title: "Document Id",
+      title: "Document Title",
       dataIndex: "id",
       key: "id",
     },
     {
-      title: "Document Title",
+      title: "Document Name",
       dataIndex: "title",
       key: "title",
     },
@@ -104,6 +108,13 @@ export default function Document() {
   const [mdrOptions, setMdrData] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
+  const [projectCode, setProjectCode] = useState("");
+  const [areaCode, setAreaCode] = useState("");
+  const [deptSuffix, setDeptSuffix] = useState("");
+  const [departments,setDepartment] = useState([])
+  const [projects,setProject] = useState([])
+
+  
 
   const documentModalShow = () => {
     setDocumentModalVisible(true);
@@ -159,8 +170,9 @@ export default function Document() {
       Object.entries(obj).forEach(([key, value]) => {
         formData.append(key, value);
       });
+      console.log(formData);
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/documents/",
+        `http://127.0.0.1:8083/api/documents/?projectCode=${projectCode}&areaCode=${areaCode}&deptSuffix=${deptSuffix}`,        
         formData,
         {
           headers: {
@@ -193,17 +205,19 @@ export default function Document() {
           },
         }
       );
-  
+        
+
       const savedData = getAllKeys('doc');
       console.log('saved data', savedData);
   
       var allJsonData = savedData.map((key) => loadData(key));
-  console.log(allJsonData);
-      console.log(response.data);
-  
+      console.log(allJsonData);
+      console.log(response.data,"received");
       // Check if response.data is an array before including it in the setData call
       const newData = Array.isArray(response.data) ? response.data : [];
-  
+
+      allJsonData,newData 
+
       setData([...allJsonData, ...newData]);
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
@@ -221,9 +235,10 @@ export default function Document() {
           },
         }
       );
+      setDepartment(response.data)
       const options = [];
       for (const item of response?.data) {
-        options.push({ value: item?.id, label: item?.title });
+        options.push({ value: item?.suffix, label: item?.suffix });
       }
       setDepartments(options); // Assuming the response.data is an array of projects
     } catch (error) {
@@ -241,9 +256,10 @@ export default function Document() {
           },
         }
       );
+      setProject(response.data)
       const options = [];
       for (const item of response?.data) {
-        options.push({ value: item?.id, label: item?.title });
+        options.push({ value: item?.code, label: item?.code });
       }
       setProjects(options); // Assuming the response.data is an array of projects
     } catch (error) {
@@ -367,7 +383,6 @@ useEffect(() => {
       { label: "Pending Endorsement (Client)", value: "pending-endorsement-client" },
       { label: "Endorsed (Client)", value: "endorsed-client" },
       { label: "Document Ready to Publish", value: "ready-to-publish" },
-              // ... (add other status options)
             ]}
             value={selectedStatus}
             onChange={(value) => setSelectedStatus(value)}
@@ -433,39 +448,7 @@ useEffect(() => {
                 />
               </Form.Item>
 
-              {/* <Form.Item */}
-              {/* label="Department Name" */}
-              {/* name="deptName" */}
-              {/* rules={[ */}
-              {/* { */}
-              {/* required: true, */}
-              {/* message: "Please select Department Name", */}
-              {/* }, */}
-              {/* ]} */}
-              {/* > */}
-              {/* <Select */}
-              {/* options={departmentOptions} */}
-              {/* value={departmentId} */}
-              {/* onChange={(value) => setDepartmentId(value)} */}
-              {/* /> */}
-              {/* </Form.Item> */}
 
-              {/* <Form.Item */}
-              {/* label="Project Name" */}
-              {/* name="projectName" */}
-              {/* rules={[ */}
-              {/* { */}
-              {/* required: true, */}
-              {/* message: "Please select Project Name", */}
-              {/* }, */}
-              {/* ]} */}
-              {/* > */}
-              {/* <Select */}
-              {/* options={projectOptions} */}
-              {/* value={projectId} */}
-              {/* onChange={(value) => setProjectId(value)} */}
-              {/* /> */}
-              {/* </Form.Item> */}
               <Form.Item
                 label="MDR"
                 name="mdr"
@@ -482,6 +465,62 @@ useEffect(() => {
                   onChange={(value) => setMDR(value)}
                 />
               </Form.Item>
+
+              <Form.Item
+                label="Project Code"
+                name="projectCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Project Code",
+                  },
+                ]}
+              >
+                <Select
+                  options={projectOptions}
+                  value={projectCode}
+                  onChange={(value) => setProjectCode(value)}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Area Code"
+                name="areaCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Area Code",
+                  },
+                ]}
+              >
+                <Select
+            options={[
+              { label: "01", value: "01" },
+              { label: "02", value: "02" },
+
+            ]}
+                  value={areaCode}
+                  onChange={(value) => setAreaCode(value)}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Department Suffix"
+                name="deptSuffix"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Add Department Suffix",
+                  },
+                ]}
+              >
+                <Select
+            options={departmentOptions}
+                  value={deptSuffix}
+                  onChange={(value) => setDeptSuffix(value)}
+                />
+              </Form.Item>
+
               <Form.Item
                 label="Extension"
                 name="extension"

@@ -167,21 +167,35 @@ import { saveData, loadData, getAllKeys } from '../../storage';
         var title=getMdrTitle;
         var mdrCode=getMdrCode;
         var count = selectedRows.length
-        selectedRows.forEach((index) => {
+        selectedRows.forEach(async (index) => {
           const documentValue = data[index].document;
-  
-          saveData(`doc-${index}`,  {
-            title,
-            departmentId,
-            projectId,
-            companyId: user?.user?.companyId,
-            authorId: user?.user?.id,
-            authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
-            mdrCode,
-            projectCode: getProjectCode,
-            departmentName: department?.label,id:documentValue
-          });
+         const masterDocumentName=title;
           console.log(documentValue);
+          try {
+            var title=documentValue;
+            const responseDoc = await axios.post(
+              "http://127.0.0.1:8083/api/documents/",
+              {
+                title,
+                departmentId,
+                projectId,
+                companyId: user?.user?.companyId,
+                userId: user?.user?.id,
+                userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+                masterDocumentId: mdrCode,
+                masterDocumentName,
+                projectCode: getProjectCode,
+                departmentName: department?.label,
+              },
+              {
+                headers: {
+                  Authorization: user?.accessToken,
+                },
+              }
+            );
+          } catch (error) {
+            console.log(error);
+          }
         });
 
         const response = await axios.post(
@@ -202,7 +216,6 @@ import { saveData, loadData, getAllKeys } from '../../storage';
           {
             headers: {
               Authorization: user?.accessToken,
-              // Add other headers if needed
             },
           }
         );
