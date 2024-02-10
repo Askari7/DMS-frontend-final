@@ -35,9 +35,12 @@ import { saveData, loadData, getAllKeys } from '../../storage';
     const getMdrCode = params.get('mdrCode');
     const projectId = params.get('projectId');
     const getMdrTitle= params.get('title');
+    const status= params.get('status');
+
     const departmentId = params.get('departmentId');
   console.log(getProjectCode,getMdrCode);
-  const departmentOptionsString = params.get('departmentOptions');
+   let departmentOptionsString = params.get('departmentOptions');
+  console.log(departmentOptionsString);
 
   const projectOptions = params.get('projectOptions');
 
@@ -51,6 +54,12 @@ import { saveData, loadData, getAllKeys } from '../../storage';
     const [selectedRows, setSelectedRows] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
+    const departmentOptions = JSON.parse(departmentOptionsString);
+    const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
+    const departmentIds = departmentId.split(',').map(Number);
+    const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
+    const departmentLabelsString = departmentLabels.join(', ');
+    console.log(departmentLabelsString);
     const [data, setData] = useState([
       // Add your data here
         // Section A: PROJECT MANAGEMENT
@@ -154,8 +163,10 @@ import { saveData, loadData, getAllKeys } from '../../storage';
         const department = departmentOptions.find(
           (item) => item?.value == departmentId
         );
+        console.log(department);
         var title=getMdrTitle;
         var mdrCode=getMdrCode;
+        var count = selectedRows.length
         selectedRows.forEach((index) => {
           const documentValue = data[index].document;
   
@@ -172,18 +183,21 @@ import { saveData, loadData, getAllKeys } from '../../storage';
           });
           console.log(documentValue);
         });
+
         const response = await axios.post(
           "http://127.0.0.1:8083/api/documents/mdr",
           {
             title,
             departmentId,
             projectId,
+            noOfDocuments:count,
+            status,
             companyId: user?.user?.companyId,
             authorId: user?.user?.id,
             authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
             mdrCode,
             projectCode: getProjectCode,
-            departmentName: department?.label,
+            departmentName: departmentLabelsString,
           },
           {
             headers: {
@@ -202,7 +216,6 @@ import { saveData, loadData, getAllKeys } from '../../storage';
       
         // Save the document field value for each selected row
 
-        documentModalCancel();
       } catch (error) {
         // Handle errors
         console.error("Error adding documents:", error);
@@ -226,7 +239,6 @@ import { saveData, loadData, getAllKeys } from '../../storage';
     };
     const mydocumentSaved = async() => {
       // Check if a row is selected
-     
     await addDocument();
       // Display success message
       message.success('Document values saved successfully.');

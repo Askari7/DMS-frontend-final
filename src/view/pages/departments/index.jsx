@@ -111,6 +111,8 @@ setDepartmentId(record['id']);
   const [userModalVisible, setUserModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [title, setTitle] = useState("");
+  const [suffix, setSuffix] = useState("");
+
   const [departmentId, setDepartmentId] = useState("");
 
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
@@ -137,7 +139,6 @@ setDepartmentId(record['id']);
   const associateUserDepartment = async () => {
     try {
       console.log(userOptions.find(user => user.value === userData),);
-
       const response = await axios.post(
         "http://127.0.0.1:8083/api/departments/associate",
         {
@@ -145,8 +146,8 @@ setDepartmentId(record['id']);
           companyId: user?.user?.companyId,
           userId: userData,
           departmentCreator:0 ,
+          noOfUsers:noOfUsers+1,
           departmentId:departmentId
-
         },
         {
           headers: {
@@ -167,7 +168,7 @@ setDepartmentId(record['id']);
       console.error("Error adding departments:", error?.message);
     }
   };
-  
+  const noOfUsers = 0
   const addDepartments = async () => {
     try {
       console.log(user);
@@ -175,7 +176,8 @@ setDepartmentId(record['id']);
         "http://127.0.0.1:8083/api/departments/",
         {
           title,
-          NoOfUsers:0,
+          suffix,
+          noOfUsers:noOfUsers,
           companyId: user?.user?.companyId,
           authorId: user?.user?.id,
           authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
@@ -183,11 +185,9 @@ setDepartmentId(record['id']);
         {
           headers: {
             Authorization: user?.accessToken,
-            // Add other headers if needed
           },
         }
       );
-      // Handle the response as needed
       console.log("departments response", response);
       message.success(response?.data?.message);
       fetchData();
@@ -210,6 +210,7 @@ setDepartmentId(record['id']);
           },
         }
       );
+      console.log(response.data);
       setData(response.data); // Assuming the response.data is an array of departments
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -249,6 +250,22 @@ setDepartmentId(record['id']);
                 <Input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Department Suffix"
+                name="suffix"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your suffix",
+                  },
+                ]}
+              >
+                <Input
+                  value={title}
+                  onChange={(e) => setSuffix(e.target.value)}
                 />
               </Form.Item>
 

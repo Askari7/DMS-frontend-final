@@ -60,7 +60,6 @@ const columns = [
 
 export default function Users() {
   const [selectedDepartments, setSelectedDepartments] = useState("");
-
   // const departmentOptions = [
   //   { label: 'Project Management', value: 'projectManagement' },
   //   { label: 'Process', value: 'process' },
@@ -76,13 +75,11 @@ export default function Users() {
   const [userModalVisible, setUserModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const isEmailValid = /\S+@\S+\.\S+/.test(email);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
-  
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -90,7 +87,7 @@ export default function Users() {
         {
           headers: {
             Authorization: user?.accessToken,
-            // Add other headers if needed
+            // Add other headers 
           },
         }
       );

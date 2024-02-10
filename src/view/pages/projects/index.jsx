@@ -67,8 +67,8 @@ const columns = [
   },
   {
     title: "No of Users",
-    dataIndex: "authorId",
-    key: "numberOfUsers",
+    dataIndex: "noOfUsers",
+    key: "noOfUsers",
   },
 
   {
@@ -177,6 +177,7 @@ export default function Projects() {
           title: projName,
           departmentId,
           status,
+          noOfUsers:0,
           clientEmail,
           code,
           companyId: user?.user?.companyId,

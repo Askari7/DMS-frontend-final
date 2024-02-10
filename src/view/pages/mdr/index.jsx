@@ -61,7 +61,7 @@ export default function MDR() {
   const [projectOptions, setProjects] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
-  const [selectedDepartments, setSelectedDepartments] = useState();
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedReviewer, setSelectedReviewer] = useState([]);
 
   const [assignedEmployees, setAssignedEmployees] = useState([]);
@@ -86,7 +86,7 @@ export default function MDR() {
     console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
 const serializedProjectOptions = JSON.stringify(projectOptions);
-    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}`);};
+    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}&status=${status}`);};
  
   
   const documentModalShow = () => {
@@ -155,7 +155,7 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
         "http://127.0.0.1:8083/api/documents/mdr",
         {
           title,
-          departmentId,
+          selectedDepartments,
           projectId,
           noOfDocuments,
           companyId: user?.user?.companyId,
@@ -320,12 +320,12 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
       console.error("Error fetching departments:", error?.message);
     }
   };
-  const handleCheckboxChange = (checkedValues) => {
-    // Concatenate all selected checkboxes into an array
-    const concatenatedString = checkedValues.join(' ')
-    setSelectedDepartments(concatenatedString);
-    console.log(selectedDepartments);
-  };
+  // const handleCheckboxChange = (checkedValues) => {
+  //   // Concatenate all selected checkboxes into an array
+  //   const concatenatedString = checkedValues.join(' ')
+  //   setSelectedDepartments(concatenatedString);
+  //   console.log(selectedDepartments);
+  // };
   useEffect(() => {
     setUser(JSON.parse(localStorage?.getItem("user")));
     // Fetch data when the component mounts
@@ -430,6 +430,18 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
               >
                <Checkbox.Group options={userOptions} value={selectedApprover} onChange={setSelectedApprover} />
               </Form.Item>
+              <Form.Item label="Status" name="status">
+            <Select
+              default="ongoing"
+              options={[
+                { value: "ongoing", label: "Ongoing" },
+                { value: "clientReviewPending", label: "Client Review Pending" },
+                { value: "complete", label: "Complete" },
+              ]}
+              value={status}
+              onChange={(e) => setStatus(e)}
+            />
+          </Form.Item>
               {/* <Form.Item
                 label="No of Documents"
                 name="noOfDocuments"

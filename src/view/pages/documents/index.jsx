@@ -2,25 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
-
-import {
-  Row,
-  Col,
-  Divider,
-  Form,
-  Space,
-  Table,
-  Select,
-  Tag,
-  Input,
-  DatePicker,
-  TimePicker,
-  Button,
-  Modal,
-  message,
-  Upload,
-} from "antd";
-import { Radio } from "antd";
+import {Row,Col,Divider,Form,Space,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,Radio} from "antd";
 import axios from "axios";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,7 +31,6 @@ const uploadProps = {
 
 export default function Document() {
   const history = useHistory();
-
   const columns = [
     {
       title: "Document Id",
@@ -107,7 +88,6 @@ export default function Document() {
     }
   ];
   const [selectedDocument, setSelectedDocument] = useState(null);
-
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [docTitle, setDocTitle] = useState("");
   const [projectId, setProjectId] = useState("");
