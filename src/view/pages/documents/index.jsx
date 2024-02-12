@@ -13,6 +13,8 @@ import { UploadOutlined } from "@ant-design/icons";
 import ProtectedAppPage from "../Protected";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import MyTreeView from '../treeview/MyTreeView.jsx';
+
 
 const uploadProps = {
   name: "file",
@@ -37,7 +39,7 @@ export default function Document() {
 
   const columns = [
     {
-      title: "Document Title",
+      title: "Document Id",
       dataIndex: "id",
       key: "id",
     },
@@ -110,9 +112,14 @@ export default function Document() {
   const [deptSuffix, setDeptSuffix] = useState("");
   const [departments,setDepartment] = useState([])
   const [projects,setProject] = useState([])
+  const [showTreeView, setShowTreeView] = useState(false);
 
-  
+  const handleProjectWiseClick = () => {
+    console.log("clicked");
+    setShowTreeView(true);
+  };
 
+ 
   const documentModalShow = () => {
     setDocumentModalVisible(true);
   };
@@ -201,7 +208,7 @@ export default function Document() {
 
       allJsonData,newData 
 
-      setData([...allJsonData, ...newData]);
+      setData([...newData]);
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
     }
@@ -554,7 +561,7 @@ useEffect(() => {
           </Col>
         </Row>
       </Modal>
-      <div style={{ textAlign: "right", marginBottom: "16px" }}>
+      <div style={{ textAlign: "right", marginBottom: "16px" ,padding:"5px"}}>
         <Button
           type="primary"
           onClick={documentModalShow}
@@ -562,9 +569,20 @@ useEffect(() => {
         >
           Add Documents
         </Button>
+
+        <Button
+          type="primary"
+          onClick={handleProjectWiseClick}
+          disabled={user?.user?.roleId == 3}
+        >Project Wise
+        </Button>
       </div>
       <Table columns={columns} dataSource={data} />
+      {showTreeView && <MyTreeView projects={data} />}
+
       <ProtectedAppPage />
+
+      
     </>
   );
 }

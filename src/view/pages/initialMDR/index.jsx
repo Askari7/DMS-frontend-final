@@ -186,6 +186,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
                 masterDocumentName,
                 projectCode: getProjectCode,
                 departmentName: department?.label,
+                status : "Initialized"
               },
               {
                 headers: {

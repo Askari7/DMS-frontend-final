@@ -620,9 +620,19 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
             key: "departmentId",
           },
           {
+            title: "Dept Name",
+            dataIndex: "departmentName",
+            key: "departmentName",
+          },
+          {
             title: "Project Id",
             dataIndex: "projectId",
             key: "projectId",
+          },
+          {
+            title: "Project Code",
+            dataIndex: "projectCode",
+            key: "projectCode",
           },
           {
             title: "Author Id",
