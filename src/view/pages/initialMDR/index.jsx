@@ -20,12 +20,9 @@ import {
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
-
-
-
+import jsondata from './data.json';
 import { saveData, loadData, getAllKeys } from '../../storage';
-
-
+console.log(jsondata);
 
   const MdrTemplate = ({ projectCode, mdrCode }) => {
     const [customModalVisible, setCustomModalVisible] = useState(false);
@@ -60,43 +57,8 @@ import { saveData, loadData, getAllKeys } from '../../storage';
     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
     const departmentLabelsString = departmentLabels.join(', ');
     console.log(departmentLabelsString);
-    const [data, setData] = useState([
-      // Add your data here
-        // Section A: PROJECT MANAGEMENT
-        { category: 'PROJECT MANAGEMENT', code: 'A', documentTitle: 'Scope of Work', additionalAssigned: 'e.g. Only for 5 kT Storage Tank Construction', areaCode: '01', departmentCode: 'PM', documentContentCode: 'SOW', sequenceNumber: '00X', document: '2014-01-PM-SOW-00X' },
-      { category: 'PROJECT MANAGEMENT', code: 'A.1', documentTitle: 'Scope of Work', areaCode: '01', departmentCode: 'PM', documentContentCode: 'SOW', sequenceNumber: '00X', document: '2014-01-PM-SOW-00X' },
-      { category: 'PROJECT MANAGEMENT', code: 'A.2', documentTitle: 'Specification', areaCode: '01', departmentCode: 'PM', documentContentCode: 'SP', sequenceNumber: '00X', document: '2014-01-PM-SP-00X' },
-      { category: 'PROJECT MANAGEMENT', code: 'A.3', documentTitle: 'Report', areaCode: '01', departmentCode: 'PM', documentContentCode: 'REP', sequenceNumber: '00X', document: '2014-01-PM-REP-00X' },
-      // ... (repeat for other items in section A)
-    
-      // Section B: PROCESS
-      { category: 'PROCESS', code: 'B', documentTitle: 'Scope of Work', areaCode: '01', departmentCode: 'PRO', documentContentCode: 'SOW', sequenceNumber: '00X', document: '2014-01-PRO-SOW-00X' },
-      { category: 'PROCESS', code: 'B.1', documentTitle: 'Scope of Work', areaCode: '01', departmentCode: 'PRO', documentContentCode: 'SOW', sequenceNumber: '00X', document: '2014-01-PRO-SOW-00X' },
-      { category: 'PROCESS', code: 'B.2', documentTitle: 'Specification', areaCode: '01', departmentCode: 'PRO', documentContentCode: 'SP', sequenceNumber: '00X', document: '2014-01-PRO-SP-00X' },
-      { category: 'PROCESS', code: 'B.3', documentTitle: 'Report', areaCode: '01', departmentCode: 'PRO', documentContentCode: 'REP', sequenceNumber: '00X', document: '2014-01-PRO-REP-00X' },
-      // ... (repeat for other items in section B)
-    
-      // Section C: MECHANICAL (PIPING)
-      { category: 'MECHANICAL (PIPING)', code: 'C', documentTitle: 'Scope of Work', areaCode: '01', departmentCode: 'PIP', documentContentCode: 'SOW', sequenceNumber: '00X', document: '2014-01-PIP-SOW-00X' },
-      { category: 'MECHANICAL (PIPING)', code: 'C.1', documentTitle: 'Scope of Work', areaCode: '01', departmentCode: 'PIP', documentContentCode: 'SOW', sequenceNumber: '00X', document: '2014-01-PIP-SOW-00X' },
-      { category: 'MECHANICAL (PIPING)', code: 'C.2', documentTitle: 'Specification', areaCode: '01', departmentCode: 'PIP', documentContentCode: 'SP', sequenceNumber: '00X', document: '2014-01-PIP-SP-00X' },
-      { category: 'MECHANICAL (PIPING)', code: 'C.3', documentTitle: 'Report', areaCode: '01', departmentCode: 'PIP', documentContentCode: 'REP', sequenceNumber: '00X', document: '2014-01-PIP-REP-00X' },
-        { category: 'PROJECT MANAGEMENT', code: 'A.1', documentTitle: 'Scope of Work', areaCode: '01',departmentCode: 'PM',documentContentCode: 'SOW',sequenceNumber: '00X', document: '2014-01-PM-SOW-00X' },
-        { category: 'PROJECT MANAGEMENT', code: 'A.2', documentTitle: 'Specification', codeDetails: '01 PM SP 00X', document: '2014-01-PM-SP-00X' },
-        // ... (repeat for other items in section A)
-      
-        // Section B: PROCESS
-        { category: 'PROCESS', code: 'B.1', documentTitle: 'Scope of Work', codeDetails: '01 PRO SOW 00X', document: '2014-01-PRO-SOW-00X' },
-        // ... (repeat for other items in section B)
-      
-        // Section C: MECHANICAL (PIPING)
-        { category: 'MECHANICAL (PIPING)', code: 'C.1', documentTitle: 'Scope of Work', codeDetails: '01 PIP SOW 00X', document: '2014-01-PIP-SOW-00X' },
-        // ... (repeat for other items in section C)
-      
-        // ... (repeat for other sections)
-      ]); // Add state for data
 
-
+    const [data, setData] = useState(jsondata);
   
     const columns = [
       {

@@ -577,12 +577,11 @@ useEffect(() => {
         >Project Wise
         </Button>
       </div>
-      <Table columns={columns} dataSource={data} />
-      {showTreeView && <MyTreeView projects={data} />}
-
-      <ProtectedAppPage />
-
+      {
+        showTreeView?<MyTreeView />:<Table columns={columns} dataSource={data} />
+      }
       
+      <ProtectedAppPage />      
     </>
   );
 }
