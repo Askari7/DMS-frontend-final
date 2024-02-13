@@ -64,6 +64,9 @@ const addDepartments = async () => {
       if (selectedDepartments.includes('Quality')) {
         selectedSuffix.push('QLT')
       }
+      if (selectedDepartments.includes('Piping')) {
+        selectedSuffix.push('PIP')
+      }
       const response = await axios.post(
         "http://127.0.0.1:8083/api/departments/",
         {

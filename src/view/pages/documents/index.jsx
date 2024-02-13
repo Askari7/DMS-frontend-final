@@ -35,6 +35,8 @@ const uploadProps = {
 };
 
 export default function Document() {
+  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
+
   const history = useHistory();
 
   const columns = [
@@ -81,11 +83,12 @@ export default function Document() {
         <Space size="middle">
           {user.user.roleId != 1 ? (
             <a>
-              Upload <input type="file" onChange={handleFileChange} />
+              Upload <input type="file" onChange={(e)=>handleFileChange(e,record)} />
             </a>
           ) : (
             <>
-              <a onClick={() => history.push(`/pages/mypdf?documentId=${record.id}`)}>Open</a>
+<a onClick={() => handleOpen(record)}>Open</a>
+              {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.id}`)}>Open</a> */}
               <a onClick={() => statusModalShow(record)}>Add Status</a>
             </>
           )}
@@ -123,7 +126,13 @@ export default function Document() {
   const documentModalShow = () => {
     setDocumentModalVisible(true);
   };
-
+  const handleOpen = (record) => {
+    // Replace 'John' with the actual doc's name
+    const docName = record.id;
+    const url= `${BACKEND_URL}/documents/${docName+'.pdf'}` 
+    // Redirect to the external URL
+    window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName+'.pdf'}&url=${url}`;
+  };
   const documentModalCancel = () => {
     setMDR("");
     setDocTitle("");
@@ -133,9 +142,17 @@ export default function Document() {
     setTextEditorValue("");
     setDocumentModalVisible(false);
   };
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    console.log('my file',file);
+  const handleFileChange = (e, record) => {
+    const uploadedFile = e.target.files[0];
+    if (uploadedFile.name === `${record.id}.pdf`) {
+      setFile(uploadedFile);
+      console.log('Uploaded file:', uploadedFile);
+    } else {
+      // Show an error message or take appropriate action
+      message.error('File name does not match '+ record.id);
+      // Clear the file input field
+      e.target.value = null;
+    }
   };
 
 
