@@ -13,7 +13,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import ProtectedAppPage from "../Protected";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import MyTreeView from '../treeview/MyTreeView.jsx';
+// import MyTreeView from '../treeview/MyTreeView.jsx';
 
 
 const uploadProps = {
@@ -81,14 +81,17 @@ export default function Document() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {user.user.roleId != 1 ? (
+          {user.user.roleId != 1 ? record.status=='Initialized'? (
             <a>
               Upload <input type="file" onChange={(e)=>handleFileChange(e,record)} />
             </a>
-          ) : (
+          ) :(
+            <a onClick={() => handleOpen(record)}>Open</a>
+
+          ): record.status =='Initialized'?<></>:(
             <>
 <a onClick={() => handleOpen(record)}>Open</a>
-              {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.id}`)}>Open</a> */}
+              {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.title}`)}>Open</a> */}
               <a onClick={() => statusModalShow(record)}>Add Status</a>
             </>
           )}
@@ -128,10 +131,11 @@ export default function Document() {
   };
   const handleOpen = (record) => {
     // Replace 'John' with the actual doc's name
-    const docName = record.id;
+    const docName = record.title;
     const url= `${BACKEND_URL}/documents/${docName+'.pdf'}` 
+    console.log(user.user.roleId,user.user.firstName,user);
     // Redirect to the external URL
-    window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName+'.pdf'}&url=${url}`;
+    window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName+'.pdf'}&url=${url}&user='${user.user.roleId} ${user.user.firstName}'`;
   };
   const documentModalCancel = () => {
     setMDR("");
@@ -142,17 +146,50 @@ export default function Document() {
     setTextEditorValue("");
     setDocumentModalVisible(false);
   };
-  const handleFileChange = (e, record) => {
+  const handleFileChange = async (e, record) => {
     const uploadedFile = e.target.files[0];
-    if (uploadedFile.name === `${record.id}.pdf`) {
+    console.log(record);
+    const title=record.title;
+    if (uploadedFile.name === `${record.title}.pdf`) {
       setFile(uploadedFile);
       console.log('Uploaded file:', uploadedFile);
+      try {
+       
+       
+        const response = await axios.post(
+          `http://127.0.0.1:8083/api/documents/upload`,        
+          {title},
+          {
+            headers: {
+              Authorization: user?.accessToken,
+              // Add other headers if needed
+            },
+          }
+        );
+        // Handle the response as needed
+        console.log(response);
+        message.success(response?.data?.message);
+       
+      } catch (error) {
+        // Handle errors
+  
+        message.error(error);
+      }
+
     } else {
       // Show an error message or take appropriate action
-      message.error('File name does not match '+ record.id);
+      message.error('File name does not match '+ record.title);
       // Clear the file input field
       e.target.value = null;
     }
+  };
+
+  const handleFile = (e) => {
+    const uploadedFile = e.target.files[0];
+    
+      setFile(uploadedFile);
+      console.log('Uploaded file:', uploadedFile);
+   
   };
 
 
@@ -551,7 +588,7 @@ useEffect(() => {
               {/* <Upload {...uploadProps}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload> */}
-              <input type="file" onChange={handleFileChange} />
+              <input type="file" onChange={handleFile} />
               <Row>
                 <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button

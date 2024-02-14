@@ -302,13 +302,31 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
         var role='Engineer'
         if(item.roleId==1){
            role ='CEO'
+
+           options.push({
+            value: item?.id,
+            label: `${item?.firstName} ${role} `,
+          });
         } if(item.roleId==2){
-          role ='HEAD'
+          role =`HEAD of ${item.department}`
+          options.push({
+            value: item?.id,
+            label: `${item?.firstName} ${role} `,
+          });
        }
+       if(item.roleId==3){
+        role =`Senior Engineer ${item.department}`
         options.push({
           value: item?.id,
           label: `${item?.firstName} ${role} `,
         });
+     } if(item.roleId==4){
+       role ='Junior'
+    }
+    if(item.roleId==5){
+      role ='Designer/Draughtsmen'
+   } 
+
       }
       const filteredArray = options.filter(item => item.roleId !== 1);
 
