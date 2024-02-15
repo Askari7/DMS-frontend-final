@@ -71,6 +71,8 @@ export default function MDR() {
   const [departmentOptions,setDepartmentOptions] = useState([])
   const [userOptions, setUserData] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [userOption, setUserDatalist] = useState([]);
+  
 
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
@@ -85,8 +87,12 @@ export default function MDR() {
     const project = projectOptions.find((item) => item?.value == projectId);
     console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
+    
 const serializedProjectOptions = JSON.stringify(projectOptions);
-    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}&status=${status}`);};
+const serializedSelectedApprover = JSON.stringify(selectedApprover);
+const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+
+    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}&status=${status}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`);};
  
   
   const documentModalShow = () => {
@@ -298,26 +304,37 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
       setAllUsers(response.data)
       console.log(response?.data, "Users");
       const options = [];
+      const option = [];
+
       for (const item of response?.data) {
         var role='Engineer'
         if(item.roleId==1){
            role ='CEO'
 
            options.push({
-            value: item?.id,
+            value: {id:item?.id,name:item.firstName},
             label: `${item?.firstName} ${role} `,
           });
+        
         } if(item.roleId==2){
           role =`HEAD of ${item.department}`
           options.push({
-            value: item?.id,
+            value: {id:item?.id,name:item.firstName},
+            label: `${item?.firstName} ${role} `,
+          });
+          option.push({
+            value:item?.id,
             label: `${item?.firstName} ${role} `,
           });
        }
        if(item.roleId==3){
         role =`Senior Engineer ${item.department}`
         options.push({
-          value: item?.id,
+          value: {id:item?.id,name:item.firstName},
+          label: `${item?.firstName} ${role} `,
+        });
+        option.push({
+          value:item?.id,
           label: `${item?.firstName} ${role} `,
         });
      } if(item.roleId==4){
@@ -333,6 +350,11 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
       setFilteredUsers(filteredArray)
 
       setUserData(options);
+      setUserDatalist(option);
+
+      console.log('my options',options);
+
+      console.log('my users',userOptions);
        // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -555,7 +577,7 @@ const serializedProjectOptions = JSON.stringify(projectOptions);
                 ]}
               >
               <Select
-                  options={userOptions}
+                  options={userOption}
                   value={assignedEmployees}
                   onChange={(value) => setAssignedEmployees(value)}
                 />

@@ -93,7 +93,7 @@ export default function Users() {
       );
       const options = [];
       for (const item of response?.data) {
-        options.push({ value: item?.title, label: item?.title });
+        options.push({ value: item?.id, label: item?.title });
       }
       setDepartmentOptions(options); // Assuming the response.data is an array of projects
     } catch (error) {
@@ -111,10 +111,10 @@ export default function Users() {
   const addUser = async () => {
     try {
       const roleOptions = {
-        "head":1,
-        "seniorEngineer":2,
-        "juniorEngineer":3,
-        "designer":4
+        "head":2,
+        "seniorEngineer":3,
+        "juniorEngineer":4,
+        "designer":5
       }
       const response = await axios.post(
         `http://127.0.0.1:8083/api/users`,
