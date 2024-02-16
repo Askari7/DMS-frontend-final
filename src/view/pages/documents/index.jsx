@@ -135,9 +135,12 @@ export default function Document() {
   const [assignedEmployees, setAssignedEmployees] = useState([]);
 const [myrecord,setMyRecord]=useState({});
 
-  const assignModalShow = (record) => {
+  const assignModalShow = async (record) => {
+    console.log('recorddddd',record);
     setMyRecord(record);
     console.log('hellloooo',myrecord);
+    await  fetchUsers();
+   
     setAssignModalVisible(true);
 
   };
@@ -225,7 +228,32 @@ const [myrecord,setMyRecord]=useState({});
       console.log(response?.data, "Users");
       const option = [];
 let role='';
-if(user.user.roleId==2){
+if(user.user.roleId==1){
+  for (const item of response?.data) {
+    console.log(myrecord,myrecord.departmentId,item.departmentId);
+   if(item.roleId==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
+    role =`Head of ${item.department}`
+    option.push({
+      value:item?.id,
+      label: `${item?.firstName} ${role} `,
+    });
+ } 
+//    if(item.roleId==4 && item.departmentId==user.user.departmentId){
+//      role = `Junior ${item.department}`
+//      option.push({
+//       value:item?.id,
+//       label: `${item?.firstName} ${role} `,
+//     });
+//   }
+//   if(item.roleId==5 && item.departmentId==user.user.departmentId){
+//     role ='Designer/Draughtsmen'
+//     option.push({
+//       value:item?.id,
+//       label: `${item?.firstName} ${role} `,
+//     });
+//  } 
+   } }
+if(user.user.roleId==2 ){
       for (const item of response?.data) {
        if(item.roleId==3 && item.departmentId==user.user.departmentId){
         role =`Senior Engineer ${item.department}`
@@ -324,7 +352,7 @@ if(user.user.roleId==2){
       // Handle the response as needed
       console.log(response);
       message.success(response?.data?.message);
-      fetchData();
+     await fetchData();
       documentModalCancel();
     } catch (error) {
       // Handle errors
@@ -337,7 +365,7 @@ if(user.user.roleId==2){
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&roleId=${user.user.roleId}&department=${user.user.departmentId}`,
+        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -476,8 +504,8 @@ useEffect(() => {
   fetchProjects();
   fetchMDR();
   fetchData();
-  fetchUsers();
-}, []); // Add updatedData as a dependency
+  fetchUsers()
+}, [myrecord]); // Add updatedData as a dependency
 
 useEffect(() => {
   // Update the data state with the updatedData
@@ -494,7 +522,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
       (item) => item?.value == departmentId
     );
     const response = await axios.put(
-      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.id}&docName=${myrecord.title}`,
+      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
       {},
       {
         headers: {
