@@ -1353,15 +1353,15 @@ import Button from '@mui/material/Button';
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
+    flexGrow: 5,
     maxWidth: 1000,
   },
   projectNode: {
     backgroundColor: '#f0f0f0',
-    fontSize: '18px',
-    padding: '8px',
+    fontSize: '24px',
+    padding: '12px',
     borderRadius: '4px',
-    marginBottom: '8px',
+    marginBottom: '12px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
       backgroundColor: '#f0f0f0',
@@ -1369,11 +1369,11 @@ const useStyles = makeStyles({
   },
   mdrNode: {
     backgroundColor: '#f0f0f0',
-    fontSize: '16px',
-    padding: '8px',
+    fontSize: '18px',
+    padding: '12px',
     borderRadius: '4px',
     marginLeft: '16px',
-    marginBottom: '6px',
+    marginBottom: '12px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
       backgroundColor: '#f0f0f0',
@@ -1381,11 +1381,11 @@ const useStyles = makeStyles({
   },
   departmentIdNode: {
     backgroundColor: '#f0f0f0',
-    fontSize: '14px',
-    padding: '4px',
+    fontSize: '16px',
+    padding: '12px',
     borderRadius: '4px',
     marginLeft: '16px',
-    marginBottom: '4px',
+    marginBottom: '12px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
       backgroundColor: '#f0f0f0',
@@ -1405,6 +1405,17 @@ const useStyles = makeStyles({
   icon: {
     marginRight: '8px',
   },
+  buttonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '8px',
+    padding: '12px',
+  },
+  status: {
+    marginRight: '12px',
+    fontSize: '20px',
+    fontWeight: 'bold',
+  },
 });
 
 const projects = [
@@ -1418,7 +1429,18 @@ const projects = [
   { id: 8, title: '2014-01-PRO-SP-003', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
   { id: 9, title: '2014-01-PIP-SOW-001', companyId: 1, departmentId: '5,6', projectId: '5', mdr: "5" },
   { id: 10, title: '2014-01-PIP-SOW-002', companyId: 1, departmentId: '5,6', projectId: '5', mdr: "5" },
-  { id: 11, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '1', projectId: '1', mdr: "1" },
+  { id: 11, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '1,6', projectId: '6', mdr: "6" },
+  { id: 12, title: '2014-01-PM-REP-001', companyId: 1, departmentId: '1,2', projectId: '6', mdr: "6" },
+  { id: 13, title: '2014-01-PRO-REP-001', companyId: 1, departmentId: '2,3', projectId: '2', mdr: "2" },
+  { id: 14, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '5,6', projectId: '2', mdr: "2" },
+  { id: 15, title: '2014-01-PM-SP-002', companyId: 1, departmentId: '5', projectId: '5', mdr: "5" },
+  { id: 16, title: '2014-01-PRO-REP-004', companyId: 1, departmentId: '8,9', projectId: '6', mdr: "46" },
+  { id: 17, title: '2014-01-PRO-SOW-002', companyId: 1, departmentId: '9', projectId: '7', mdr: "7" },
+  { id: 18, title: '2014-01-PRO-SOW-001', companyId: 1, departmentId: '8', projectId: '7', mdr: "7" },
+  { id: 19, title: '2014-01-PRO-SP-003', companyId: 1, departmentId: '7,8', projectId: '7', mdr: "7" },
+  { id: 20, title: '2014-01-PIP-SOW-001', companyId: 1, departmentId: '5,6', projectId: '8', mdr: "8" },
+  { id: 21, title: '2014-01-PIP-SOW-002', companyId: 1, departmentId: '5,6', projectId: '8', mdr: "8" },
+  { id: 22, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '7', projectId: '9', mdr: "9" },  
 ];
 
 const data = {};
@@ -1488,10 +1510,10 @@ const MyTreeView = () => {
                         label={`Title: ${title}`}
                         className={classes.titleNode}
                         icon={<DescriptionIcon className={classes.icon} />}
-                        sx={{ display: 'inline-flex' }} // Display child nodes inline
+                        sx={{ display: 'inline-flex' }} 
                       >
-                        <div style={{display :'inline-flex'}}>
-                          <span>Status: Ongoing</span>
+                        <div className={classes.buttonContainer}>
+                          <span className={classes.status}>Status: Ongoing</span>
                           <Button onClick={() => handleOpenDocument(title)} variant="outlined" color="primary">Open Document</Button>
                         </div>
                       </TreeItem>
