@@ -13,7 +13,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import ProtectedAppPage from "../Protected";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import MyTreeView from '../treeview/MyTreeView.jsx';
+// import MyTreeView from '../treeview/MyTreeView.jsx';
 
 
 const uploadProps = {
@@ -65,30 +65,44 @@ export default function Document() {
       dataIndex: "title",
       key: "title",
     },
-    {
-      title: ".exe",
-      dataIndex: "extension",
-      key: "extension",
-    },
+    // {
+    //   title: ".exe",
+    //   dataIndex: "extension",
+    //   key: "extension",
+    // },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
     },
-  
+    {
+      title: "Assigned To",
+      dataIndex: "assignedTo",
+      key: "assignedTo",
+    },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {user.user.roleId != 1 ? (
+          {user.user.roleId != 1 ? record.status=='Initialized'? (
+            <>
             <a>
-              Upload <input type="file" onChange={(e)=>handleFileChange(e,record)} />
+              <input type="file" onChange={(e)=>handleFileChange(e,record)} />
+             
+              <text onClick={() => assignModalShow(record)}>Assign Document</text>
+
             </a>
-          ) : (
+
+            </>
+          ) :(
+            <a onClick={() => handleOpen(record)}>Open</a>
+
+          ): record.status =='Initialized'?              <a onClick={() => assignModalShow(record)}>Assign Document</a>
+          :(
             <>
 <a onClick={() => handleOpen(record)}>Open</a>
-              {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.id}`)}>Open</a> */}
+              {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.title}`)}>Open</a> */}
               <a onClick={() => statusModalShow(record)}>Add Status</a>
             </>
           )}
@@ -96,6 +110,7 @@ export default function Document() {
       ),
     }
   ];
+  const [assignModalVisible, setAssignModalVisible] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [docTitle, setDocTitle] = useState("");
@@ -116,22 +131,41 @@ export default function Document() {
   const [departments,setDepartment] = useState([])
   const [projects,setProject] = useState([])
   const [showTreeView, setShowTreeView] = useState(false);
+  const [userOption, setUserDatalist] = useState([]);
+  const [assignedEmployees, setAssignedEmployees] = useState([]);
+const [myrecord,setMyRecord]=useState({});
+
+  const assignModalShow = async (record) => {
+    console.log('recorddddd',record);
+    setMyRecord(record);
+    console.log('hellloooo',myrecord);
+    await  fetchUsers();
+   
+    setAssignModalVisible(true);
+
+  };
+
+  const assignModalCancel = () => {
+    setAssignModalVisible(false);
+  };
 
   const handleProjectWiseClick = () => {
     console.log("clicked");
     setShowTreeView(true);
   };
 
+  
  
   const documentModalShow = () => {
     setDocumentModalVisible(true);
   };
   const handleOpen = (record) => {
     // Replace 'John' with the actual doc's name
-    const docName = record.id;
+    const docName = record.title;
     const url= `${BACKEND_URL}/documents/${docName+'.pdf'}` 
+    console.log(user.user.roleId,user.user.firstName,user);
     // Redirect to the external URL
-    window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName+'.pdf'}&url=${url}`;
+    window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName+'.pdf'}&url=${url}&user='${user.user.roleId} ${user.user.firstName}'`;
   };
   const documentModalCancel = () => {
     setMDR("");
@@ -142,17 +176,144 @@ export default function Document() {
     setTextEditorValue("");
     setDocumentModalVisible(false);
   };
-  const handleFileChange = (e, record) => {
+  const handleFileChange = async (e, record) => {
     const uploadedFile = e.target.files[0];
-    if (uploadedFile.name === `${record.id}.pdf`) {
+    console.log(record);
+    const title=record.title;
+    if (uploadedFile.name === `${record.title}.pdf`) {
       setFile(uploadedFile);
       console.log('Uploaded file:', uploadedFile);
+      try {
+       
+       
+        const response = await axios.post(
+          `http://127.0.0.1:8083/api/documents/upload`,        
+          {title},
+          {
+            headers: {
+              Authorization: user?.accessToken,
+              // Add other headers if needed
+            },
+          }
+        );
+        // Handle the response as needed
+        console.log(response);
+        message.success(response?.data?.message);
+       
+      } catch (error) {
+        // Handle errors
+  
+        message.error(error);
+      }
+
     } else {
       // Show an error message or take appropriate action
-      message.error('File name does not match '+ record.id);
+      message.error('File name does not match '+ record.title);
       // Clear the file input field
       e.target.value = null;
     }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      console.log(response?.data, "Users");
+      const option = [];
+let role='';
+if(user.user.roleId==1){
+  for (const item of response?.data) {
+    console.log(myrecord,myrecord.departmentId,item.departmentId);
+   if(item.roleId==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
+    role =`Head of ${item.department}`
+    option.push({
+      value:item?.id,
+      label: `${item?.firstName} ${role} `,
+    });
+ } 
+//    if(item.roleId==4 && item.departmentId==user.user.departmentId){
+//      role = `Junior ${item.department}`
+//      option.push({
+//       value:item?.id,
+//       label: `${item?.firstName} ${role} `,
+//     });
+//   }
+//   if(item.roleId==5 && item.departmentId==user.user.departmentId){
+//     role ='Designer/Draughtsmen'
+//     option.push({
+//       value:item?.id,
+//       label: `${item?.firstName} ${role} `,
+//     });
+//  } 
+   } }
+if(user.user.roleId==2 ){
+      for (const item of response?.data) {
+       if(item.roleId==3 && item.departmentId==user.user.departmentId){
+        role =`Senior Engineer ${item.department}`
+        option.push({
+          value:item?.id,
+          label: `${item?.firstName} ${role} `,
+        });
+     } 
+  //    if(item.roleId==4 && item.departmentId==user.user.departmentId){
+  //      role = `Junior ${item.department}`
+  //      option.push({
+  //       value:item?.id,
+  //       label: `${item?.firstName} ${role} `,
+  //     });
+  //   }
+  //   if(item.roleId==5 && item.departmentId==user.user.departmentId){
+  //     role ='Designer/Draughtsmen'
+  //     option.push({
+  //       value:item?.id,
+  //       label: `${item?.firstName} ${role} `,
+  //     });
+  //  } 
+       } }
+       if(user.user.roleId==3){
+        for (const item of response?.data) {
+      //    if(item.roleId==3 && item.departmentId==user.user.departmentId){
+      //     role =`Senior Engineer ${item.department}`
+      //     option.push({
+      //       value:item?.id,
+      //       label: `${item?.firstName} ${role} `,
+      //     });
+      //  } 
+       if(item.roleId==4 && item.departmentId==user.user.departmentId){
+         role = `Junior ${item.department}`
+         option.push({
+          value:item?.id,
+          label: `${item?.firstName} ${role} `,
+        });
+      }
+      if(item.roleId==5 && item.departmentId==user.user.departmentId){
+        role ='Designer/Draughtsmen'
+        option.push({
+          value:item?.id,
+          label: `${item?.firstName} ${role} `,
+        });
+     } 
+         } }
+      setUserDatalist(option);
+       // Assuming the response.data is an array of DocumentPermissions
+    } catch (error) {
+      console.error("Error fetching Users:", error?.message);
+    }
+  };
+
+  const handleFile = (e) => {
+    const uploadedFile = e.target.files[0];
+    
+      setFile(uploadedFile);
+      console.log('Uploaded file:', uploadedFile);
+   
   };
 
 
@@ -191,7 +352,7 @@ export default function Document() {
       // Handle the response as needed
       console.log(response);
       message.success(response?.data?.message);
-      fetchData();
+     await fetchData();
       documentModalCancel();
     } catch (error) {
       // Handle errors
@@ -204,7 +365,7 @@ export default function Document() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -214,16 +375,11 @@ export default function Document() {
       );
         
 
-      const savedData = getAllKeys('doc');
-      console.log('saved data', savedData);
-  
-      var allJsonData = savedData.map((key) => loadData(key));
-      console.log(allJsonData);
+
       console.log(response.data,"received");
       // Check if response.data is an array before including it in the setData call
       const newData = Array.isArray(response.data) ? response.data : [];
 
-      allJsonData,newData 
 
       setData([...newData]);
     } catch (error) {
@@ -348,12 +504,39 @@ useEffect(() => {
   fetchProjects();
   fetchMDR();
   fetchData();
-}, []); // Add updatedData as a dependency
+  fetchUsers()
+}, [myrecord]); // Add updatedData as a dependency
 
 useEffect(() => {
   // Update the data state with the updatedData
   setData(updatedData);
 }, [updatedData]);
+const assignDoc = async(assignedEmployees,myrecord)=>{
+  try {
+    console.log('aaaa',myrecord.title);
+    // console.log(allUsers);
+    // const assignedUser = allUsers.find(user => user.id == assignedEmployees)      
+    // console.log(assignedUser);
+    const project = projectOptions.find((item) => item?.value == projectId);
+    const department = departmentOptions.find(
+      (item) => item?.value == departmentId
+    );
+    const response = await axios.put(
+      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
+      {},
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    );
+    setAssignModalVisible(false)
+    fetchData()
+  } catch (error) {
+    console.error("Error assigning documents:", error);
+  }
+}
   return (
     <>
     <Modal
@@ -417,6 +600,52 @@ useEffect(() => {
     </Col>
   </Row>
 </Modal>
+
+
+<Modal
+        title="Assign Document"
+        width={400}
+        centered
+        visible={assignModalVisible}
+        onCancel={assignModalCancel}
+        footer={null}
+        closeIcon={
+          <RiCloseFill className="remix-icon text-color-black-100" size={24} />
+        }
+      >
+        <Row justify="space-between" align="center">
+          <Col span={20}>
+            <Form layout="vertical" name="basic">
+                <Form.Item
+                label="Assign Document to"
+                name="assignDoc"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Assign Document",
+                  },
+                ]}
+              >
+              <Select
+                  options={userOption}
+                  value={assignedEmployees}
+                  onChange={(value) => setAssignedEmployees(value)}
+                />
+                </Form.Item>
+
+              <Row>           
+              <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+                  <Button block onClick={()=>assignDoc(assignedEmployees,myrecord)} type="primary"htmlType="submit">Assigned</Button>
+                </Col>
+              
+              </Row>
+            </Form>
+          </Col>
+        </Row>
+      </Modal>
+
+
+
       <Modal
         title="Upload Document"
         width={1000}
@@ -551,7 +780,7 @@ useEffect(() => {
               {/* <Upload {...uploadProps}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload> */}
-              <input type="file" onChange={handleFileChange} />
+              <input type="file" onChange={handleFile} />
               <Row>
                 <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button

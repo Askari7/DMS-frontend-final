@@ -40,6 +40,8 @@ console.log(jsondata);
   console.log(departmentOptionsString);
 
   const projectOptions = params.get('projectOptions');
+  const approver = params.get('approver');
+  const reviewer = params.get('reviewer');
 
     const [customFieldValues, setCustomFieldValues] = useState({});
     const [templateModalVisible,setTemplateModalVisible] = useState(false)
@@ -122,10 +124,10 @@ console.log(jsondata);
       console.log(getMdrTitle,projectOptions,departmentOptions,projectId,departmentId);
  
       try {
-        const department = departmentOptions.find(
-          (item) => item?.value == departmentId
-        );
-        console.log(department);
+//         const department = departmentOptions.filter(item => departmentId.includes(item?.value));
+// const departmentNames = departments.map(item => item.label);
+
+        // console.log(department);
         var title=getMdrTitle;
         var mdrCode=getMdrCode;
         var count = selectedRows.length
@@ -133,6 +135,7 @@ console.log(jsondata);
           const documentValue = data[index].document;
          const masterDocumentName=title;
           console.log(documentValue);
+          console.log('This is cvoming from param',approver,reviewer);
           try {
             var title=documentValue;
             const responseDoc = await axios.post(
@@ -147,8 +150,10 @@ console.log(jsondata);
                 masterDocumentId: mdrCode,
                 masterDocumentName,
                 projectCode: getProjectCode,
-                departmentName: department?.label,
-                status : "Initialized"
+                departmentName:departmentLabelsString,
+                status : "Initialized",
+                 approver,
+                 reviewer
               },
               {
                 headers: {
