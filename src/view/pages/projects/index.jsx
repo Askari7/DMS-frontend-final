@@ -176,7 +176,7 @@ export default function Projects() {
         {
           title: projName,
           departmentId,
-          status,
+          status:"Initialized",
           noOfUsers:0,
           clientEmail,
           code,
@@ -340,7 +340,7 @@ export default function Projects() {
         <DatePicker style={{ width: '100%' }} />
       </Form.Item>
 
-          <Form.Item label="Status" name="status">
+          {/* <Form.Item label="Status" name="status">
             <Select
               default="ongoing"
               options={[
@@ -351,7 +351,7 @@ export default function Projects() {
               value={status}
               onChange={(e) => setStatus(e)}
             />
-          </Form.Item>
+          </Form.Item> */}
           <Row>
             <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
               <Button

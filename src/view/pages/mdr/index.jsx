@@ -50,6 +50,8 @@ const uploadProps = {
 export default function MDR() {
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+
 
   const [title, setTitle] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -69,9 +71,12 @@ export default function MDR() {
   const[allUsers,setAllUsers] = useState([])
   const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
   const [departmentOptions,setDepartmentOptions] = useState([])
+
+  const [departmentOption,setDepartmentOption] = useState([])
   const [userOptions, setUserData] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [userOption, setUserDatalist] = useState([]);
+  const [record,setRecord] = useState()
   
 
   const showMdrTemplate = () => {
@@ -88,11 +93,12 @@ export default function MDR() {
     console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
     
+    const serializedDepartmentOption = JSON.stringify(departmentOption);
 const serializedProjectOptions = JSON.stringify(projectOptions);
 const serializedSelectedApprover = JSON.stringify(selectedApprover);
 const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
 
-    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}&status=${status}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`);};
+    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`);};
  
   
   const documentModalShow = () => {
@@ -115,12 +121,21 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
     setAssignModalVisible(false);
   };
 
+  const createModalShow = (record) => {
+    console.log(record)
+    setRecord(record)
+    setCreateModalVisible(true);
+  };
+
+  const createModalCancel = () => {
+    setCreateModalVisible(false);
+  };
+
 
   const assignMDR = async(assignedEmployees,allUsers)=>{
     try {
       // console.log(allUsers);
       const assignedUser = allUsers.find(user => user.id == assignedEmployees)      
-      // console.log(assignedUser);
       const project = projectOptions.find((item) => item?.value == projectId);
       const department = departmentOptions.find(
         (item) => item?.value == departmentId
@@ -128,14 +143,16 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
       const response = await axios.post(
         "http://127.0.0.1:8083/api/documents/mdr",
         {
-          // departmentId,
-          // projectId,
+          departmentId:assignedUser.departmentId,
+          projectId,
           companyId: assignedUser?.companyId,
           authorId: assignedUser?.id,
           authorName: assignedUser?.firstName,
           mdrCode,
-          // projectCode: project?.code,
-          // departmentName: department?.label,
+          projectCode: project?.code,
+          departmentName: assignedUser.department,
+          status:"Assigned",
+          noOfDocuments:0
         },
         {
           headers: {
@@ -206,6 +223,33 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
       console.error("Error fetching documents:", error?.message);
     }
   };
+  const mdr = async() =>{
+    console.log(record)
+      try {
+        // console.log(allUsers);
+        const projectId = record.projectId
+        const projectCode = record.projectCode
+        console.log(projectId,projectCode);
+        const response = await axios.put(
+          `http://127.0.0.1:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
+          {
+                title,
+                mdrCode,
+                status:"Ongoing"
+          },
+          {
+            headers: {
+              Authorization: user?.accessToken,
+              // Add other headers if needed
+            },
+          }
+        );
+        setCreateModalVisible(false)
+        fetchData()
+      } catch (error) {
+        console.error("Error Updating MDR:", error);
+      }
+  }
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -246,10 +290,19 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
         }
       );
       const options = [];
+      const option = [];
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
+        option.push({ value: item?.suffix, label: item?.title });
+
       }
-      setDepartmentOptions(options); // Assuming the response.data is an array of projects
+      console.log("option",option);
+      console.log("options",options);
+
+      setDepartmentOptions(options); 
+      setDepartmentOption(option); 
+      console.log("option",option);
+
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
@@ -312,7 +365,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
            role ='CEO'
 
            options.push({
-            value: {id:item?.id,name:item.firstName},
+            value: {id:item?.id,name:item.firstName,departmentId:item?.departmentId,department:item.department},
             label: `${item?.firstName} ${role} `,
           });
         
@@ -470,7 +523,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
               >
                <Checkbox.Group options={userOptions} value={selectedApprover} onChange={setSelectedApprover} />
               </Form.Item>
-              <Form.Item label="Status" name="status">
+              {/* <Form.Item label="Status" name="status">
             <Select
               default="ongoing"
               options={[
@@ -481,7 +534,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
               value={status}
               onChange={(e) => setStatus(e)}
             />
-          </Form.Item>
+          </Form.Item> */}
               {/* <Form.Item
                 label="No of Documents"
                 name="noOfDocuments"
@@ -627,6 +680,65 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
           </Col>
         </Row>
       </Modal>
+
+      <Modal
+        title="Create MDR "
+        width={400}
+        centered
+        visible={createModalVisible}
+        onCancel={createModalCancel}
+        footer={null}
+        closeIcon={
+          <RiCloseFill className="remix-icon text-color-black-100" size={24} />
+        }
+      >
+        <Row justify="space-between" align="center">
+          <Col span={20}>
+            <Form layout="vertical" name="basic">
+              <Form.Item
+                label="MDR Title"
+                name="mdrTitle"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select MDR Title",
+                  },
+                ]}
+              ><Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />                
+                
+                </Form.Item>
+
+                <Form.Item
+                label="MDR Code"
+                name="mdrCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select MDR Code",
+                  },
+                ]}
+              >
+                  <Input
+                  value={mdrCode}
+                  onChange={(e) => setMdrCode(e.target.value)}
+                />                
+                </Form.Item>
+              <Row>
+              <Button
+          type="primary"
+          onClick={mdr}
+          style={{ marginRight: '10px' }}
+        >
+          Create
+        </Button>
+              </Row>
+            </Form>
+          </Col>
+        </Row>
+      </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
         <Button
           type="primary"
@@ -708,6 +820,16 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
                     disabled={user?.user?.roleId != 1}
                   >
                     Export
+                  </Button>
+                  <Button
+                    key={record?.id}
+                    onClick={() => {createModalShow(record)
+                      // exportCSV(record);
+                      
+                    }}
+                    disabled={user?.user?.roleId == 1}
+                  >
+                    Create
                   </Button>
                 </Space>
               </>
