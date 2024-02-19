@@ -1,4 +1,4 @@
-// import React from 'react';
+// import {useState,useEffect} from 'react';
 // import TreeView from '@material-ui/lab/TreeView';
 // import TreeItem from '@material-ui/lab/TreeItem';
 
@@ -1340,7 +1340,7 @@
 
 
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import { makeStyles } from '@material-ui/core/styles';
@@ -1350,7 +1350,7 @@ import FolderSpecialIcon from '@mui/icons-material/FolderSpecial';
 import FolderOpenIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Button from '@mui/material/Button';
-
+import axios from 'axios';
 const useStyles = makeStyles({
   root: {
     flexGrow: 5,
@@ -1418,6 +1418,7 @@ const useStyles = makeStyles({
   },
 });
 
+
 const projects = [
   { id: 1, title: '2014-01-PM-REP-001', companyId: 1, departmentId: '1', projectId: '1', mdr: "1" },
   { id: 2, title: '2014-01-PRO-REP-001', companyId: 1, departmentId: '2', projectId: '2', mdr: "2" },
@@ -1462,6 +1463,31 @@ projects.forEach(project => {
 });
 
 const MyTreeView = () => {
+
+  const [information,setInformation]=useState()
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+
+  console.log("user",user)
+  const fetchInformation = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+          },
+        }
+        
+      );  
+      console.log('Information response data',response.data);
+      setInformation(response.data); // Assuming the response.data is an array of projects
+    } catch (error) {
+      console.error("Error fetching projects:", error?.message);
+    }
+  };
+  useEffect(()=>{
+    fetchInformation()
+  },[])
   const classes = useStyles();
 
   const handleOpenDocument = (title) => {

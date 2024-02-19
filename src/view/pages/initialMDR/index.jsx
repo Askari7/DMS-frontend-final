@@ -56,12 +56,14 @@ console.log(jsondata);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
 
-//     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
-// console.log("hehe",departmentOptionSuffixes)
+    const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
+console.log("hehe",departmentOptionSuffixes)
     const departmentOptions = JSON.parse(departmentOptionsString);
     console.log("department",departmentOptions);
     const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
     console.log("departmentmap",departmentOptionsMap);
+    const departmentOptionsSuffixMap = new Map(departmentOptionSuffixes.map(option => [option.value, option.label]));
+    console.log("hiiiiiiiiii",departmentOptionsSuffixMap);
     const departmentIds = departmentId.split(',').map(Number);
     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
     console.log("id",departmentIds,"labels",departmentLabels);
