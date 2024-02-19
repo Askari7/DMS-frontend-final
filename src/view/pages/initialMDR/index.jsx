@@ -38,6 +38,8 @@ console.log(jsondata);
   console.log(getProjectCode,getMdrCode);
    let departmentOptionsString = params.get('departmentOptions');
   console.log(departmentOptionsString);
+  let departmentOptionSuffix = params.get('departmentOption');
+  console.log("Suffix",departmentOptionSuffix);
 
   const projectOptions = params.get('projectOptions');
   const approver = params.get('approver');
@@ -53,13 +55,18 @@ console.log(jsondata);
     const [selectedRows, setSelectedRows] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
+
+//     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
+// console.log("hehe",departmentOptionSuffixes)
     const departmentOptions = JSON.parse(departmentOptionsString);
+    console.log("department",departmentOptions);
     const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
+    console.log("departmentmap",departmentOptionsMap);
     const departmentIds = departmentId.split(',').map(Number);
     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
+    console.log("id",departmentIds,"labels",departmentLabels);
     const departmentLabelsString = departmentLabels.join(', ');
-    console.log(departmentLabelsString);
-
+    console.log("strings",departmentLabelsString);
     const [data, setData] = useState(jsondata);
   
     const columns = [
@@ -173,7 +180,7 @@ console.log(jsondata);
             departmentId,
             projectId,
             noOfDocuments:count,
-            status,
+            status:"Ongoing",
             companyId: user?.user?.companyId,
             authorId: user?.user?.id,
             authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
