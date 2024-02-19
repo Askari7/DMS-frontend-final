@@ -60,9 +60,14 @@ const columns = [
   },
 
   {
-    title: "Your Status",
-    dataIndex: "yourStatus",
-    key: "yourStatus",
+    title: "Overall Approver Status",
+    dataIndex: "approverStatus",
+    key: "approverStatus",
+  },
+  {
+    title: "Overall Reviewer Status",
+    dataIndex: "reviewerStatus",
+    key: "reviewerStatus",
   },
 
   {
@@ -224,7 +229,7 @@ export default function DocumentPermissions() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/permissions?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user?.user?.id}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -232,6 +237,29 @@ export default function DocumentPermissions() {
           },
         }
       );
+      console.log('response',response.data);
+      
+      for(let i of response.data){
+        const approverStatusArray = i.approverStatus.split(',').map(num => parseInt(num.trim(), 10));
+        const reviewerStatusArray = i.reviewerStatus.split(',').map(num => parseInt(num.trim(), 10));
+
+        if (approverStatusArray.every(num => num === 0)) {
+          i['approverStatus']='Pending';
+        } else if (approverStatusArray.some(num => num !== 0 && num !== 2)) {
+          i['approverStatus']='Rejected';
+        } else if (approverStatusArray.every(num => num === 2)) {
+          i['approverStatus']='Sent to Client';
+        }
+
+
+        if (reviewerStatusArray.every(num => num === 0)) {
+          i['reviewerStatus']='Pending';
+        } else if (reviewerStatusArray.some(num => num !== 0 && num !== 2)) {
+          i['reviewerStatus']='Rejected';
+        } else if (reviewerStatusArray.every(num => num === 2)) {
+          i['reviewerStatus']='Sent for Approval';
+        }
+      }
       setData(response.data); // Assuming the response.data is an array of departments
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
