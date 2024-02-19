@@ -303,6 +303,12 @@ const pages = [
     navLink: "/pages/document-number",
   },
   {
+    id: "document-assessment",
+    title: <IntlMessages id="sidebar-pages-document-assessment" />,
+    icon: <Profile size={18} />,
+    navLink: "/pages/document-assessment",
+  },
+  {
     id: "documents-permissions",
     title: <IntlMessages id="sidebar-pages-document-permissions" />,
     icon: <Profile size={18} />,
