@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
-
+import MyTreeView from "../treeview/MyTreeView";
 import {Row,Col,Divider,Form,Space,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
 } from "antd";
 import { Radio } from "antd";
@@ -13,7 +13,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import ProtectedAppPage from "../Protected";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-// import MyTreeView from '../treeview/MyTreeView.jsx';
 
 
 const uploadProps = {
@@ -152,6 +151,11 @@ const [myrecord,setMyRecord]=useState({});
   const handleProjectWiseClick = () => {
     console.log("clicked");
     setShowTreeView(true);
+  };
+
+  const handleDocumentWiseClick = () => {
+    console.log("clicked");
+    setShowTreeView(false);
   };
 
   
@@ -301,6 +305,7 @@ if(user.user.roleId==2 ){
         });
      } 
          } }
+         console.log("option",option);
       setUserDatalist(option);
        // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
@@ -821,6 +826,13 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
           onClick={handleProjectWiseClick}
           disabled={user?.user?.roleId == 3}
         >Project Wise
+        </Button>
+
+        <Button
+          type="primary"
+          onClick={handleD}
+          disabled={user?.user?.roleId == 3}
+        >Documents
         </Button>
       </div>
       {

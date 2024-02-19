@@ -87,13 +87,16 @@ export default function MDR() {
     setMdrTemplateVisible(false);
   };
 
+  const serializedDepartmentOption = JSON.stringify(departmentOption);
+  console.log("serialized",serializedDepartmentOption)
+
   const history = useHistory();
   const navigateToMdrTemplate = () => {
     const project = projectOptions.find((item) => item?.value == projectId);
     console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
-    
     const serializedDepartmentOption = JSON.stringify(departmentOption);
+    console.log("serialized",serializedDepartmentOption)
 const serializedProjectOptions = JSON.stringify(projectOptions);
 const serializedSelectedApprover = JSON.stringify(selectedApprover);
 const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
@@ -427,7 +430,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
     fetchUsers();
     fetchData();
     console.log(data);
-    console.log(user);
+    // console.log(user);
   }, []);
   return (
     <>

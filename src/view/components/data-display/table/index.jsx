@@ -137,8 +137,8 @@ export default function Table() {
 
   return (
     <Row gutter={[32]}>
-      <Col xl={19} span={24} className="hp-mb-32 hp-table-content-col">
-        <Row gutter={[32, 32]} className="hp-mb-32">
+      <Col xl={19} span={32} className="hp-mb-32 hp-table-content-col">
+        <Row gutter={[32, 32]} className="hp-mb-64">
           <PageContent
             title="Table"
             desc="A table displays rows of data."
