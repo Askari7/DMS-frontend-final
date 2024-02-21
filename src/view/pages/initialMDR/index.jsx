@@ -145,6 +145,7 @@ console.log("hehe",departmentOptionSuffixes)
           console.log('This is cvoming from param',approver,reviewer);
           try {
             var title=documentValue;
+            var version='000';
             const responseDoc = await axios.post(
               "http://127.0.0.1:8083/api/documents/",
               {
@@ -160,7 +161,8 @@ console.log("hehe",departmentOptionSuffixes)
                 departmentName:departmentLabelsString,
                 status : "Initialized",
                  approver,
-                 reviewer
+                 reviewer,
+                 version
               },
               {
                 headers: {

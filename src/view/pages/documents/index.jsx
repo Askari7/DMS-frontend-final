@@ -48,6 +48,10 @@ export default function Document() {
       title: "Document Name",
       dataIndex: "title",
       key: "title",
+    }, {
+      title: "Version",
+      dataIndex: "version",
+      key: "version",
     },
     {
       title: "Dept Id",
