@@ -4,7 +4,8 @@ import { Card, Row, Col, Dropdown, Menu } from "antd";
 import { RiMoreFill } from "react-icons/ri";
 import Chart from "react-apexcharts";
 
-export default function DonutChart() {
+export default function DonutChart({ projects, projectCount }) {
+  console.log("projects",projects,"projectCount",projectCount);
   const menu = (
     <Menu>
       <Menu.Item>Last 28 Days</Menu.Item>
@@ -13,8 +14,39 @@ export default function DonutChart() {
     </Menu>
   );
 
+  // Initialize counts for each status
+let initializedCount = 0;
+let completedCount = 0;
+let workingCount = 0;
+
+// Iterate over each project
+projects.forEach(project => {
+  // Increment the count based on the status of the project
+  switch (project.status) {
+    case "Initialized":
+      initializedCount++;
+      break;
+    case "Completed":
+      completedCount++;
+      break;
+    case "Working":
+      workingCount++;
+      break;
+    default:
+      // Do nothing or handle unrecognized statuses
+      break;
+  }
+});
+
+console.log(initializedCount,completedCount,workingCount);
+const statusCounts = [initializedCount, completedCount, workingCount];
+
+console.log("Status Counts:", statusCounts);
+
   const [data] = useState({
-    series: [25, 13, 12],
+
+    series: [statusCounts.length],
+    
     options: {
       chart: {
         fontFamily: "Manrope, sans-serif",
@@ -28,7 +60,7 @@ export default function DonutChart() {
       },
       colors: ["#0010F7", "#55B1F3", "#1BE7FF"],
 
-      labels: ["Open", "Closed", " Hold"],
+      labels: ["Initialized", "Complete", " Working"],
 
       dataLabels: {
         enabled: false,
@@ -58,7 +90,7 @@ export default function DonutChart() {
                 formatter: function (w) {
                   return `${w.globals.seriesTotals.reduce((a, b) => {
                     return a + b;
-                  }, 0)}`;
+                  })}`;
                 },
               },
             },

@@ -19,10 +19,15 @@ import {
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
-// import InfoProfile from "./personel-information";
-// import MenuProfile from "./menu";
-// import PasswordProfile from "./password-change";
+
 import ProtectedAppPage from "../Protected";
+const handleDelete = (record) => {
+  record.delete = true;
+  fetchData().catch(error => {
+    console.error("Error deleting project:", error);
+  });
+};
+
 
 const columns = [
   {
@@ -34,11 +39,6 @@ const columns = [
     title: "Project Title",
     dataIndex: "title",
     key: "title",
-  },
-  {
-    title: "Department Name",
-    dataIndex: "departmentNames",
-    key: "departmentNames",
   },
   {
     title: "Client Email",
@@ -76,9 +76,9 @@ const columns = [
     key: "action",
     render: (_, record) => (
       <Space size="middle">
-        <a>Delete</a>
+        <a onClick={() => handleDelete(record)}>Delete</a>
       </Space>
-    ),
+    )
   },
 ];
 
@@ -221,7 +221,8 @@ export default function Projects() {
       );
       
       console.log('Project response data',response.data);
-      setData(response.data); // Assuming the response.data is an array of projects
+      const filteredData = response.data.filter(item => item.delete === false);
+      setData(filteredData);      
       const options = [];
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });

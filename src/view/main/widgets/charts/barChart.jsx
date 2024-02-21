@@ -4,7 +4,11 @@ import { Card, Row, Col, DatePicker } from "antd";
 import Chart from "react-apexcharts";
 import moment from "moment";
 
-export default function BarChart() {
+export default function BarChart({projects}) {
+  const projectTitles = projects.map(project => project.title);
+  const projectMembers = projects.map(project => project.noOfUsers);
+
+  console.log("counts",projectTitles,projectMembers);
   function onChange(date, dateString) {
     console.log(date, dateString);
   }
@@ -13,7 +17,7 @@ export default function BarChart() {
     series: [
       {
         name: "Team Size",
-        data: [9, 12, 13, 7, 4, 11, 8,5,14,10,6,3],
+        data: projectMembers,
       },
     ],
     options: {
@@ -72,20 +76,7 @@ export default function BarChart() {
             fontSize: "14px",
           },
         },
-        categories: [
-          "Project1",
-          "Project2",
-          "Project3",
-          "Project4",
-          "Project5",
-          "Project6",
-          "Project7",
-          "Project8",
-          "Project9",
-          "Project10",
-          "Project11",
-          "Project12",
-        ],
+        categories:projectTitles
       },
       legend: {
         horizontalAlign: "right",

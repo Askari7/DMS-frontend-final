@@ -4,25 +4,69 @@ import { Row, Col, Divider, Form, Input, Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserPassword } from "../../../redux/auth/authActions";
 import { FormattedMessage } from "react-intl";
-
+import axios from "axios";
 export default function PasswordProfile() {
   const dividerClass = "hp-border-color-black-40 hp-border-color-dark-80";
-  const [oldPassword1, setOldPassword1] = useState("")
-  const [oldPassword2, setOldPassword2] = useState("")
+  const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
-  const user = useSelector((state) => state.auth?.user);
+
+  const [confirmNewPassword, setConfirmNewPassword] = useState("")
+  
+  // const user = useSelector((state) => state.auth?.user);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
 
   const dispatch = useDispatch()
   const [form] = Form.useForm();
   const onFinishFailed = () => {
     message.error("Submit failed!");
   };
-  const userPasswordChange = () =>{
-    dispatch(updateUserPassword({previousPassword: oldPassword1, password: newPassword ,id: user?.id }))
-    setOldPassword1('')
-    setOldPassword2("")
+  // const userPasswordChange = () =>{
+  //   dispatch(updateUserPassword({previousPassword: oldPassword, password: newPassword ,id: user?.id }))
+  //   setOldPassword('')
+  //   setNewPassword("")
+  //   setConfirmNewPassword("")
+  // }
+
+  const updateUserPassword = async () => {
+    const obj = {};
+    if (oldPassword) {
+      obj.oldPassword = oldPassword;
+    }
+    if (newPassword) {
+      obj.newPassword = newPassword;
+    }
+
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8083/api/users/${user?.user?.id}`,
+        obj,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+
+        }
+      );
+      // Handle the response as needed
+      console.log("response", response);
+      if (response?.status == 200) {
+        message.success("User Updated Successfully");
+        localStorage?.setItem("user", JSON.stringify(response?.data));
+        window.location.reload();
+      }
+    } catch (error) {
+      if (error?.message == "Request failed with status code 401") {
+        message.error("Unauthorized");
+      }
+      console.error("Error updating:", error?.message);
+    }
+    setOldPassword("")
     setNewPassword("")
-  }
+    setConfirmNewPassword("")
+  };
+
+
   return (
     <Row>
       <Col span={24}>
@@ -36,7 +80,7 @@ export default function PasswordProfile() {
 
       <Col xxl={5} xl={10} md={15} span={24}>
         <Form layout="vertical" name="basic"
-             onFinish={userPasswordChange}
+             onFinish={updateUserPassword}
              form={form}
              onFinishFailed={onFinishFailed}
              initialValues={{ remember: true }}
@@ -47,7 +91,7 @@ export default function PasswordProfile() {
                <FormattedMessage id="pc-old" />
               </span>
             }
-            name="old-password-1"
+            name="old-password"
             rules={[
               {
                 required: true,
@@ -68,7 +112,7 @@ export default function PasswordProfile() {
               },
             ]}
           >
-            <Input.Password placeholder="Placeholder text" id="old-password-1" value={oldPassword1} onChange={(e)=>setOldPassword1(e.target.value)} />
+            <Input.Password placeholder="Placeholder text" id="old-password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} />
           </Form.Item>
 
           <Form.Item
@@ -98,7 +142,7 @@ export default function PasswordProfile() {
               }
             ]}
           >
-            <Input.Password placeholder="Placeholder text" id="new-password" value={oldPassword2} onChange={(e)=>setOldPassword2(e.target.value)} />
+            <Input.Password placeholder="Placeholder text" id="new-password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} />
           </Form.Item>
 
           <Form.Item
@@ -126,7 +170,7 @@ export default function PasswordProfile() {
             ]}
             name="confirm-new-password"
           >
-            <Input.Password placeholder="Placeholder text" id="confirm-new-password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} />
+            <Input.Password placeholder="Placeholder text" id="confirm-new-password" value={confirmNewPassword} onChange={(e)=>setConfirmNewPassword(e.target.value)} />
           </Form.Item>
 
           <Form.Item>
