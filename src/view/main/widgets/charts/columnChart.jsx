@@ -4,7 +4,7 @@ import { Card, Row, Col, DatePicker } from "antd";
 import Chart from "react-apexcharts";
 import moment from "moment";
 
-export default function ColumnChart() {
+export default function ColumnChart({titles,count}) {
   function onChange(date, dateString) {
     console.log(date, dateString);
   }
@@ -14,15 +14,13 @@ export default function ColumnChart() {
       {
         name: "Complete %",
         data: [
-          50, 40, 70, 90, 60, 80, 55, 30, 10, 5,
-          15, 25,
+          10,20,30,40
         ],
       },
       {
         name: "Remaining %",
         data: [
-          50, 60,30 , 10, 40, 20, 45, 70, 90, 95,
-          85, 75,
+          10,20,30,40
         ],
       },
     ],
@@ -88,20 +86,8 @@ export default function ColumnChart() {
             fontSize: "14px",
           },
         },
-        categories: [
-          "Project1",
-          "Project2",
-          "Project3",
-          "Project4",
-          "Project5",
-          "Project6",
-          "Project7",
-          "Project8",
-          "Project9",
-          "Project10",
-          "Project11",
-          "Project12",
-        ],
+        categories: titles
+        ,
       },
       legend: {
         horizontalAlign: "right",

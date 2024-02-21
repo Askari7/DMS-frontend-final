@@ -812,7 +812,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
           </Col>
         </Row>
       </Modal>
-      <div style={{ textAlign: "right", marginBottom: "16px" ,padding:"5px"}}>
+      <div style={{ textAlign: "right", marginBottom: "16px" ,padding:"15px", gap:"15px"}}>
         <Button
           type="primary"
           onClick={documentModalShow}
@@ -830,7 +830,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
 
         <Button
           type="primary"
-          onClick={handleD}
+          onClick={handleDocumentWiseClick}
           disabled={user?.user?.roleId == 3}
         >Documents
         </Button>
