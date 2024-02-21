@@ -12,7 +12,7 @@ import {
 } from "react-icons/ri";
 import moment from "moment";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 const [likes, setLikes] = useState(0);
 const [dislikes, setDislikes] = useState(0);
@@ -88,7 +88,7 @@ import {
 } from "react-icons/ri";
 import moment from "moment";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 const data = [
   {
@@ -173,7 +173,7 @@ import {
 } from "react-icons/ri";
 import moment from "moment";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 const { TextArea } = Input;
 

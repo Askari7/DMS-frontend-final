@@ -7,7 +7,7 @@ import { basic } from "./code.js";
 import { Card, Row, Col, List, Avatar, Button } from "antd";
 import { RiCodeSSlashLine } from "react-icons/ri";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 export default function BasicList() {
   const [checkedCode, setCheckedCode] = useState(false);
