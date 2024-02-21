@@ -24,86 +24,92 @@ import { Checkbox } from "antd";
 // import PasswordProfile from "./password-change";
 // import ProtectedAppPage from "../Protected";
 
-const columns = [
-//   {
-//     title: "ID",
-//     dataIndex: "id",
-//     key: "id",
-//   },
-  {
-    title: "Document Name",
-    dataIndex: "docName",
-    key: "docName",
-  },
-
-  {
-    title: "MDR Code",
-    dataIndex: "masterDocumentCode",
-    key: "masterDocumentCode",
-  },
-  {
-    title: "Approver",
-    dataIndex: "approver",
-    key: "approver",
-  },
-
-  {
-    title: "Reviewer",
-    dataIndex: "reviewer",
-    key: "reviewer",
-  },
-  
-  {
-    title: "Your Role",
-    dataIndex: "yourRole",
-    key: "yourRole",
-  },
-
-  {
-    title: "Overall Approver Status",
-    dataIndex: "approverStatus",
-    key: "approverStatus",
-  },
-  {
-    title: "Overall Reviewer Status",
-    dataIndex: "reviewerStatus",
-    key: "reviewerStatus",
-  },
-
-  {
-    title: "Creator",
-    dataIndex: "allowCreate",
-    key: "allowCreate",
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-       (
-          <a onClick={() => handleOpen(record)}>Open</a>
-
-        )
-      </Space>
-    ),
-  }
-];
-const permissionsOptions = [
-  {
-    label: "Reviewer",
-    value: "Reviewer",
-  },
-  {
-    label: "Approver",
-    value: "Approver",
-  },
-  {
-    label: "Creator",
-    value: "Creator",
-  },
-];
 
 export default function DocumentPermissions() {
+  const columns = [
+    //   {
+    //     title: "ID",
+    //     dataIndex: "id",
+    //     key: "id",
+    //   },
+      {
+        title: "Document Name",
+        dataIndex: "docName",
+        key: "docName",
+      },
+    
+      {
+        title: "MDR Code",
+        dataIndex: "masterDocumentCode",
+        key: "masterDocumentCode",
+      },
+      {
+        title: "Approver",
+        dataIndex: "approver",
+        key: "approver",
+      },
+    
+      {
+        title: "Reviewer",
+        dataIndex: "reviewer",
+        key: "reviewer",
+      },
+      
+      {
+        title: "Your Role",
+        dataIndex: "yourRole",
+        key: "yourRole",
+      },
+    
+      {
+        title: "Overall Approver Status",
+        dataIndex: "approverStatus",
+        key: "approverStatus",
+      },
+      {
+        title: "Overall Reviewer Status",
+        dataIndex: "reviewerStatus",
+        key: "reviewerStatus",
+      },
+    
+      {
+        title: "Creator",
+        dataIndex: "allowCreate",
+        key: "allowCreate",
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (_, record) => (
+          <Space size="middle">
+           
+              <a onClick={() => handleOpen(record)}>Open</a>
+              <a onClick={() => statusModalShow(record)}>Add Status</a>
+    
+            
+          </Space>
+        ),
+      }
+    ];
+    const permissionsOptions = [
+      {
+        label: "Reviewer",
+        value: "Reviewer",
+      },
+      {
+        label: "Approver",
+        value: "Approver",
+      },
+      {
+        label: "Creator",
+        value: "Creator",
+      },
+    ];
+    const [selectedStatus, setSelectedStatus] = useState("");
+
+    const [selectedDocument, setSelectedDocument] = useState(null);
+    const [statusModalVisible, setStatusModalVisible] = useState(false);
+
   const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =
     useState(false);
   const [mdrOptions, setMdrData] = useState([]);
@@ -118,7 +124,14 @@ export default function DocumentPermissions() {
   const [data, setData] = useState([]);
   const [DocumentPermissionOptions, setDocumentPermissions] = useState([]);
   const [checked, setChecked] = useState([]);
-
+  const statusModalShow = (record) => {
+    setSelectedDocument(record);
+    setStatusModalVisible(true);
+  };
+  const statusModalCancel = () => {
+    setSelectedStatus("");
+    setStatusModalVisible(false);
+  };
   const [DocumentPermissionId, setDocumentPermissionId] = useState("");
 
   const DocumentPermissionModalShow = () => {
@@ -242,7 +255,18 @@ export default function DocumentPermissions() {
       for(let i of response.data){
         const approverStatusArray = i.approverStatus.split(',').map(num => parseInt(num.trim(), 10));
         const reviewerStatusArray = i.reviewerStatus.split(',').map(num => parseInt(num.trim(), 10));
-
+        if(i.approverId.includes(user.user.id) && i.reviewerId.includes(user.user.id)){
+          console.log('YESSSSSSSSSSS');
+          i['yourRole']='Approver and Reviewer';
+        }
+        else if(i.approverId.includes(user.user.id) ){
+          console.log('YESSSSSSSSSSS');
+          i['yourRole']='Approver';
+        }
+        else if(i.reviewerId.includes(user.user.id)){
+          console.log('YESSSSSSSSSSS');
+          i['yourRole']='Reviewer';
+        }
         if (approverStatusArray.every(num => num === 0)) {
           i['approverStatus']='Pending';
         } else if (approverStatusArray.some(num => num !== 0 && num !== 2)) {
@@ -274,6 +298,60 @@ export default function DocumentPermissions() {
   }, []);
   return (
     <>
+    <Modal
+  title="Change Status"
+  width={400}
+  centered
+  visible={statusModalVisible}
+  onCancel={statusModalCancel}
+  footer={null}
+  closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+>
+  <Row justify="space-between" align="center">
+    <Col span={20}>
+      <Form layout="vertical" name="basic">
+        <Form.Item
+          label="Select Status"
+          name="selectedStatus"
+          rules={[
+            {
+              required: true,
+              message: "Please select a status",
+            },
+          ]}
+        >
+          <Select
+            options={[
+      { label: "Accept", value: "Accept" },
+      { label: "Reject", value: "Reject" },
+     
+            ]}
+            value={selectedStatus}
+            onChange={(value) => setSelectedStatus(value)}
+          />
+        </Form.Item>
+        {/* ... (your existing code) */}
+        <Row>
+          <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+            <Button
+              block
+              type="primary"
+              htmlType="submit"
+              onClick={() => handleStatusChange(selectedStatus)}
+            >
+              Submit
+            </Button>
+          </Col>
+          <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
+            <Button block onClick={statusModalCancel}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Col>
+  </Row>
+</Modal>
       <Modal
         title="Create Permissions"
         width={416}
