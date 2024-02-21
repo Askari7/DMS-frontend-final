@@ -163,13 +163,19 @@ const [myrecord,setMyRecord]=useState({});
   const documentModalShow = () => {
     setDocumentModalVisible(true);
   };
-  const handleOpen = (record) => {
+  const handleOpen = async (record) => {
+   const responseData=await fetchAppRev(record.title);
+   console.log('helllooo',responseData);
     // Replace 'John' with the actual doc's name
     const docName = record.title;
-    const url= `${BACKEND_URL}/documents/${docName+'.pdf'}` 
+    const url= `${BACKEND_URL}/documents/${docName}-${record.version}.pdf` 
     console.log(user.user.roleId,user.user.firstName,user);
+    let allowed='false';
+if(responseData){
+allowed='true';
+}
     // Redirect to the external URL
-    window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName+'.pdf'}&url=${url}&user='${user.user.roleId} ${user.user.firstName}'`;
+     window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
   };
   const documentModalCancel = () => {
     setMDR("");
@@ -180,11 +186,34 @@ const [myrecord,setMyRecord]=useState({});
     setTextEditorValue("");
     setDocumentModalVisible(false);
   };
+  
+  const fetchAppRev = async (title) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+        
+
+
+      console.log(response.data,"received");
+      return response.data;
+    
+    } catch (error) {
+      console.error("Error fetching documents:", error?.message);
+    }
+  };
   const handleFileChange = async (e, record) => {
     const uploadedFile = e.target.files[0];
     console.log(record);
     const title=record.title;
-    if (uploadedFile.name === `${record.title}.pdf`) {
+    console.log(record.title,record.version);
+    if (uploadedFile.name === `${record.title}-${record.version}.pdf`) {
       setFile(uploadedFile);
       console.log('Uploaded file:', uploadedFile);
       try {
@@ -219,6 +248,8 @@ const [myrecord,setMyRecord]=useState({});
   };
 
   const fetchUsers = async () => {
+
+    
     try {
       const response = await axios.get(
         `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
