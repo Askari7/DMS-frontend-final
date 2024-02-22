@@ -68,7 +68,7 @@ const addDepartments = async () => {
         selectedSuffix.push('PIP')
       }
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/departments/",
+        "http://54.81.250.98:8083/api/departments/",
         {
           title:selectedDepartments,
           companyId: user?.user?.companyId,

@@ -34,7 +34,7 @@ const uploadProps = {
 };
 
 export default function Document() {
-  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
+  const BACKEND_URL = "http://54.81.250.98:8083"; // Update with your backend URL
 
   const history = useHistory();
 
@@ -206,7 +206,7 @@ allowed='true';
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        `http://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -252,7 +252,7 @@ console.log(formData,'formdata');
        
 
         const response = await axios.post(
-          `http://127.0.0.1:8083/api/documents/upload`,        
+          `http://54.81.250.98:8083/api/documents/upload`,        
           formData,
           {
             headers: {
@@ -284,7 +284,7 @@ console.log(formData,'formdata');
     
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -408,7 +408,7 @@ if(user.user.roleId==2 ){
       });
       console.log(formData);
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/?projectCode=${projectCode}&areaCode=${areaCode}&deptSuffix=${deptSuffix}`,        
+        `http://54.81.250.98:8083/api/documents/?projectCode=${projectCode}&areaCode=${areaCode}&deptSuffix=${deptSuffix}`,        
         formData,
         {
           headers: {
@@ -434,7 +434,7 @@ if(user.user.roleId==2 ){
     
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
+        `http://54.81.250.98:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -459,7 +459,7 @@ if(user.user.roleId==2 ){
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -480,7 +480,7 @@ if(user.user.roleId==2 ){
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -501,7 +501,7 @@ if(user.user.roleId==2 ){
   const fetchMDR = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -591,7 +591,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
       (item) => item?.value == departmentId
     );
     const response = await axios.put(
-      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
+      `http://54.81.250.98:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
       {},
       {
         headers: {
