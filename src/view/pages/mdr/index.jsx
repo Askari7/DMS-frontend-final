@@ -722,6 +722,7 @@ const fetchDepartmentDocs = async (record) => {
 
       {mdrTemplateVisible && <MdrTemplate />}
       </div>
+      <div style={{ overflowX: "auto" }}>
       <Table
         columns={[
           {
@@ -813,7 +814,7 @@ const fetchDepartmentDocs = async (record) => {
           },
         ]}
         dataSource={data}
-      />
+      /></div>
       <ProtectedAppPage />
     </>
   );
