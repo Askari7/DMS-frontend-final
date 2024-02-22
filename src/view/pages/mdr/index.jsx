@@ -80,7 +80,8 @@ export default function MDR() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
-
+  const [projectCode,setProjectCode] = useState()
+  
 
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
@@ -100,17 +101,42 @@ export default function MDR() {
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
     const serializedDepartmentOption = JSON.stringify(departmentOption);
     console.log("serialized",serializedDepartmentOption)
-const serializedProjectOptions = JSON.stringify(projectOptions);
-const serializedSelectedApprover = JSON.stringify(selectedApprover);
-const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+    const serializedProjectOptions = JSON.stringify(projectOptions);
+    const serializedSelectedApprover = JSON.stringify(selectedApprover);
+    const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}
+    &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
+    &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
+    &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
 
-    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`);};
+
  
-  
+  const navigate = () => {
+    const project = record.projectId;
+    const serializedDepartmentOptions = JSON.stringify(departmentOptions);
+    const serializedDepartmentOption = JSON.stringify(departmentOption);
+    const serializedProjectOptions = JSON.stringify(projectOptions);
+    const serializedSelectedApprover = JSON.stringify(selectedApprover);
+    const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+
+    history.push(`/pages/initialMDR?projectCode=${record.projectCode}&mdrCode=${record.mdrCode}
+    &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
+    &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
+    &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
+    
   const documentModalShow = () => {
     setDocumentModalVisible(true);
+    setProjectCode(record.projectCode)
+
   };
 
+  const documentModalShowing = (record) => {
+    console.log("record",record);
+
+    setRecord(record);
+    setDocumentModalVisible(true);
+    // setProjectId()
+  };
   const documentModalCancel = () => {
     setTitle("");
     setProjectId("");
@@ -128,7 +154,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
   };
 
   const createModalShow = (record) => {
-    console.log(record)
+    console.log("record",record)
     setRecord(record)
     setCreateModalVisible(true);
   };
@@ -308,6 +334,7 @@ const fetchDepartmentDocs = async (record) => {
       );
 
       console.log('mdr data',response.data);
+      setProjectCode(response.data.projectCode)
       if (user?.user?.roleId===3 || user?.user?.roleId ===4) {
         const data = response.data.filter(item => item.authorId === user?.user?.id);
         console.log("data",data);
@@ -568,35 +595,6 @@ const fetchDepartmentDocs = async (record) => {
               >
                <Checkbox.Group options={userOptions} value={selectedApprover} onChange={setSelectedApprover} />
               </Form.Item>
-              {/* <Form.Item label="Status" name="status">
-            <Select
-              default="ongoing"
-              options={[
-                { value: "ongoing", label: "Ongoing" },
-                { value: "clientReviewPending", label: "Client Review Pending" },
-                { value: "complete", label: "Complete" },
-              ]}
-              value={status}
-              onChange={(e) => setStatus(e)}
-            />
-          </Form.Item> */}
-              {/* <Form.Item
-                label="No of Documents"
-                name="noOfDocuments"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input No of Documents",
-                  },
-                ]}
-              >
-                <Input
-                  type="number"
-                  value={noOfDocuments}
-                  onChange={(e) => setNoOfDocuments(e.target.value)}
-                />
-              </Form.Item> */}
-
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">MDR template</Button>
@@ -604,30 +602,6 @@ const fetchDepartmentDocs = async (record) => {
                 <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">Create Custom</Button>
                 </Col>
-                
-              </Row>
-
-              <Row>
-                {/* <Col md={12} span={24} className="hp-pr-sm-0 mt-2 hp-pr-12 ">
-                  <Button
-                    block
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => addDocument()}
-                  >
-                    Submit
-                  </Button>
-                </Col> */}
-
-                {/* <Col
-                  md={12}
-                  span={24}
-                  className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12"
-                >
-                  <Button block onClick={documentModalCancel}>
-                    Cancel
-                  </Button>
-                </Col> */}
               </Row>
             </Form>
           </Col>
@@ -680,19 +654,6 @@ const fetchDepartmentDocs = async (record) => {
                   onChange={(value) => setAssignedEmployees(value)}
                 />
                 </Form.Item>
-
-              {/* <Form.Item
-                label="Assigned To"
-                name="employees"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Employees Name",
-                  },
-                ]}
-              > 
-              <Checkbox.Group options={userOptions} value={assignedEmployees} onChange={setAssignedEmployees} />
-              </Form.Item>  */}
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button block onClick={()=>assignMDR(assignedEmployees,allUsers)} type="primary"htmlType="submit">Assigned</Button>
@@ -700,26 +661,6 @@ const fetchDepartmentDocs = async (record) => {
               </Row>
 
               <Row>
-                {/* <Col md={12} span={24} className="hp-pr-sm-0 mt-2 hp-pr-12 ">
-                  <Button
-                    block
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => addDocument()}
-                  >
-                    Submit
-                  </Button>
-                </Col> */}
-
-                {/* <Col
-                  md={12}
-                  span={24}
-                  className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12"
-                >
-                  <Button block onClick={documentModalCancel}>
-                    Cancel
-                  </Button>
-                </Col> */}
               </Row>
             </Form>
           </Col>

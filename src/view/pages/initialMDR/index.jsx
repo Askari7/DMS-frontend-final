@@ -28,14 +28,14 @@ console.log(jsondata);
     const [customModalVisible, setCustomModalVisible] = useState(false);
     const { search } = useLocation();
     const params = new URLSearchParams(search);
-    const getProjectCode = params.get('projectCode');
+    const ProjectCode = params.get('projectCode');
     const getMdrCode = params.get('mdrCode');
     const projectId = params.get('projectId');
     const getMdrTitle= params.get('title');
     const status= params.get('status');
 
     const departmentId = params.get('departmentId');
-  console.log(getProjectCode,getMdrCode);
+  console.log(ProjectCode,getMdrCode);
    let departmentOptionsString = params.get('departmentOptions');
   console.log(departmentOptionsString);
   let departmentOptionSuffix = params.get('departmentOption');
@@ -44,6 +44,7 @@ console.log(jsondata);
   const projectOptions = params.get('projectOptions');
   const approver = params.get('approver');
   const reviewer = params.get('reviewer');
+  // const projectCode = params.get('projectCode');
 
     const [customFieldValues, setCustomFieldValues] = useState({});
     const [templateModalVisible,setTemplateModalVisible] = useState(false)
@@ -139,10 +140,14 @@ console.log("hehe",departmentOptionSuffixes)
         var mdrCode=getMdrCode;
         var count = selectedRows.length
         selectedRows.forEach(async (index) => {
-          const documentValue = data[index].document;
+          let documentValue = data[index].document;
+          documentValue = documentValue.replace("2014", ProjectCode)
+          console.log(documentValue,);
+
          const masterDocumentName=title;
           console.log(documentValue);
-          console.log('This is cvoming from param',approver,reviewer);
+          const assignedBy=user.user.id;
+          console.log('This is coming from param',approver,reviewer);
           try {
             var title=documentValue;
             var version='000';
@@ -157,9 +162,10 @@ console.log("hehe",departmentOptionSuffixes)
                 userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
                 masterDocumentId: mdrCode,
                 masterDocumentName,
-                projectCode: getProjectCode,
+                projectCode: ProjectCode,
                 departmentName:departmentLabelsString,
                 status : "Initialized",
+                assignedBy,
                  approver,
                  reviewer,
                  version
@@ -187,7 +193,7 @@ console.log("hehe",departmentOptionSuffixes)
             authorId: user?.user?.id,
             authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
             mdrCode,
-            projectCode: getProjectCode,
+            projectCode: ProjectCode,
             departmentName: departmentLabelsString,
           },
           {
@@ -279,13 +285,11 @@ console.log("hehe",departmentOptionSuffixes)
           {
             headers: {
               Authorization: user?.accessToken,
-              // Add other headers if needed
             },
           }
         );
-        // console.log(response);
         var newResponse=response.data.documentNumberFormat.split('-');
-        setCodes(getProjectCode+'-'+newResponse[1]+'-'+newResponse[2]+'-'+getMdrCode+'-'+'00X')        
+        setCodes(ProjectCode+'-'+newResponse[1]+'-'+newResponse[2]+'-'+getMdrCode+'-'+'00X')        
 
       } catch (error) {
         console.error("Error fetching projects:", error?.message);
@@ -310,7 +314,7 @@ console.log("hehe",departmentOptionSuffixes)
       if (selectedRowData) {
         const updatedData = [...data];
         const index = selectedRowData.key;
-        const newDocument = `${getProjectCode}-${title}-${getMdrCode}-00X`;
+        const newDocument = `${ProjectCode}-${title}-${getMdrCode}-00X`;
     
         updatedData[index] = {
           ...selectedRowData,

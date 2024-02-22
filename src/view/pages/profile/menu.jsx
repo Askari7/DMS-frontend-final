@@ -114,15 +114,15 @@ export default function MenuProfile(props) {
               hp-mb-16 hp-pl-24 hp-pr-32
               ${
                 splitLocation[splitLocation.length - 1] ===
-                "activity"
+                "company-information"
                   ? "ant-menu-item-selected"
                   : "ant-menu-item-selected-in-active"
               }
             `}
             onClick={props.onCloseDrawer}
           >
-            <Link to="/pages/profile/activity">
-              Activity
+            <Link to="/pages/profile/company-information">
+              Company Information
             </Link>
           </Menu.Item>
 

@@ -9,8 +9,7 @@ import InfoProfile from "./personel-information";
 import MenuProfile from "./menu";
 import PasswordProfile from "./password-change";
 import ProtectedAppPage from "../Protected";
-import { Activity } from "iconsax-react";
-import ActivityProfile from "./activity";
+import CompanyInfo from "./company-information";
 
 export default function Profile() {
   const [visible, setVisible] = useState(false);
@@ -99,14 +98,12 @@ export default function Profile() {
               <Route path="/pages/profile/personel-information" exact>
                 <InfoProfile />
               </Route>
-
               <Route path="/pages/profile/password-change">
                 <PasswordProfile />
               </Route>
-                          <Route path="/pages/profile/activity">
-                <ActivityProfile />
+              <Route path="/pages/profile/company-information">
+                <CompanyInfo />
               </Route>
-  
             </Switch>
           </Col>
         </Row>

@@ -16,11 +16,33 @@ export default function Analytics() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
   const [projects,setProjects] = useState([]);
+  const [departments,setDepartments] = useState([]);
+  const [userStrength,setUserStrength] = useState()
   const [assessment,setAssessment] = useState([])
   const [documents,setDocuments] = useState([])
   const [mdr,setMdr] = useState([])
   const [systemLog, setSystemLog] = useState([]);
-console.log("data",data);
+  const [departmentCounts,setDepartmentCounts] = useState()
+const fetchDepartments = async () => {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8083/api/departments/count?departmentId=${user?.user.departmentId}`,
+      {
+        headers: {
+          Authorization: user?.accessToken,
+        },
+      }
+    );
+    
+    console.log("users",response.data);
+    console.log("users",response.data.noOfUsers);
+    setDepartments(response.data.noOfUsers)
+
+  } catch (error) {
+    console.error("Error fetching departments:", error?.message);
+  }
+};
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -69,6 +91,25 @@ console.log("data",data);
       
       console.log('Project response data',response.data);
       setProjects(response.data); 
+      const departmentCount = {};
+    response.data.forEach(project => {
+    const departmentId = project.departmentId;
+    departmentCount[departmentId] = (departmentCount[departmentId] || 0) + 1;
+});
+
+console.log("Department count:", departmentCount);
+
+// setDepartmentCounts(departmentCount)
+
+const userDepartmentId = user.user.departmentId; // Assuming user.user.departmentId is the departmentId of the user
+
+// Fetch count for user's departmentId
+const userDepartmentCount = departmentCount[userDepartmentId] || 0;
+
+console.log("Count for user's department:", userDepartmentCount);
+setDepartmentCounts(userDepartmentCount)
+
+
     } catch (error) {
       console.error("Error fetching projects:", error?.message);
     }
@@ -119,112 +160,397 @@ console.log("data",data);
     fetchProjects();
     fetchDocuments();
     fetchMdr();
+    fetchDepartments()
     // fetchClients();
   }, []);
   return (
-<>
-  <Row gutter={[32, 32]} className="hp-mb-32">
-    <Col span={24}>
-      <h1 className="hp-mb-0">{data.companyName}</h1>
-    </Col>
-    <Col span={24}>
-      <h1 className="hp-mb-0">Information Of Company</h1>
-    </Col>
-    {/* <Col span={24}>
-      <DonutChart projects={projects} projectCount={data.projectCount} />
-    </Col> */}
-  </Row>
+    <>
+      {/* <Row gutter={[32, 32]} className="hp-mb-32">
+        {/* <Col span={24}>
+          <DonutChart projects={projects} projectCount={data.projectCount} />
+        </Col> */}
+      {/* </Row> */} 
+      {user?.user?.roleId === 1 && ( // Check if roleId is 1
+        <Row gutter={[32, 32]} className="hp-mb-32">
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <Row gutter={[32, 32]}>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">{data.companyName} CEO {user.user.firstName} {user.user.lastName}</h1>
+                </Col>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">Analytics Of Company</h1>
+                </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Departments"
+                      count={data?.departmentCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Projects"
+                      count={data?.projectCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Clients"
+                      count={data?.clientCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="MDR"
+                      count={data?.mdrCount || "0"}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={24}>
+                <FeatureCard
+                  icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                  title="Employees"
+                  count={data?.employeeCount || "0"}
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              {data?.roleCounts && (
+                <>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Lead"
+                      count={data.roleCounts['2'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Senior Engineer"
+                      count={data.roleCounts['3'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Junior Engineer"
+                      count={data.roleCounts['4'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Designer or "
+                      count={data.roleCounts['5'] || "0"}
+                    />
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Col>
+          <Col span={24}>
+            {user?.user?.roleId === 1 && (
+              <ListCard title="System Logs" list={data?.logs} />
+            )}
+          </Col>
+        </Row>
 
-  <Row gutter={[32, 32]} className="hp-mb-32">
-    <Col span={24}>
-      <Row gutter={[32, 32]}>
-        <Col span={24}>
-          <Row gutter={[32, 32]}>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Departments"
-                count={data?.departmentCount || "0"}
-              />
-            </Col>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Projects"
-                count={data?.projectCount || "0"}
-              />
-            </Col>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Clients"
-                count={data?.clientCount || "0"}
-              />
-            </Col>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="MDR"
-                count={data?.mdrCount || "0"}
-              />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <FeatureCard
-            icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-            title="Employees"
-            count={data?.employeeCount || "0"}
-          />
-        </Col>
-      </Row>
-    </Col>
-    <Col span={24}>
-      <Row gutter={[32, 32]}>
-        {data?.roleCounts && (
-          <>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Lead"
-                count={data.roleCounts['2'] || "0"}
-              />
-            </Col>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Senior Engineer"
-                count={data.roleCounts['3'] || "0"}
-              />
-            </Col>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Junior Engineer"
-                count={data.roleCounts['4'] || "0"}
-              />
-            </Col>
-            <Col span={6}>
-              <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                title="Designer"
-                count={data.roleCounts['5'] || "0"}
-              />
-            </Col>
-          </>
+
+      )
+      }      
+
+      {user?.user?.roleId === 2 && ( // Check if roleId is 1
+        <Row gutter={[32, 32]} className="hp-mb-32">
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <Row gutter={[32, 32]}>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">{user.user.department} Lead {user.user.firstName} {user.user.lastName}</h1>
+                </Col>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">Analytics Of Company</h1>
+                </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Total Strength"
+                      count={departments|| "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Departments Project"
+                      count={departmentCounts|| "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Assigned MDRs"
+                      count={data?.clientCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="MDR"
+                      count={data?.mdrCount || "0"}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={24}>
+                <FeatureCard
+                  icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                  title="Employees"
+                  count={data?.employeeCount || "0"}
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              {data?.roleCounts && (
+                <>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Lead"
+                      count={data.roleCounts['2'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Senior Engineer"
+                      count={data.roleCounts['3'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Junior Engineer"
+                      count={data.roleCounts['4'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Designer or "
+                      count={data.roleCounts['5'] || "0"}
+                    />
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Col>
+          <Col span={24}>
+            {user?.user?.roleId === 1 && (
+              <ListCard title="System Logs" list={data?.logs} />
+            )}
+          </Col>
+        </Row>
+        
         )}
-      </Row>
-    </Col>
-    <Col span={24}>
-      {user?.user?.roleId == 1 ? (
-        <ListCard title="System Logs" list={data?.logs} />
-      ) : (
-        <div />
-      )}
-    </Col>
-  </Row>
-  <ProtectedAppPage />
-</>
 
-  );
+{user?.user?.roleId === 3 && ( // Check if roleId is 1
+        <Row gutter={[32, 32]} className="hp-mb-32">
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <Row gutter={[32, 32]}>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">{user.user.department} Senior Engineer {user.user.firstName} {user.user.lastName}</h1>
+                </Col>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">Analytics Of Company</h1>
+                </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Departments"
+                      count={data?.departmentCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Projects"
+                      count={data?.projectCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Clients"
+                      count={data?.clientCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="MDR"
+                      count={data?.mdrCount || "0"}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={24}>
+                <FeatureCard
+                  icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                  title="Employees"
+                  count={data?.employeeCount || "0"}
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              {data?.roleCounts && (
+                <>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Senior Engineer"
+                      count={data.roleCounts['3'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Junior Engineer"
+                      count={data.roleCounts['4'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Designer or "
+                      count={data.roleCounts['5'] || "0"}
+                    />
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Col>
+          <Col span={24}>
+            {user?.user?.roleId === 1 && (
+              <ListCard title="System Logs" list={data?.logs} />
+            )}
+          </Col>
+        </Row>
+        
+        )}
+
+
+{user?.user?.roleId === 4 && ( // Check if roleId is 1
+        <Row gutter={[32, 32]} className="hp-mb-32">
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <Row gutter={[32, 32]}>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">{user.user.department} Junior Engineer {user.user.firstName} {user.user.lastName}</h1>
+                </Col>
+                <Col span={24}>
+                  <h1 className="hp-mb-0">Analytics Of Company</h1>
+                </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Departments"
+                      count={data?.departmentCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Projects"
+                      count={data?.projectCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Clients"
+                      count={data?.clientCount || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="MDR"
+                      count={data?.mdrCount || "0"}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={24}>
+                <FeatureCard
+                  icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                  title="Employees"
+                  count={data?.employeeCount || "0"}
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              {data?.roleCounts && (
+                <>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Lead"
+                      count={data.roleCounts['2'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Senior Engineer"
+                      count={data.roleCounts['3'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Junior Engineer"
+                      count={data.roleCounts['4'] || "0"}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <FeatureCard
+                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      title="Designer or "
+                      count={data.roleCounts['5'] || "0"}
+                    />
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Col>
+          <Col span={24}>
+            {user?.user?.roleId === 1 && (
+              <ListCard title="System Logs" list={data?.logs} />
+            )}
+          </Col>
+        </Row>
+        
+        )}
+
+      <ProtectedAppPage />
+    </>
+  );  
 }
