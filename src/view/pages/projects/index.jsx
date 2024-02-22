@@ -103,7 +103,7 @@ export default function Projects() {
   const fetchClients = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -159,7 +159,7 @@ export default function Projects() {
     console.log("inside");
     try {
       const response = await axios.post(
-        "https://54.81.250.98:8083/api/projects/",
+        "http://54.81.250.98:8083/api/projects/",
         {
           title: projName,
           departmentId,
@@ -197,7 +197,7 @@ export default function Projects() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -222,7 +222,7 @@ export default function Projects() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

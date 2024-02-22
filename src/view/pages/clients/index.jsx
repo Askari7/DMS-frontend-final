@@ -97,7 +97,7 @@ const [data, setData] = useState([]);
 const fetchData = async () => {
   try {
     const response = await axios.get(
-      `https://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
+      `http://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -117,7 +117,7 @@ const addClient = async () => {
   try {
 
     const response = await axios.post(
-      `https://54.81.250.98:8083/api/clients`,
+      `http://54.81.250.98:8083/api/clients`,
       {
         clientName,
         companyId:user?.user?.companyId,
@@ -148,7 +148,7 @@ const addClient = async () => {
 const fetchProjects = async () => {
   try {
     const response = await axios.get(
-      `https://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+      `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,

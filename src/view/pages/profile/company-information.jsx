@@ -56,7 +56,7 @@ export default function CompanyInfo() {
 
     try {
       const response = await axios.put(
-        `https://54.81.250.98:8083/api/users/${user?.user?.id}`,
+        `http://54.81.250.98:8083/api/users/${user?.user?.id}`,
         obj,
         {
           headers: {

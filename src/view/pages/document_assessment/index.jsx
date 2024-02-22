@@ -25,7 +25,7 @@ import { Checkbox } from "antd";
 
 
 export default function DocumentPermissions() {
-  const BACKEND_URL = "https://54.81.250.98:8083"; // Update with your backend URL
+  const BACKEND_URL = "http://54.81.250.98:8083"; // Update with your backend URL
 
   const columns = [
     //   {
@@ -180,7 +180,7 @@ export default function DocumentPermissions() {
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        `http://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -215,7 +215,7 @@ export default function DocumentPermissions() {
   const addPermission = async () => {
     try {
       const response = await axios.post(
-        "https://54.81.250.98:8083/api/documents/permissions",
+        "http://54.81.250.98:8083/api/documents/permissions",
         {
           masterDocumentId: mdr,
           userId: permissionUser,
@@ -249,7 +249,7 @@ export default function DocumentPermissions() {
   const fetchMDR = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -279,7 +279,7 @@ export default function DocumentPermissions() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -317,7 +317,7 @@ export default function DocumentPermissions() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user?.user?.id}`,
+        `http://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user?.user?.id}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -421,7 +421,7 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
               console.log(myrecord.yourRole,selectedStatus,revStat.join(','),appStat.join(','));
 
       const response = await axios.put(
-        `https://54.81.250.98:8083/api/documents/establishment`,
+        `http://54.81.250.98:8083/api/documents/establishment`,
         {
           status: selectedStatus,
           revStatusArr: revStat.join(','), // Convert array to string

@@ -184,7 +184,7 @@ const fetchDepartmentDocs = async (record) => {
   try {
     console.log('recorddd',record);
     const response = await axios.get(
-      `https://54.81.250.98:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
+      `http://54.81.250.98:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -212,7 +212,7 @@ const fetchDepartmentDocs = async (record) => {
         (item) => item?.value == departmentId
       );
       const response = await axios.post(
-        "https://54.81.250.98:8083/api/documents/mdr",
+        "http://54.81.250.98:8083/api/documents/mdr",
         {
           departmentId:assignedUser.departmentId,
           projectId,
@@ -246,7 +246,7 @@ const fetchDepartmentDocs = async (record) => {
       );
 
       const response = await axios.post(
-        "https://54.81.250.98:8083/api/documents/mdr",
+        "http://54.81.250.98:8083/api/documents/mdr",
         {
           title,
           selectedDepartments,
@@ -280,7 +280,7 @@ const fetchDepartmentDocs = async (record) => {
     try {
       console.log(record);
       const response = await axios.post(
-        `https://54.81.250.98:8083/api/documents?projectId${record?.projectId}?companyId=${user?.user?.companyId}?masterDocumentId=${record.mdrCode}`,
+        `http://54.81.250.98:8083/api/documents?projectId${record?.projectId}?companyId=${user?.user?.companyId}?masterDocumentId=${record.mdrCode}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -302,7 +302,7 @@ const fetchDepartmentDocs = async (record) => {
         const projectCode = record.projectCode
         console.log(projectId,projectCode);
         const response = await axios.put(
-          `https://54.81.250.98:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
+          `http://54.81.250.98:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
           {
                 title,
                 mdrCode,
@@ -324,7 +324,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -353,7 +353,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -382,7 +382,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -418,7 +418,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `https://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
