@@ -48,6 +48,10 @@ export default function Document() {
       title: "Document Name",
       dataIndex: "title",
       key: "title",
+    }, {
+      title: "Version",
+      dataIndex: "version",
+      key: "version",
     },
     {
       title: "Dept Id",
@@ -85,24 +89,36 @@ export default function Document() {
       render: (_, record) => (
         <Space size="middle">
           {user.user.roleId != 1 ? record.status=='Initialized'? (
-            <>
-            <a>
-              <input type="file" onChange={(e)=>handleFileChange(e,record)} />
+                    <Space size="middle">
+
+            <input type="file" onChange={(e)=>handleFileChange(e,record)}>
              
-              <text onClick={() => assignModalShow(record)}>Assign Document</text>
 
-            </a>
+            </input>
+            <a onClick={() => assignModalShow(record)}>Assign Document</a>
 
-            </>
-          ) :(
+            </Space>
+
+            
+          ) : user.user.id == record.assignedTo ?(
+            <Space size="middle">
             <a onClick={() => handleOpen(record)}>Open</a>
+            
+            <input type="file" onChange={(e)=>handleFileChange(e,record)}/>
+            </Space>
 
-          ): record.status =='Initialized'?              <a onClick={() => assignModalShow(record)}>Assign Document</a>
+          ): (
+            <>
+<a onClick={() => handleOpen(record)}>Open</a>
+              {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.title}`)}>Open</a> */}
+              {/* <a onClick={() => statusModalShow(record)}>Add Status</a> */}
+            </>
+          ):record.status =='Initialized'?              <a onClick={() => assignModalShow(record)}>Assign Document</a>
           :(
             <>
 <a onClick={() => handleOpen(record)}>Open</a>
               {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.title}`)}>Open</a> */}
-              <a onClick={() => statusModalShow(record)}>Add Status</a>
+              {/* <a onClick={() => statusModalShow(record)}>Add Status</a> */}
             </>
           )}
         </Space>
@@ -209,16 +225,32 @@ allowed='true';
     }
   };
   const handleFileChange = async (e, record) => {
+    const formData = new FormData();
+
     const uploadedFile = e.target.files[0];
     console.log(record);
     const title=record.title;
     console.log(record.title,record.version);
     if (uploadedFile.name === `${record.title}-${record.version}.pdf`) {
       setFile(uploadedFile);
+console.log(formData,'formdata');
       console.log('Uploaded file:', uploadedFile);
+
+      const obj = {
+        title: title,
+        companyId: user?.user?.companyId,
+        roleId: user?.user?.roleId,
+        userId: user?.user?.id,
+        userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+        "file": uploadedFile
+      };
+      Object.entries(obj).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
       try {
        
        
+
         const response = await axios.post(
           `http://54.81.250.98:8083/api/documents/upload`,        
           {title},
@@ -399,6 +431,7 @@ if(user.user.roleId==2 ){
     }
   };
   const fetchData = async () => {
+    
     try {
       const response = await axios.get(
         `http://54.81.250.98:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
@@ -843,7 +876,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
           </Col>
         </Row>
       </Modal>
-      <div style={{ textAlign: "right", marginBottom: "16px" ,padding:"5px"}}>
+      <div style={{ textAlign: "right", marginBottom: "16px" ,padding:"15px", gap:"15px"}}>
         <Button
           type="primary"
           onClick={documentModalShow}

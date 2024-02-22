@@ -9,6 +9,7 @@ import InfoProfile from "./personel-information";
 import MenuProfile from "./menu";
 import PasswordProfile from "./password-change";
 import ProtectedAppPage from "../Protected";
+import CompanyInfo from "./company-information";
 
 export default function Profile() {
   const [visible, setVisible] = useState(false);
@@ -65,12 +66,11 @@ export default function Profile() {
           footer="none"
         />
       </Drawer>
-
-      {/* <Col span={24}>
+    <Col span={24}>
         <Row gutter={[32, 32]} justify="space-between">
           <Breadcrumbs breadCrumbParent="Pages" breadCrumbActive="Profile" />
         </Row>
-      </Col> */}
+      </Col> 
 
       <Col span={24}>
         <Row className="hp-profile-mobile-menu-btn hp-bg-color-black-0 hp-bg-color-dark-100 hp-border-radius hp-py-12 hp-px-sm-8 hp-px-24 hp-mb-16">
@@ -98,9 +98,11 @@ export default function Profile() {
               <Route path="/pages/profile/personel-information" exact>
                 <InfoProfile />
               </Route>
-
               <Route path="/pages/profile/password-change">
                 <PasswordProfile />
+              </Route>
+              <Route path="/pages/profile/company-information">
+                <CompanyInfo />
               </Route>
             </Switch>
           </Col>

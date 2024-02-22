@@ -8,7 +8,7 @@ import { Card, Row, Col, List, Tooltip, Comment, Button } from "antd";
 import { RiCodeSSlashLine } from "react-icons/ri";
 import moment from "moment";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 export default function CommentListUsage() {
   const [checkedCode, setCheckedCode] = useState(false);

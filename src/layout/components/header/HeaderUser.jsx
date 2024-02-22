@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Dropdown, Col, Divider, Row } from "antd";
 import { Calculator } from "iconsax-react";
 
-import avatarImg from "../../../assets/images/memoji/user-avatar-4.png";
+import avatarImg from "../../../assets/images/users/user-14.svg";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../../redux/auth/authActions";
 

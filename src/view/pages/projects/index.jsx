@@ -19,10 +19,15 @@ import {
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
-// import InfoProfile from "./personel-information";
-// import MenuProfile from "./menu";
-// import PasswordProfile from "./password-change";
+
 import ProtectedAppPage from "../Protected";
+const handleDelete = (record) => {
+  record.delete = true;
+  fetchData().catch(error => {
+    console.error("Error deleting project:", error);
+  });
+};
+
 
 const columns = [
   {
@@ -34,11 +39,6 @@ const columns = [
     title: "Project Title",
     dataIndex: "title",
     key: "title",
-  },
-  {
-    title: "Department Name",
-    dataIndex: "departmentNames",
-    key: "departmentNames",
   },
   {
     title: "Client Email",
@@ -76,28 +76,15 @@ const columns = [
     key: "action",
     render: (_, record) => (
       <Space size="middle">
-        <a>Delete</a>
+        <a onClick={() => handleDelete(record)}>Delete</a>
       </Space>
-    ),
+    )
   },
 ];
 
 export default function Projects() {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [departmentName,setDepartmentName] = useState('')
-
-  // const departmentOptions = [
-  //   { label: 'Project Management', value: 'projectManagement' },
-  //   { label: 'Process', value: 'process' },
-  //   { label: 'Mechanical', value: 'mechanical' },
-  //   { label: 'Electrical', value: 'electrical' },
-  //   { label: 'Instrumentation', value: 'instrumentation' },
-  //   { label: 'Civil / Structure', value: 'civilStructure' },
-  //   { label: 'Finance', value: 'finance' },
-  //   { label: 'HR / Admin', value: 'hrAdmin' },
-  //   { label: 'Quality', value: 'quality' },
-  // ];
-
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
@@ -221,7 +208,7 @@ export default function Projects() {
       );
       
       console.log('Project response data',response.data);
-      setData(response.data); // Assuming the response.data is an array of projects
+      setData(response.data);      
       const options = [];
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
@@ -280,7 +267,6 @@ export default function Projects() {
         centered
         onFinish={() => {
           addProject();
-          // Clear form fields
           setCode("");
           setStatus("");
           setProjName("");
