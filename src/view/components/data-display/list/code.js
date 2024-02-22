@@ -7,7 +7,7 @@ import {
   RiStarLine,
 } from "react-icons/ri";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 const data = [
   {
@@ -47,7 +47,7 @@ import React, { useState, useEffect } from "react";
 import { List, Avatar, Skeleton, Button } from "antd";
 import { axios } from "axios";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 const axios = require("axios").default;
 const count = 3;
@@ -139,7 +139,7 @@ export const vertical = `
 import { List, Avatar, Space } from "antd";
 import { RiThumbUpLine, RiMessage3Line, RiStarLine } from "react-icons/ri";
 
-import user from "../../../../assets/images/memoji/memoji-1.png";
+import user from "../../../../assets/images/users/OIP.jpg";
 
 const listData = [];
 for (let i = 0; i < 23; i++) {

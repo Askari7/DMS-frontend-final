@@ -14,7 +14,7 @@ import {
 } from "react-iconly";
 
 import menuImg from "../../../assets/images/pages/profile/menu-img.svg";
-import avatar from "../../../assets/images/memoji/memoji-1.png";
+import avatar from "../../../assets/images/users/1.jpg";
 
 export default function MenuProfile(props) {
   const menuIconClass = "remix-icon hp-mr-8";
