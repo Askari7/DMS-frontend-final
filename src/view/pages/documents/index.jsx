@@ -399,6 +399,7 @@ if(user.user.roleId==2 ){
     }
   };
   const fetchData = async () => {
+    
     try {
       const response = await axios.get(
         `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,

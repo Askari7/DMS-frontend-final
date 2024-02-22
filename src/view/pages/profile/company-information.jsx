@@ -21,7 +21,7 @@ import {
   updateUserInformation,
 } from "../../../redux/auth/authActions";
 import axios from "axios";
-export default function InfoProfile() {
+export default function CompanyInfo() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const dispatch = useDispatch();
 

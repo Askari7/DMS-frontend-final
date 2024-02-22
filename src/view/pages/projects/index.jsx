@@ -85,19 +85,6 @@ const columns = [
 export default function Projects() {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [departmentName,setDepartmentName] = useState('')
-
-  // const departmentOptions = [
-  //   { label: 'Project Management', value: 'projectManagement' },
-  //   { label: 'Process', value: 'process' },
-  //   { label: 'Mechanical', value: 'mechanical' },
-  //   { label: 'Electrical', value: 'electrical' },
-  //   { label: 'Instrumentation', value: 'instrumentation' },
-  //   { label: 'Civil / Structure', value: 'civilStructure' },
-  //   { label: 'Finance', value: 'finance' },
-  //   { label: 'HR / Admin', value: 'hrAdmin' },
-  //   { label: 'Quality', value: 'quality' },
-  // ];
-
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
@@ -221,8 +208,7 @@ export default function Projects() {
       );
       
       console.log('Project response data',response.data);
-      const filteredData = response.data.filter(item => item.delete === false);
-      setData(filteredData);      
+      setData(response.data);      
       const options = [];
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
@@ -281,7 +267,6 @@ export default function Projects() {
         centered
         onFinish={() => {
           addProject();
-          // Clear form fields
           setCode("");
           setStatus("");
           setProjName("");
