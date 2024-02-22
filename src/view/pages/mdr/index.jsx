@@ -51,6 +51,8 @@ export default function MDR() {
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [showModalVisible, setShowModalVisible] = useState(false);
+
 
 
   const [title, setTitle] = useState("");
@@ -65,6 +67,7 @@ export default function MDR() {
   const [data, setData] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedReviewer, setSelectedReviewer] = useState([]);
+  const [docData, setDocData] = useState([]);
 
   const [assignedEmployees, setAssignedEmployees] = useState([]);
   const [selectedApprover, setSelectedApprover] = useState([]);
@@ -77,7 +80,7 @@ export default function MDR() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
-  
+
 
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
@@ -130,10 +133,49 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
     setCreateModalVisible(true);
   };
 
+  const showModalShow = (record) => {
+    console.log(record)
+    setRecord(record)
+    showDocs(record)
+    setShowModalVisible(true);
+  };
+
+  const showModalCancel = () => {
+    setShowModalVisible(false);
+  };
   const createModalCancel = () => {
     setCreateModalVisible(false);
   };
+const showDocs = async(record)=>{
+  console.log("record",record);
 
+  fetchDepartmentDocs(record)
+
+
+}
+
+const fetchDepartmentDocs = async (record) => {
+  try {
+    console.log('recorddd',record);
+    const response = await axios.get(
+      `http://127.0.0.1:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    );
+      setDocData(response.data);
+      console.log(docData,'hiiiiiiiii');
+    console.log(response.data,"received");
+    // Check if response.data is an array before including it in the setData call
+    // const newData = Array.isArray(response.data) ? response.data : [];
+    // setData([...newData]);
+  } catch (error) {
+    console.error("Error fetching documents:", error?.message);
+  }
+};
 
   const assignMDR = async(assignedEmployees,allUsers)=>{
     try {
@@ -212,7 +254,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
     try {
       console.log(record);
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/export/${record?.id}?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents?projectId${record?.projectId}?companyId=${user?.user?.companyId}?masterDocumentId=${record.mdrCode}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -685,11 +727,11 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
       </Modal>
 
       <Modal
-        title="Create MDR "
+        title="Show MDR Documents "
         width={400}
         centered
-        visible={createModalVisible}
-        onCancel={createModalCancel}
+        visible={showModalVisible}
+        onCancel={showModalCancel}
         footer={null}
         closeIcon={
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
@@ -697,48 +739,25 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
       >
         <Row justify="space-between" align="center">
           <Col span={20}>
-            <Form layout="vertical" name="basic">
-              <Form.Item
-                label="MDR Title"
-                name="mdrTitle"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select MDR Title",
-                  },
-                ]}
-              ><Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />                
-                
-                </Form.Item>
-
-                <Form.Item
-                label="MDR Code"
-                name="mdrCode"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select MDR Code",
-                  },
-                ]}
-              >
-                  <Input
-                  value={mdrCode}
-                  onChange={(e) => setMdrCode(e.target.value)}
-                />                
-                </Form.Item>
-              <Row>
-              <Button
-          type="primary"
-          onClick={mdr}
-          style={{ marginRight: '10px' }}
-        >
-          Create
-        </Button>
-              </Row>
-            </Form>
+          <div>
+          <h3>MDR Documents</h3>
+          {/* <ul>
+            {selectedRows.map((row, index) => (
+              <li key={index}>{row+1}</li>
+            ))}
+          </ul> */}
+    <ul>
+      {docData.map((doc,index) => (
+        <li key={index}>
+          {/* <strong>Category:</strong> {data[index].category} <br /> */}
+          {/* <strong>Code:</strong> {data[index].code} <br /> */}
+          <strong>Document Title:</strong> {doc.title} <br />
+          {/* <strong>Document Number:</strong> {data[index].document} <br /> */}
+          {/* Add other properties as needed */}
+        </li>
+      ))}
+    </ul>
+        </div>
           </Col>
         </Row>
       </Modal>
@@ -815,6 +834,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
             render: (_, record) => (
               <>
                 <Space size="middle">
+
                   <Button
                     key={record?.id}
                     onClick={() => {
@@ -824,16 +844,28 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
                   >
                     Export
                   </Button>
+                  {user.user.roleId!==1 &&       
+                  <>
                   <Button
                     key={record?.id}
-                    onClick={() => {createModalShow(record)
-                      // exportCSV(record);
-                      
+                    onClick={() => {createModalShow(record)                      
                     }}
-                    disabled={user?.user?.roleId == 1}
                   >
                     Create
                   </Button>
+                  </>
+                  }      
+                  {user.user.roleId==1 &&       
+                  <>
+                  <Button
+                    key={record?.id}
+                    onClick={() => {showModalShow(record)                      
+                    }}
+                  >
+                    Open
+                  </Button>
+                  </>
+                  }       
                 </Space>
               </>
             ),
