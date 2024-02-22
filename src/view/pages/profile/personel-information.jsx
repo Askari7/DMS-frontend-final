@@ -56,7 +56,7 @@ export default function InfoProfile() {
 
     try {
       const response = await axios.put(
-        `http://54.81.250.98:8083/api/users/${user?.user?.id}`,
+        `https://54.81.250.98:8083/api/users/${user?.user?.id}`,
         obj,
         {
           headers: {

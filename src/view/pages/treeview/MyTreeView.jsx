@@ -1471,7 +1471,7 @@ const MyTreeView = () => {
   const fetchInformation = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

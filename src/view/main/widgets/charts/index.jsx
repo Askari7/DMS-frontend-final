@@ -29,7 +29,7 @@ export default function Charts() {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -49,7 +49,7 @@ export default function Charts() {
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/documents?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -67,7 +67,7 @@ export default function Charts() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -90,7 +90,7 @@ export default function Charts() {
   const fetchMdr = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

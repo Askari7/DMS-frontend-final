@@ -83,7 +83,7 @@ export default function Users() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -117,7 +117,7 @@ export default function Users() {
         "designer":5
       }
       const response = await axios.post(
-        `http://54.81.250.98:8083/api/users`,
+        `https://54.81.250.98:8083/api/users`,
         {
           roleId:roleOptions[role],
           companyId:user?.user?.companyId,
@@ -148,7 +148,7 @@ export default function Users() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

@@ -55,7 +55,7 @@ export default function SignUp() {
     try {
       // Make the POST request using Axios with async/await
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/auth/signup",
+        "https://54.81.250.98:8083/api/auth/signup",
         {
           firstName,
           lastName,

@@ -101,7 +101,7 @@ export default function DocumentNumbering() {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://54.81.250.98:8083/api/documents/format?companyId=${user?.user?.companyId}`,
+        `https://54.81.250.98:8083/api/documents/format?companyId=${user?.user?.companyId}`,
         {
           documentNumberFormat: `${firstField}-${secondField}-${thirdField}-${fourthField}`,
         },

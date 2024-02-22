@@ -17,7 +17,7 @@ export default function ResetPassword() {
 
   console.log(token)
   const onFinish = () => {
-    axios.post(`http://54.81.250.98:3001/v1/auth/reset-password?token=${token}`, {password})
+    axios.post(`https://54.81.250.98:3001/v1/auth/reset-password?token=${token}`, {password})
     .then(response=> {
       console.log(response.data)
       if(response.status == 204){
