@@ -47,7 +47,7 @@ export default function Login() {
     try {
       // Make the POST request using Axios with async/await
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/auth/signin",
+        "http://54.81.250.98:8083/api/auth/signin",
         {
           email,
           password,

@@ -144,7 +144,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
         (item) => item?.value == departmentId
       );
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/documents/mdr",
+        "http://54.81.250.98:8083/api/documents/mdr",
         {
           departmentId:assignedUser.departmentId,
           projectId,
@@ -178,7 +178,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
       );
 
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/documents/mdr",
+        "http://54.81.250.98:8083/api/documents/mdr",
         {
           title,
           selectedDepartments,
@@ -212,7 +212,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
     try {
       console.log(record);
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/export/${record?.id}?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/documents/export/${record?.id}?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -234,7 +234,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
         const projectCode = record.projectCode
         console.log(projectId,projectCode);
         const response = await axios.put(
-          `http://127.0.0.1:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
+          `http://54.81.250.98:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
           {
                 title,
                 mdrCode,
@@ -256,7 +256,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -284,7 +284,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -313,7 +313,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -349,7 +349,7 @@ const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,

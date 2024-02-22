@@ -45,7 +45,7 @@ const DocumentNumberingForm = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/format?companyId=${user?.user?.companyId}`,
+        `http://54.81.250.98:8083/api/documents/format?companyId=${user?.user?.companyId}`,
         {
           documentNumberFormat: `${docNumber}`,
         },
