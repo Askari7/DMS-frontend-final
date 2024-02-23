@@ -1468,25 +1468,25 @@ const MyTreeView = () => {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
 
 //   console.log("user",user)
-//   const fetchInformation = async () => {
-//     try {
-//       const response = await axios.get(
-//         `http://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
-//         {
-//           headers: {
-//             Authorization: user?.accessToken,
-//           },
-//         }
+  // const fetchInformation = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+  //       {
+  //         headers: {
+  //           Authorization: user?.accessToken,
+  //         },
+  //       }
+  //     )
         
-      );  
-      console.log('Information response data',response.data);
-      setInformation(response.data); // Assuming the response.data is an array of projects
-    } catch (error) {
-      console.error("Error fetching projects:", error?.message);
-    }
-  };
+  //     console.log('Information response data',response.data);
+  //     setInformation(response.data); // Assuming the response.data is an array of projects
+  //   } catch (error) {
+  //     console.error("Error fetching projects:", error?.message);
+  //   }
+  
   useEffect(()=>{
-    fetchInformation()
+    // fetchInformation()
   },[])
   const classes = useStyles();
 
@@ -1553,6 +1553,6 @@ const MyTreeView = () => {
       </TreeView>
     </div>
   );
-};
+}
 
 export default MyTreeView;

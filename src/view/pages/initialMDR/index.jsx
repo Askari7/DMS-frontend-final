@@ -138,6 +138,7 @@ console.log("hehe",departmentOptionSuffixes)
         // console.log(department);
         var title=getMdrTitle;
         var mdrCode=getMdrCode;
+        mdrCode=mdrCode.replace(/\s/g, '');
         var count = selectedRows.length
         selectedRows.forEach(async (index) => {
           let documentValue = data[index].document;
@@ -147,6 +148,7 @@ console.log("hehe",departmentOptionSuffixes)
          const masterDocumentName=title;
           console.log(documentValue);
           const assignedBy=user.user.id;
+          const assignedFrom=user.user.roleId;
           console.log('This is coming from param',approver,reviewer);
           try {
             var title=documentValue;
@@ -166,6 +168,7 @@ console.log("hehe",departmentOptionSuffixes)
                 departmentName:departmentLabelsString,
                 status : "Initialized",
                 assignedBy,
+                assignedFrom,
                  approver,
                  reviewer,
                  version
@@ -386,7 +389,7 @@ console.log("hehe",departmentOptionSuffixes)
           onClick={handleDone}
           // disabled={user?.user?.roleId != 1}
         >
-          Done
+          Confirm
         </Button>
     </Modal>
 
@@ -402,7 +405,7 @@ console.log("hehe",departmentOptionSuffixes)
       <Row justify="space-between" align="center">
         {/* Display the content of selectedRows here */}
         <div>
-          <h3>Selected Rows:</h3>
+          <h3>Selected Documents:</h3>
           {/* <ul>
             {selectedRows.map((row, index) => (
               <li key={index}>{row+1}</li>
@@ -444,13 +447,21 @@ console.log("hehe",departmentOptionSuffixes)
         }}
 
       />
+      <Space >
       <Button
         type="primary"
         onClick={customModalShow}
       >
         Add Custom
       </Button>
-
+      <Button
+          type="primary"
+          onClick={templateModalShow}
+          // disabled={user?.user?.roleId != 1}
+        >
+          Proceed
+        </Button>
+        </Space>
       {/* Custom Modal */}
       <Modal
         title="Add Custom Field"
@@ -491,13 +502,7 @@ console.log("hehe",departmentOptionSuffixes)
         </Form>
       </Modal>
 
-            <Button
-          type="primary"
-          onClick={templateModalShow}
-          // disabled={user?.user?.roleId != 1}
-        >
-          View Templates
-        </Button>
+         
       {/* <div style={{ marginTop: '16px' }}>
         Selected Rows: {selectedRows.join(', ')}
       </div> */}

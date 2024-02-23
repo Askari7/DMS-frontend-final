@@ -606,6 +606,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
     console.error("Error assigning documents:", error);
   }
 }
+
   return (
     <>
     <Modal
@@ -885,12 +886,12 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
           Add Documents
         </Button>
 
-        <Button
+        {/* <Button
           type="primary"
           onClick={handleProjectWiseClick}
           disabled={user?.user?.roleId == 3}
         >Project Wise
-        </Button>
+        </Button> */}
 
         <Button
           type="primary"

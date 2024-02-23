@@ -126,7 +126,7 @@ export default function MDR() {
     
   const documentModalShow = () => {
     setDocumentModalVisible(true);
-    setProjectCode(record.projectCode)
+    // setProjectCode(record.projectCode)
 
   };
 
@@ -152,7 +152,7 @@ export default function MDR() {
   const assignModalCancel = () => {
     setAssignModalVisible(false);
   };
-
+let count=0;
   const createModalShow = (record) => {
     console.log("record",record)
     setRecord(record)
@@ -179,6 +179,41 @@ const showDocs = async(record)=>{
 
 
 }
+const convertToCSV = (data) => {
+  const csvRows = [];
+  
+  const headers = Object.keys(data[0]);
+  csvRows.push(headers.join(','));
+
+  data.forEach((object) => {
+    const values = headers.map(header => {
+      const needsQuotes = typeof object[header] === 'string' && object[header].includes(',');
+      if (needsQuotes) {
+        return `"${object[header].replace(/"/g, '""')}"`;
+      }
+      return object[header];
+    });
+    csvRows.push(values.join(','));
+  });
+
+  return csvRows.join('\n');
+};
+
+const handleExport = async (record) => {
+  await fetchDepartmentDocs(record);
+  console.log(count,'counttt');
+  if (docData.length > 0) {
+    const csvData = convertToCSV(docData);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `MDR ${docData[0].masterDocumentId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
 
 const fetchDepartmentDocs = async (record) => {
   try {
@@ -202,7 +237,9 @@ const fetchDepartmentDocs = async (record) => {
     console.error("Error fetching documents:", error?.message);
   }
 };
-
+useEffect(() => {
+  
+}, [docData]);
   const assignMDR = async(assignedEmployees,allUsers)=>{
     try {
       // console.log(allUsers);
@@ -779,9 +816,7 @@ const fetchDepartmentDocs = async (record) => {
 
                   <Button
                     key={record?.id}
-                    onClick={() => {
-                      exportCSV(record);
-                    }}
+                    onClick={() => handleExport(record)}
                     disabled={user?.user?.roleId != 1}
                   >
                     Export

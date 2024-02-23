@@ -88,6 +88,8 @@ export default function Projects() {
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
+  const [projCode, setProjCode] = useState("");
+
   const [clientEmail, setClientEmail] = useState("");
 
   const [departmentId, setDepartmentId] = useState([]);
@@ -282,8 +284,12 @@ export default function Projects() {
         }
       >
         <Form layout="vertical" name="basic">
-        <Form.Item label="Project Code"> <label> {code}</label></Form.Item> 
-          <Form.Item label="Project Name" name="projName">
+        <Form.Item label="Project Code" name="projCode">
+            <Input
+              value={projCode}
+              onChange={(e) => setProjCode(e.target.value)}
+            />
+          </Form.Item>          <Form.Item label="Project Name" name="projName">
             <Input
               value={projName}
               onChange={(e) => setProjName(e.target.value)}
