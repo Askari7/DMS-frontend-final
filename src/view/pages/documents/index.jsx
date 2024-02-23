@@ -184,14 +184,14 @@ const [myrecord,setMyRecord]=useState({});
    console.log('helllooo',responseData);
     // Replace 'John' with the actual doc's name
     const docName = record.title;
-    const url= `${BACKEND_URL}/documents/${docName}-${record.version}.pdf` 
+    const url= `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf` 
     console.log(user.user.roleId,user.user.firstName,user);
     let allowed='false';
 if(responseData){
 allowed='true';
 }
     // Redirect to the external URL
-     window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+     window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
   };
   const documentModalCancel = () => {
     setMDR("");
@@ -253,7 +253,7 @@ console.log(formData,'formdata');
 
         const response = await axios.post(
           `http://54.81.250.98:8083/api/documents/upload`,        
-          {title},
+          formData,
           {
             headers: {
               Authorization: user?.accessToken,
@@ -886,12 +886,12 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
           Add Documents
         </Button>
 
-        {/* <Button
+        <Button
           type="primary"
           onClick={handleProjectWiseClick}
           disabled={user?.user?.roleId == 3}
         >Project Wise
-        </Button> */}
+        </Button>
 
         <Button
           type="primary"
@@ -901,7 +901,8 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
         </Button>
       </div>
       {
-        showTreeView?<MyTreeView />:<Table columns={columns} dataSource={data} />
+        showTreeView?<MyTreeView />:      <div style={{ overflowX: "auto" }}>
+        <Table columns={columns} dataSource={data} /></div>
       }
       
       <ProtectedAppPage />      

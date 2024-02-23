@@ -364,8 +364,8 @@ setDepartmentId(record['id']);
    
       </div>
 
-      <Table columns={columns} dataSource={data} />
-      <ProtectedAppPage />
+      <div style={{ overflowX: "auto" }}>
+      <Table columns={columns} dataSource={data} /></div>      <ProtectedAppPage />
     </>
   );
 }
