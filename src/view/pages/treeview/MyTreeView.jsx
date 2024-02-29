@@ -1429,20 +1429,7 @@ const projects = [
   { id: 7, title: '2014-01-PRO-SOW-001', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
   { id: 8, title: '2014-01-PRO-SP-003', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
   { id: 9, title: '2014-01-PIP-SOW-001', companyId: 1, departmentId: '5,6', projectId: '5', mdr: "5" },
-  { id: 10, title: '2014-01-PIP-SOW-002', companyId: 1, departmentId: '5,6', projectId: '5', mdr: "5" },
-  { id: 11, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '1,6', projectId: '6', mdr: "6" },
-  { id: 12, title: '2014-01-PM-REP-001', companyId: 1, departmentId: '1,2', projectId: '6', mdr: "6" },
-  { id: 13, title: '2014-01-PRO-REP-001', companyId: 1, departmentId: '2,3', projectId: '2', mdr: "2" },
-  { id: 14, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '5,6', projectId: '2', mdr: "2" },
-  { id: 15, title: '2014-01-PM-SP-002', companyId: 1, departmentId: '5', projectId: '5', mdr: "5" },
-  { id: 16, title: '2014-01-PRO-REP-004', companyId: 1, departmentId: '8,9', projectId: '6', mdr: "46" },
-  { id: 17, title: '2014-01-PRO-SOW-002', companyId: 1, departmentId: '9', projectId: '7', mdr: "7" },
-  { id: 18, title: '2014-01-PRO-SOW-001', companyId: 1, departmentId: '8', projectId: '7', mdr: "7" },
-  { id: 19, title: '2014-01-PRO-SP-003', companyId: 1, departmentId: '7,8', projectId: '7', mdr: "7" },
-  { id: 20, title: '2014-01-PIP-SOW-001', companyId: 1, departmentId: '5,6', projectId: '8', mdr: "8" },
-  { id: 21, title: '2014-01-PIP-SOW-002', companyId: 1, departmentId: '5,6', projectId: '8', mdr: "8" },
-  { id: 22, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '7', projectId: '9', mdr: "9" },  
-];
+  ];
 
 const data = {};
 
@@ -1471,7 +1458,7 @@ const MyTreeView = () => {
   const fetchInformation = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

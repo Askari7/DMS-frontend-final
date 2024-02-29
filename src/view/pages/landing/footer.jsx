@@ -103,7 +103,7 @@ export default function LandingFooter() {
         >
           <Col>
             <p className="hp-p1-body hp-mb-sm-16 hp-mb-0">
-              © zentrum 🥊 {new Date().getFullYear}, All Rights Reserved.
+              © novacon 🥊 {new Date().getFullYear}, All Rights Reserved.
             </p>
           </Col>
 

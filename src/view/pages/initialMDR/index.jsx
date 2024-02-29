@@ -152,7 +152,7 @@ console.log("hehe",departmentOptionSuffixes)
             var title=documentValue;
             var version='000';
             const responseDoc = await axios.post(
-              "http://54.81.250.98:8083/api/documents/",
+              "http://127.0.0.1:8083/api/documents/",
               {
                 title,
                 departmentId,
@@ -182,7 +182,7 @@ console.log("hehe",departmentOptionSuffixes)
         });
 
         const response = await axios.post(
-          "http://54.81.250.98:8083/api/documents/mdr",
+          "http://127.0.0.1:8083/api/documents/mdr",
           {
             title,
             departmentId,
@@ -281,7 +281,7 @@ console.log("hehe",departmentOptionSuffixes)
 
       try {
         const response = await axios.get(
-          `http://54.81.250.98:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
+          `http://127.0.0.1:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
           {
             headers: {
               Authorization: user?.accessToken,

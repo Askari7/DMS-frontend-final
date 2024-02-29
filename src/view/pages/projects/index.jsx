@@ -41,14 +41,14 @@ const columns = [
     key: "title",
   },
   {
+    title: "Project Code",
+    dataIndex: "code",
+    key: "code",
+  },
+  {
     title: "Client Email",
     dataIndex: "clientEmail",
     key: "clientEmail",
-  },
-  {
-    title: "Author Id",
-    dataIndex: "authorId",
-    key: "authorId",
   },
   {
     title: "Author Name",
@@ -56,19 +56,25 @@ const columns = [
     key: "authorName",
   },
   {
-    title: "Project Code",
-    dataIndex: "code",
-    key: "code",
-  },
-  {
     title: "Status",
     dataIndex: "status",
     key: "status",
   },
   {
-    title: "No of Users",
+    title: "No of Workers",
     dataIndex: "noOfUsers",
     key: "noOfUsers",
+  },
+  {
+    title: "Start Date",
+    dataIndex: "startedDate",
+    key: "startedDate",
+  },
+
+  {
+    title: "End Date",
+    dataIndex: "endedDate",
+    key: "endedDate",
   },
 
   {
@@ -89,7 +95,8 @@ export default function Projects() {
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
-
+  const [startedDate, setStartDate] = useState("");
+  const [endedDate, setEndDate] = useState("");
   const [departmentId, setDepartmentId] = useState([]);
   const [status, setStatus] = useState("");
   const [code, setCode] = useState("");
@@ -100,10 +107,17 @@ export default function Projects() {
   const [clients,setClients] = useState([])
   const [projectId, setProjectId] = useState("");
 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
   const fetchClients = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -157,12 +171,13 @@ export default function Projects() {
   };
   const addProject = async () => {
     console.log("inside");
+    console.log("dates",startedDate,endedDate);
     try {
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/projects/",
+        "http://127.0.0.1:8083/api/projects/",
         {
           title: projName,
-          departmentId,
+          // departmentId,
           status:"Initialized",
           noOfUsers:0,
           clientEmail,
@@ -170,6 +185,8 @@ export default function Projects() {
           companyId: user?.user?.companyId,
           authorId: user?.user?.id,
           authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+          startedDate,
+          endedDate
         },
         {
           headers: {
@@ -197,7 +214,7 @@ export default function Projects() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -208,7 +225,19 @@ export default function Projects() {
       );
       
       console.log('Project response data',response.data);
-      setData(response.data);      
+      const formattedData = response.data.map(project => {
+        // Assuming project.startedDate and project.endedDate are DateTime strings
+        const formattedStartDate = new Date(project.startedDate).toLocaleDateString('en-GB');
+        const formattedEndDate = new Date(project.endedDate).toLocaleDateString('en-GB');
+        // Create a new object with formatted dates
+        return {
+          ...project,
+          startedDate: formattedStartDate,
+          endedDate: formattedEndDate,
+        };
+      });
+      
+      setData(formattedData);
       const options = [];
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
@@ -222,7 +251,7 @@ export default function Projects() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -310,21 +339,21 @@ export default function Projects() {
                 />  
                 </Form.Item>
 
-          <Form.Item
-        label="Departments"
-        name="departmentIds"
-        rules={[{ required: true, message: 'Please select at least one department' }]}
-      >
-        <Checkbox.Group options={departmentOptions} value={departmentId} onChange={setDepartmentId} />
+      <Form.Item label="Start Date" name="startedDate" rules={[{ required: true, message: 'Please select start date' }]}>
+        <DatePicker style={{ width: '100%' }} onChange={handleStartDateChange} />
+      </Form.Item>
+
+      <Form.Item label="End Date" name="endedDate" rules={[{ required: true, message: 'Please select end date' }]}>
+        <DatePicker style={{ width: '100%' }} onChange={handleEndDateChange} />
       </Form.Item>
          
-          <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select start date' }]}>
+          {/* <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select start date' }]}>
         <DatePicker style={{ width: '100%' }} />
       </Form.Item>
 
       <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select end date' }]}>
         <DatePicker style={{ width: '100%' }} />
-      </Form.Item>
+      </Form.Item> */}
 
           {/* <Form.Item label="Status" name="status">
             <Select

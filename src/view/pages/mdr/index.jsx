@@ -80,6 +80,7 @@ export default function MDR() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
+
   const [projectCode,setProjectCode] = useState()
   
 
@@ -127,7 +128,6 @@ export default function MDR() {
   const documentModalShow = () => {
     setDocumentModalVisible(true);
     setProjectCode(record.projectCode)
-
   };
 
   const documentModalShowing = (record) => {
@@ -160,7 +160,7 @@ export default function MDR() {
   };
 
   const showModalShow = (record) => {
-    console.log(record)
+    console.log(record,"record")
     setRecord(record)
     showDocs(record)
     setShowModalVisible(true);
@@ -184,7 +184,7 @@ const fetchDepartmentDocs = async (record) => {
   try {
     console.log('recorddd',record);
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
+      `http://127.0.0.1:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -192,6 +192,7 @@ const fetchDepartmentDocs = async (record) => {
         },
       }
     );
+    console.log(response.data);
       setDocData(response.data);
       console.log(docData,'hiiiiiiiii');
     console.log(response.data,"received");
@@ -212,7 +213,7 @@ const fetchDepartmentDocs = async (record) => {
         (item) => item?.value == departmentId
       );
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/documents/mdr",
+        "http://127.0.0.1:8083/api/documents/mdr",
         {
           departmentId:assignedUser.departmentId,
           projectId,
@@ -246,7 +247,7 @@ const fetchDepartmentDocs = async (record) => {
       );
 
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/documents/mdr",
+        "http://127.0.0.1:8083/api/documents/mdr",
         {
           title,
           selectedDepartments,
@@ -280,7 +281,7 @@ const fetchDepartmentDocs = async (record) => {
     try {
       console.log(record);
       const response = await axios.post(
-        `http://54.81.250.98:8083/api/documents?projectId${record?.projectId}?companyId=${user?.user?.companyId}?masterDocumentId=${record.mdrCode}`,
+        `http://127.0.0.1:8083/api/documents?projectId${record?.projectId}?companyId=${user?.user?.companyId}?masterDocumentId=${record.mdrCode}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -302,7 +303,7 @@ const fetchDepartmentDocs = async (record) => {
         const projectCode = record.projectCode
         console.log(projectId,projectCode);
         const response = await axios.put(
-          `http://54.81.250.98:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
+          `http://127.0.0.1:8083/api/documents/mdr?projectId=${projectId}&projectCode=${projectCode}`,
           {
                 title,
                 mdrCode,
@@ -324,7 +325,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -353,7 +354,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -382,7 +383,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -418,7 +419,7 @@ const fetchDepartmentDocs = async (record) => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -730,31 +731,32 @@ const fetchDepartmentDocs = async (record) => {
             dataIndex: "title",
             key: "title",
           },
-          {
-            title: "Dept Id",
-            dataIndex: "departmentId",
-            key: "departmentId",
-          },
-          {
-            title: "Dept Name",
-            dataIndex: "departmentName",
-            key: "departmentName",
-          },
-          {
-            title: "Project Id",
-            dataIndex: "projectId",
-            key: "projectId",
-          },
+          // {
+          //   title: "Dept Id",
+          //   dataIndex: "departmentId",
+          //   key: "departmentId",
+          // },
+
+          // {
+          //   title: "Project Id",
+          //   dataIndex: "projectId",
+          //   key: "projectId",
+          // },
           {
             title: "Project Code",
             dataIndex: "projectCode",
             key: "projectCode",
           },
           {
-            title: "Author Id",
-            dataIndex: "authorId",
-            key: "authorId",
+            title: "Dept Name",
+            dataIndex: "departmentName",
+            key: "departmentName",
           },
+          // {
+          //   title: "Author Id",
+          //   dataIndex: "authorId",
+          //   key: "authorId",
+          // },
           {
             title: "Author Name",
             dataIndex: "authorName",
