@@ -156,7 +156,8 @@ let count=0;
   const createModalShow = (record) => {
     console.log("record",record)
     setRecord(record)
-    setCreateModalVisible(true);
+    setDocumentModalVisible(true);
+    // setCreateModalVisible(true);
   };
 
   const showModalShow = (record) => {

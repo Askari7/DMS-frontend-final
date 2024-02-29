@@ -136,7 +136,6 @@ export default function Projects() {
   };
 
   const projectModalShow = () => {
-    setCode( generateUnique4DigitNumber(usedNumbers));
 
     setProjectModalVisible(true);
   };
@@ -287,7 +286,7 @@ export default function Projects() {
         <Form.Item label="Project Code" name="projCode">
             <Input
               value={projCode}
-              onChange={(e) => setProjCode(e.target.value)}
+              onChange={(e) => setCode(e.target.value)}
             />
           </Form.Item>          <Form.Item label="Project Name" name="projName">
             <Input
