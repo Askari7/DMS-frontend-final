@@ -51,11 +51,17 @@ console.log(jsondata);
     const [selectedFieldVisible,setSelectedFieldVisible]  = useState(false)
     const [title,setTitle] = useState('')
     const [selectedRowData, setSelectedRowData] = useState(null);
-
+    const [departmentWise, setDepartmentWise] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [displayNames, setDisplayNames] = useState([]);
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [codes,setCodes] = useState([])
     const [selectedRows, setSelectedRows] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
+    const [count,setCount] = useState(1)
+    // const [dataArray,setDataArray] = useState([])
+
 
     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
 console.log("hehe",departmentOptionSuffixes)
@@ -69,6 +75,10 @@ console.log("hehe",departmentOptionSuffixes)
     const departmentLabelsString = departmentLabels.join(', ');
     console.log("strings",departmentLabelsString);
     const [data, setData] = useState(jsondata);
+    const [dataArray,setDataArray] = useState(jsondata)
+
+    console.log("jsonData",jsondata);
+
   
     const columns = [
       {
@@ -77,20 +87,15 @@ console.log("hehe",departmentOptionSuffixes)
         key: 'code',
       },
       {
-        title: 'DOCUMENT TITLE (Pre-Loaded)',
+        title: 'Document',
         dataIndex: 'documentTitle',
         key: 'documentTitle',
       },
-      {
-        title: 'Additional Assigned',
-        dataIndex: 'additionalAssigned',
-        key: 'additionalAssigned',
-      },
-      {
-        title: 'Area Code',
-        dataIndex: 'areaCode',
-        key: 'areaCode',
-      },
+      // {
+      //   title: 'Area Code',
+      //   dataIndex: 'areaCode',
+      //   key: 'areaCode',
+      // },
       {
         title: 'Department Code',
         dataIndex: 'departmentCode',
@@ -101,11 +106,11 @@ console.log("hehe",departmentOptionSuffixes)
         dataIndex: 'documentContentCode',
         key: 'documentContentCode',
       },
-      {
-        title: 'Sequence Number',
-        dataIndex: 'sequenceNumber',
-        key: 'sequenceNumber',
-      },
+      // {
+      //   title: 'Sequence Number',
+      //   dataIndex: 'sequenceNumber',
+      //   key: 'sequenceNumber',
+      // },
       {
         title: 'DOCUMENT NUMBER',
         dataIndex: 'document', // Use 'documentNumber' as the dataIndex
@@ -114,18 +119,47 @@ console.log("hehe",departmentOptionSuffixes)
         //   <span>{codes}</span>
         // ),
       },
-     
       {
-        title: "Update Code",
-        key: "updateCode",
+        title: "No Of Documents",
+        key: "noOfDocuments",
         render: (_, record) => (
-          <Space size="middle">
-            <Button onClick={() => handleUpdate(record)}>Update</Button>
+          <Space size="middle" align="center">
+            <Button onClick={() => handleCount(record)}>Add </Button>
+            <Tag style={{color:"white",backgroundColor:"blue"}}>{count}</Tag>
           </Space>
           
         ),
       },
+      // {
+      //   title: "Update Code",
+      //   key: "updateCode",
+      //   render: (_, record) => (
+      //     <Space size="middle">
+      //       <Button onClick={() => handleUpdate(record)}>Update</Button>
+      //     </Space>
+          
+      //   ),
+      // },
     ];
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        setDisplayNames(departmentOptions.map(option => option.label));
+        setLoading(false);
+      }, 1000);
+  
+      return () => clearTimeout(timeout);
+    }, []);
+
+    const handleCount=()=>{
+    }
+
+    const departmentWiseShow = () => {
+      setDepartmentWise(true);
+    };
+  
+    const departmentWiseCancel = () => {
+      setDepartmentWise(false);
+    };
     const addDocument = async () => {
       
       const departmentOptions = await JSON.parse(departmentOptionsString);
@@ -138,6 +172,7 @@ console.log("hehe",departmentOptionSuffixes)
         // console.log(department);
         var title=getMdrTitle;
         var mdrCode=getMdrCode;
+        mdrCode=mdrCode.replace(/\s/g, '');
         var count = selectedRows.length
         selectedRows.forEach(async (index) => {
           let documentValue = data[index].document;
@@ -147,6 +182,7 @@ console.log("hehe",departmentOptionSuffixes)
          const masterDocumentName=title;
           console.log(documentValue);
           const assignedBy=user.user.id;
+          const assignedFrom=user.user.roleId;
           console.log('This is coming from param',approver,reviewer);
           try {
             var title=documentValue;
@@ -166,6 +202,7 @@ console.log("hehe",departmentOptionSuffixes)
                 departmentName:departmentLabelsString,
                 status : "Initialized",
                 assignedBy,
+                assignedFrom,
                  approver,
                  reviewer,
                  version
@@ -218,6 +255,32 @@ console.log("hehe",departmentOptionSuffixes)
       }
     };
 
+    const handleDepartmentClick = (name) => {
+      console.log("name",name);
+      setSelectedDepartment(name);
+      departmentWiseCancel();
+      filterData(name);
+    };
+
+    const filterData = (selectedDepartment) => {
+      // Assuming data is an array of users with each object having a 'department' and 'roleTitle' property
+      const filteredData = dataArray.filter(data => String(data.category).toUpperCase() === String(selectedDepartment).toUpperCase());
+    
+      // Define the order of roles
+      // const roleOrder = ['Head', 'Senior', 'Junior', 'Designer'];
+    
+      // Sort the filtered data based on the order of roles
+      // filteredData.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
+  
+      console.log("filter",filteredData);
+      setData(filteredData);
+    };
+  
+    const handleClick = () => {
+      departmentWiseCancel();
+      setData(dataArray)
+    };
+
     const templateModalShow = () => {
       setTemplateModalVisible(true);
       
@@ -232,6 +295,12 @@ console.log("hehe",departmentOptionSuffixes)
       });
     
       setData(updatedData);
+      
+
+      const navigateBackToMDR = () => {
+
+        history.push(`/pages/MDR`)};
+      
     };
     const mydocumentSaved = async() => {
       // Check if a row is selected
@@ -247,10 +316,12 @@ console.log("hehe",departmentOptionSuffixes)
     
       // Close the template modal
       templateModalCancel();
+
     };
     
     const templateModalCancel = () => {
       setTemplateModalVisible(false);
+      
     };
 
     const selectedModalShow = () => {
@@ -322,6 +393,7 @@ console.log("hehe",departmentOptionSuffixes)
         };
     
         setData(updatedData);
+        // setDataArray(updatedData);
         setSelectedRowData(null);
         selectedModalCancel();
       }
@@ -386,7 +458,7 @@ console.log("hehe",departmentOptionSuffixes)
           onClick={handleDone}
           // disabled={user?.user?.roleId != 1}
         >
-          Done
+          Confirm
         </Button>
     </Modal>
 
@@ -400,41 +472,104 @@ console.log("hehe",departmentOptionSuffixes)
       closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
     >
       <Row justify="space-between" align="center">
-        {/* Display the content of selectedRows here */}
         <div>
-          <h3>Selected Rows:</h3>
-          {/* <ul>
-            {selectedRows.map((row, index) => (
-              <li key={index}>{row+1}</li>
+          <h3>Selected Documents:</h3>
+          <ul style={{ margin: "2px" ,padding:"2px"}}>
+            {selectedRows.map((index) => (
+              <li key={index} style={{ margin: "2px" ,padding:"2px"}}>
+                <strong style={{color:"blue"}}>Category:</strong> {data[index].category} <br />
+                <strong style={{color:"blue"}}>Code:</strong> {data[index].code} <br />
+                <strong style={{color:"blue"}}>Document Title:</strong> {data[index].documentTitle} <br />
+                <strong style={{color:"blue"}}>Document Number:</strong> {data[index].document} <br />
+                {/* Add other properties as needed */}
+
+                {/* Input for Document Title */}
+                <Input
+                style={{ margin: "6px" }}
+                  placeholder="Enter Document Title"
+                  value={customFieldValues.title || ''} // You may adjust this based on your state
+                  onChange={(e) => handleCustomFieldChange('title', e.target.value)}
+                />
+              </li>
             ))}
-          </ul> */}
-    <ul>
-      {selectedRows.map((index) => (
-        <li key={index}>
-          <strong>Category:</strong> {data[index].category} <br />
-          <strong>Code:</strong> {data[index].code} <br />
-          <strong>Document Title:</strong> {data[index].documentTitle} <br />
-          <strong>Document Number:</strong> {data[index].document} <br />
-          {/* Add other properties as needed */}
-        </li>
-      ))}
-    </ul>
+          </ul>
         </div>
       </Row>
       <Button
-          type="primary"
-          onClick={mydocumentSaved}
-          // disabled={user?.user?.roleId != 1}
-        >
-          Done
-        </Button>
+        type="primary"
+        onClick={mydocumentSaved}
+        // disabled={user?.user?.roleId != 1}
+      >
+        Done
+      </Button>
+    </Modal>
+
+    <Modal
+      title="Departments"
+      width={416}
+      centered
+      visible={departmentWise}
+      onCancel={departmentWiseCancel}
+      footer={null}
+      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+    >
+            <Button
+            size="default"
+            type="primary"
+            onClick={()=>handleClick()}
+
+            style={{ margin: '8px' }}
+          >
+            All Documents
+          </Button>
+      {loading ? (
+        
+        departmentOptions.map(option => (
+          <Button
+            key={option.label}
+            loading
+            size="default"
+            style={{ margin: '8px' }}
+          >
+            {option.label}
+          </Button>
+        ))
+      ) : (
+        displayNames.map(name => (
+          <Button
+            key={name}
+            size="default"
+            style={{ margin: '8px' }}
+            onClick={() => handleDepartmentClick(name)}
+            type={selectedDepartment === name ? 'primary' : 'default'}
+          >
+            {name}
+          </Button>
+        ))
+      )}
     </Modal>
     
     <div>
         <div style={{ textAlign: 'center', marginTop: 20 }}>
-        <h1>Company Environment Setup</h1>
+        <h1>Select Dcuments For MDR</h1>
       </div>
-      <h2>MDR Template</h2>
+
+      <div style={{ marginBottom: "16px" ,justifyContent:"space-between"}}>
+        <h1>MDR Templates</h1>
+        <div>
+
+        <Button
+          type="primary"
+          disabled={user?.user?.roleId != 1}
+          style={{margin:"4px"}}
+          onClick={departmentWiseShow}
+
+        >
+          Department Wise
+        </Button>
+        </div>
+
+      </div>
       <Table
         columns={columns}
         dataSource={data.map((item, index) => ({ ...item, key: index }))}
@@ -442,15 +577,22 @@ console.log("hehe",departmentOptionSuffixes)
           selectedRowKeys: selectedRows,
           onChange: (selectedRowKeys) => setSelectedRows(selectedRowKeys),
         }}
-
       />
+      <Space >
       <Button
         type="primary"
         onClick={customModalShow}
       >
         Add Custom
       </Button>
-
+      <Button
+          type="primary"
+          onClick={templateModalShow}
+          // disabled={user?.user?.roleId != 1}
+        >
+          Proceed
+        </Button>
+        </Space>
       {/* Custom Modal */}
       <Modal
         title="Add Custom Field"
@@ -491,13 +633,7 @@ console.log("hehe",departmentOptionSuffixes)
         </Form>
       </Modal>
 
-            <Button
-          type="primary"
-          onClick={templateModalShow}
-          // disabled={user?.user?.roleId != 1}
-        >
-          View Templates
-        </Button>
+         
       {/* <div style={{ marginTop: '16px' }}>
         Selected Rows: {selectedRows.join(', ')}
       </div> */}

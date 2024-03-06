@@ -8,7 +8,7 @@ import logo from "../../../../assets/images/logo/logo.svg";
 import logoDark from "../../../../assets/images/logo/logo-dark.svg";
 import logoRTL from "../../../../assets/images/logo/logo-rtl.svg";
 import logoRTLDark from "../../../../assets/images/logo/logo-rtl-dark.svg";
-import DMSLogo from "../../../../assets/images/logo/dms-logo.png";
+import DMSLogo from "../../../../assets/images/logo/Logo-01.png";
 import JobConnectLogo from "../../../../assets/images/logo/logo2.jpeg";
 
 import themeConfig from "../../../../configs/themeConfig.jsx";
@@ -47,7 +47,8 @@ export default function MenuLogo(props) {
           )
         } */}
 
-        <img className="hp-logo" src={DMSLogo} alt="logo" />
+        <img className="hp-logo" src={DMSLogo}   style={{ width: '200px', height: '100px', background: 'transparent' }}
+ alt="logo" />
         {/* <h3>Job Connect</h3> */}
       </Link>
     </div>

@@ -9,7 +9,9 @@ import bgDark from "../../../assets/images/pages/authentication/authentication-b
 
 import MenuLogo from "../../../layout/components/menu/logo";
 import JobConnectLogo from "../../../assets/images/logo/logo2.jpeg";
-import DMSLogo from "../../../assets/images/logo/dms-logo.png";
+import DMSLogo from "../../../assets/images/logo/logo_novacon.jpg";
+import Logo from "../../../assets/images/logo/novacon.jpg";
+
 // import ads from ""
 export default function LeftContent() {
   // Redux
@@ -27,7 +29,30 @@ export default function LeftContent() {
       className=""
     >
       {/* JobConnect Sidebar */}
-      <img src={DMSLogo} alt="logo" height="60%" width="80%" />
-    </Col>
+      <img
+  src={Logo}
+  alt="logo"
+  height="75%"
+  width="75%"
+  style={{
+    position: 'relative',
+    animation: 'floatUpDown 2s ease-in-out infinite',
+    
+  }}
+/>  <style>
+        {`
+          @keyframes floatUpDown {
+            0%, 100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(-10px); /* Adjust the value based on your preference */
+            }
+          }
+          
+        `}
+      </style>  </Col>
+
   );
+  
 }

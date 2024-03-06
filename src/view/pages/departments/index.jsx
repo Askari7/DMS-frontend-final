@@ -26,14 +26,14 @@ const columns = [
     key: "title",
   },
   {
-    title: "Author Id",
-    dataIndex: "authorId",
-    key: "authorId",
+    title: "Department Suffix",
+    dataIndex: "suffix",
+    key: "suffix",
   },
   {
-    title: "Author Name",
-    dataIndex: "authorName",
-    key: "authorName",
+    title: "Department Owner",
+    dataIndex: "headLeads",
+    key: "headLeads",
   },
   {
     title: "No of Users",
@@ -364,8 +364,8 @@ setDepartmentId(record['id']);
    
       </div>
 
-      <Table columns={columns} dataSource={data} />
-      <ProtectedAppPage />
+      <div style={{ overflowX: "auto" }}>
+      <Table columns={columns} dataSource={data} /></div>      <ProtectedAppPage />
     </>
   );
 }

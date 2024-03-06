@@ -3,7 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
 import MyTreeView from "../treeview/MyTreeView";
-import {Row,Col,Divider,Form,Space,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
+import {Row,Col,Divider,Form,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
 } from "antd";
 import { Radio } from "antd";
 import axios from "axios";
@@ -40,11 +40,6 @@ export default function Document() {
 
   const columns = [
     {
-      title: "Document Id",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Document Name",
       dataIndex: "title",
       key: "title",
@@ -52,21 +47,6 @@ export default function Document() {
       title: "Version",
       dataIndex: "version",
       key: "version",
-    },
-    {
-      title: "Dept Id",
-      dataIndex: "departmentId",
-      key: "departmentId",
-    },
-    {
-      title: "Project Id",
-      dataIndex: "projectId",
-      key: "projectId",
-    },
-    {
-      title: "MDR",
-      dataIndex: "title",
-      key: "title",
     },
     // {
     //   title: ".exe",
@@ -184,14 +164,14 @@ const [myrecord,setMyRecord]=useState({});
    console.log('helllooo',responseData);
     // Replace 'John' with the actual doc's name
     const docName = record.title;
-    const url= `${BACKEND_URL}/documents/${docName}-${record.version}.pdf` 
+    const url= `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf` 
     console.log(user.user.roleId,user.user.firstName,user);
     let allowed='false';
 if(responseData){
 allowed='true';
 }
     // Redirect to the external URL
-     window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+     window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
   };
   const documentModalCancel = () => {
     setMDR("");
@@ -295,9 +275,10 @@ console.log(formData,'formdata');
       console.log(response?.data, "Users");
       const option = [];
 let role='';
+console.log("uuuu",user?.user.roleId,user?.user.companyId,user?.user.id);
 if(user.user.roleId==1){
   for (const item of response?.data) {
-    console.log(myrecord,myrecord.departmentId,item.departmentId);
+    console.log(myrecord,myrecord.departmentId,item.departmentId,"data");
    if(item.roleId==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
     role =`Head of ${item.department}`
     option.push({
@@ -434,7 +415,7 @@ if(user.user.roleId==2 ){
     
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
+        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.roleId}&department=${user.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -582,6 +563,7 @@ useEffect(() => {
 }, [updatedData]);
 const assignDoc = async(assignedEmployees,myrecord)=>{
   try {
+    console.log(assignedEmployees,"employees");
     console.log('aaaa',myrecord.title);
     // console.log(allUsers);
     // const assignedUser = allUsers.find(user => user.id == assignedEmployees)      
@@ -606,6 +588,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
     console.error("Error assigning documents:", error);
   }
 }
+
   return (
     <>
     <Modal
@@ -695,11 +678,11 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
                   },
                 ]}
               >
-              <Select
-                  options={userOption}
-                  value={assignedEmployees}
-                  onChange={(value) => setAssignedEmployees(value)}
-                />
+              <Checkbox.Group
+              options={userOption}
+              value={assignedEmployees}
+              onChange={(value) => setAssignedEmployees(value)}
+  />
                 </Form.Item>
 
               <Row>           
@@ -880,6 +863,8 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
         <Button
           type="primary"
           onClick={documentModalShow}
+          style={{ marginRight: '10px' }}
+
           disabled={user?.user?.roleId == 3}
         >
           Add Documents
@@ -888,6 +873,8 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
         <Button
           type="primary"
           onClick={handleProjectWiseClick}
+          style={{ marginRight: '10px' }}
+
           disabled={user?.user?.roleId == 3}
         >Project Wise
         </Button>
@@ -900,7 +887,8 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
         </Button>
       </div>
       {
-        showTreeView?<MyTreeView />:<Table columns={columns} dataSource={data} />
+        showTreeView?<MyTreeView />:      <div style={{ overflowX: "auto" }}>
+        <Table columns={columns} dataSource={data} /></div>
       }
       
       <ProtectedAppPage />      

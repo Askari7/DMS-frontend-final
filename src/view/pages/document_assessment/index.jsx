@@ -91,7 +91,7 @@ export default function DocumentPermissions() {
            
               <a onClick={() => handleOpen(record)}>Open</a>
               <a onClick={() => statusModalShow(record)}>Add Status</a>
-    
+                  <a onClick={() => clientModalShow(record)}>Send to Client</a>
             
           </Space>
         ),
@@ -112,9 +112,11 @@ export default function DocumentPermissions() {
       },
     ];
     const [selectedStatus, setSelectedStatus] = useState("");
-
+    const [rejectionMarks,setRejectionMarks] = useState("")
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [statusModalVisible, setStatusModalVisible] = useState(false);
+    const [clientModalVisible, setClientModalVisible] = useState(false);
+    const [selectedEmail, setSelectedEmail] = useState([]);
 
   const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =
     useState(false);
@@ -128,14 +130,19 @@ export default function DocumentPermissions() {
 
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
+  const [clients, setClients] = useState([]);
+
   const [DocumentPermissionOptions, setDocumentPermissions] = useState([]);
   const [checked, setChecked] = useState([]);
   const [updatedData, setUpdatedData] = useState([]);
   const [appStatusArr, setAppStatusArr] = useState([]);
   const [revStatusArr, setRevStatusArr] = useState([]);
+  const [appCommentArr, setAppCommentArr] = useState([]);
+  const [revCommentArr, setRevCommentArr] = useState([]);
   const [appIdArr, setAppIdArr] = useState([]);
   const [revIdArr, setRevIdArr] = useState([]);
-  
+  const [showRemarksInput, setShowRemarksInput] = useState(false);
+
   const [index, setIndex] = useState("");
 
 
@@ -148,19 +155,43 @@ export default function DocumentPermissions() {
     setSelectedStatus("");
     setStatusModalVisible(false);
   };
+  
+  const handleStatus = (status) => {
+    setSelectedStatus(status);
+    if (status === 'Reject') {
+      setShowRemarksInput(true);
+    } else {
+      setShowRemarksInput(false);
+    }
+
+    // Your other status change logic here
+  };
+
+  const clientModalShow = (record) => {
+    setClientModalVisible(true);
+  };
+  const clientModalCancel = () => {
+    setClientModalVisible(false);
+  };
+
   const handleStatusChange = async () => {
+    console.log("rejection",rejectionMarks);
     // Check if the selected document is available
     if (selectedDocument) {
       // Perform your logic to update the status here
       // You can use the selectedStatus along with the record data
       // to update the status in the data array or make an API call
   
-      const updatedRecord = { ...selectedDocument, status: selectedStatus };
+      const updatedRecord = { ...selectedDocument, status: selectedStatus, remarks:rejectionMarks};
+
+      console.log("updated",updatedRecord);
   
       // Update the data array with the modified record
       const updatedDataArray = data.map((item) =>
         item.id === selectedDocument.id ? updatedRecord : item
       );
+
+      console.log(updatedDataArray,"updatedData");
       // Load data from the specific key
    
       // Trigger a re-render with the updated data
@@ -177,6 +208,41 @@ export default function DocumentPermissions() {
   const DocumentPermissionModalShow = () => {
     setDocumentPermissionModalVisible(true);
   };
+
+  
+  const sendEmail = async()=>{
+    try {
+      
+    } catch (error) {
+      console.error("Error Sending Email:", error?.message);
+
+    }
+  }
+
+  const fetchClients = async()=>{
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+        
+      console.log(response.data,"received");
+      const clients = response.data.map(client => ({
+        value: client.companyName,
+        label: client.companyName,
+      }));
+      console.log("clients",clients);
+       setClients(clients);
+    } catch (error) {
+      console.error("Error fetching clients:", error?.message);
+
+    }
+  }
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
@@ -210,7 +276,7 @@ export default function DocumentPermissions() {
  allowed='true';
  }
      // Redirect to the external URL
-      window.location.href = `http://localhost:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+      window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
    };
   const addPermission = async () => {
     try {
@@ -332,8 +398,8 @@ export default function DocumentPermissions() {
         const reviewerStatusArray = i.reviewerStatus.split(',').map(num => parseInt(num.trim(), 10));
         const reviewerIdArray = i.reviewerId.split(',').map(num => parseInt(num.trim(), 10));
         const approverIdArray = i.approverId.split(',').map(num => parseInt(num.trim(), 10));
-setRevIdArr(i.reviewerId.split(',').map(num => parseInt(num.trim(), 10)));
-setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
+        setRevIdArr(i.reviewerId.split(',').map(num => parseInt(num.trim(), 10)));
+        setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
         setRevStatusArr(i.reviewerStatus.split(',').map(num => parseInt(num.trim(), 10)));
         setAppStatusArr(i.approverStatus.split(',').map(num => parseInt(num.trim(), 10)));
         console.log(revStatusArr,appStatusArr,'hii');
@@ -341,11 +407,36 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
         if(i.approverId.includes(user.user.id) && i.reviewerId.includes(user.user.id)){
           console.log('YESSSSSSSSSSS');
           i['yourRole']='Approver and Reviewer';
+          console.log(approverIdArray.indexOf(user.user.id),'jjjjj');
+          console.log(approverIdArray,user.user.id,approverStatusArray[approverIdArray.indexOf(user.user.id)],'ssss'+typeof(approverStatusArray));
+         if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==1){
+           i['yourStatus']='Rejected';
+
+         }
+         else if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==2){
+           i['yourStatus']='Accepted';
+         }
+         else if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==0){
+           i['yourStatus']='Pending';
+         }
+       
         }
         else if(approverIdArray.includes(user.user.id) ){
           console.log('YESSSSSSSSSSS');
           i['yourRole']='Approver';
           setIndex(approverIdArray.indexOf(user.user.id));
+          console.log(approverIdArray.indexOf(user.user.id),'jjjjj');
+          console.log(approverIdArray,user.user.id,approverStatusArray[approverIdArray.indexOf(user.user.id)],'ssss'+typeof(approverStatusArray));
+         if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==1){
+           i['yourStatus']='Rejected';
+
+         }
+         else if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==2){
+           i['yourStatus']='Accepted';
+         }
+         else if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==0){
+           i['yourStatus']='Pending';
+         }
 
         }
         else if(reviewerIdArray.includes(user.user.id)){
@@ -401,21 +492,59 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
       let revStat = [...revStatusArr];
  
       let appStat = [...appStatusArr];
-      if (myrecord.yourRole === 'Approver' && selectedStatus === 'Accept') {
+
+      let revComment = [...revCommentArr];
+ 
+      let appComment = [...appCommentArr];
+      if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Accept') {
+        role = 1;
+        
+        appStat[appIdArr.indexOf(user.user.id)] = 2;
+        appComment[appIdArr.indexOf(user.user.id)] = "";
+        setAppStatusArr(appStat); 
+        setAppCommentArr(appComment); 
+        revStat[revIdArr.indexOf(user.user.id)] = 2;
+        revComment[revIdArr.indexOf(user.user.id)] = "";
+        setRevCommentArr(revComment);
+      } else if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Reject') {
+        role = 1;
+        appStat[appIdArr.indexOf(user.user.id)] = 1;
+        appComment[appIdArr.indexOf(user.user.id)] = myrecord.remarks;
+        setAppCommentArr(appStat);
+        role = 0;
+        revComment[revIdArr.indexOf(user.user.id)] = myrecord.remarks;
+        setRevCommentArr(revComment);
+              }
+      else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Accept') {
         role = 1;
         appStat[appIdArr.indexOf(user.user.id)] = 2;
-        setAppStatusArr(appStat);      } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Accept') {
+        setAppStatusArr(appStat);
+        
+        appComment[appIdArr.indexOf(user.user.id)] = "";
+        setAppCommentArr(appComment); 
+      
+      } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Accept') {
         role = 0;
         revStat[revIdArr.indexOf(user.user.id)] = 2;
         setRevStatusArr(revStat);
+        revComment[revIdArr.indexOf(user.user.id)] = "";
+        setRevCommentArr(revComment);
               }
          else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Reject') {
         role = 1;
         appStat[appIdArr.indexOf(user.user.id)] = 1;
-        setAppStatusArr(appStat);      } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Reject') {
+        setAppStatusArr(appStat);  
+        
+        appComment[appIdArr.indexOf(user.user.id)] = myrecord.remarks;
+        setAppCommentArr(appComment); 
+      
+      } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Reject') {
         role = 0;
         revStat[revIdArr.indexOf(user.user.id)] = 1;
         setRevStatusArr(revStat);
+
+        revComment[revIdArr.indexOf(user.user.id)] = myrecord.remarks;
+        setRevCommentArr(revComment);
               }
       
               console.log(myrecord.yourRole,selectedStatus,revStat.join(','),appStat.join(','));
@@ -426,6 +555,8 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
           status: selectedStatus,
           revStatusArr: revStat.join(','), // Convert array to string
           appStatusArr: appStat.join(','), // Convert array to string
+          reviewerComment:revComment.join(","),
+          approverComment:appComment.join(","),
           docName: myrecord.docName,
         },
         {
@@ -449,6 +580,7 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
     await fetchData();
     fetchUsers();
     fetchMDR();
+    fetchClients();
   }, []);
   return (
     <>
@@ -481,11 +613,24 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
      
             ]}
             value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value)}
-          />
+            onChange={(value) => handleStatus(value)}
+            />
         </Form.Item>
-        {/* ... (your existing code) */}
-        <Row>
+        {showRemarksInput && (
+              <Form.Item
+                label="Remarks"
+                name="remarks"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please provide remarks for rejection',
+                  },
+                ]}
+              >
+                <Input.TextArea rows={4} placeholder="Enter remarks for rejection" value={rejectionMarks} onChange={(e)=>setRejectionMarks(e.target.value)}/>
+              </Form.Item>
+            )}        
+            <Row>
           <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
             <Button
               block
@@ -506,6 +651,59 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
     </Col>
   </Row>
 </Modal>
+
+<Modal
+  title="Send To Client"
+  width={400}
+  centered
+  visible={clientModalVisible}
+  onCancel={clientModalCancel}
+  footer={null}
+  closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+>
+  <Row justify="space-between" align="center">
+    <Col span={20}>
+      <Form layout="vertical" name="basic">
+
+        <Form.Item
+          label="Select Emails"
+          name="selectedEmails"
+          rules={[
+            {
+              required: true,
+              message: "Please select a Email",
+            },
+          ]}
+        >
+          <Select
+            options={clients}
+            value={selectedEmail}
+            onChange={(value) => setSelectedEmail(value)}
+          />
+        </Form.Item>
+        <Row>
+          <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+            <Button
+              block
+              type="primary"
+              htmlType="submit"
+              onClick={() => sendEmail()}
+            >
+              Send
+            </Button>
+          </Col>
+          <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
+            <Button block onClick={clientModalCancel}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Col>
+  </Row>
+</Modal>
+
+
       <Modal
         title="Create Permissions"
         width={416}
@@ -588,7 +786,8 @@ setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
           Add Permissions
         </Button>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <div style={{ overflowX: "auto" }}>
+      <Table columns={columns} dataSource={data} /></div>
     </>
   );
 }

@@ -18,7 +18,7 @@ export default function MenuFooter() {
               className="hp-badge-text hp-font-weight-600 hp-mb-0 hp-text-color-dark-30"
               href="mailto:info@jobconnect.ch"
             >
-              info@monit.ch{" "}
+              info@Novacon.ch{" "}
             </a>
           </p>
         </Col>

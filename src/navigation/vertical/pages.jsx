@@ -120,7 +120,7 @@ const pages = [
   //         },
   //         {
   //             id: "profile-activity",
-  //             title: <IntlMessages id="sidebar-pages-profile-activity-monitor" />,
+  //             title: <IntlMessages id="sidebar-pages-profile-activity-Novaconor" />,
   //             navLink: "/pages/profile/activity",
   //         },
   //         {

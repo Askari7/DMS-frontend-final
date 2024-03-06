@@ -31,37 +31,22 @@ const handleDelete = (record) => {
 
 const columns = [
   {
-    title: "Project Id",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "Project Title",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
     title: "Project Code",
     dataIndex: "code",
     key: "code",
   },
   {
-    title: "Client Email",
+    title: "Project ",
+    dataIndex: "title",
+    key: "title",
+  },
+  {
+    title: "Client",
     dataIndex: "clientEmail",
     key: "clientEmail",
   },
   {
-    title: "Author Name",
-    dataIndex: "authorName",
-    key: "authorName",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "No of Workers",
+    title: "No of Users",
     dataIndex: "noOfUsers",
     key: "noOfUsers",
   },
@@ -72,11 +57,15 @@ const columns = [
   },
 
   {
-    title: "End Date",
+    title: "Expected End Date",
     dataIndex: "endedDate",
     key: "endedDate",
   },
-
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+  },
   {
     title: "Action",
     key: "action",
@@ -94,6 +83,8 @@ export default function Projects() {
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
+  const [projCode, setProjCode] = useState("");
+
   const [clientEmail, setClientEmail] = useState("");
   const [startedDate, setStartDate] = useState("");
   const [endedDate, setEndDate] = useState("");
@@ -130,12 +121,12 @@ export default function Projects() {
   
       const options = response?.data.reduce((acc, item) => {
         // Check if the title is not in the Set
-        if (!uniqueTitlesSet.has(item.email)) {
+        if (!uniqueTitlesSet.has(item.companyName)) {
           // Add title to the Set
-          uniqueTitlesSet.add(item.email);
+          uniqueTitlesSet.add(item.com);
   
           // Push the option to the result array
-          acc.push({ value: item.email, label: item.email, name: item.email });
+          acc.push({ value: item.companyName, label: item.companyName, name: item.companyName });
         }
   
         return acc;
@@ -148,7 +139,6 @@ export default function Projects() {
   };
 
   const projectModalShow = () => {
-    setCode( generateUnique4DigitNumber(usedNumbers));
 
     setProjectModalVisible(true);
   };
@@ -311,8 +301,12 @@ export default function Projects() {
         }
       >
         <Form layout="vertical" name="basic">
-        <Form.Item label="Project Code"> <label> {code}</label></Form.Item> 
-          <Form.Item label="Project Name" name="projName">
+        <Form.Item label="Project Code" name="projCode">
+            <Input
+              value={projCode}
+              onChange={(e) => setCode(e.target.value)}
+            />
+          </Form.Item>          <Form.Item label="Project Name" name="projName">
             <Input
               value={projName}
               onChange={(e) => setProjName(e.target.value)}

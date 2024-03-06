@@ -80,7 +80,7 @@ const OrganizationChart = ({ employees }) => {
     <TreeNode
       label={(
         <div>
-          {node.firstName} {node.lastName} - {node.designation} {node.department}
+          {node.firstName} {node.lastName} - {node.designation} {node.department[0].title}
         </div>
       )}
       key={node.id.toString()} // Key to avoid React warning about unique keys

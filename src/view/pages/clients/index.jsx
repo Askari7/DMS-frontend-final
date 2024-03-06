@@ -20,6 +20,7 @@ import { RiMore2Line, RiMenuFill, RiCloseFill } from "react-icons/ri";
 import Breadcrumbs from "../../../layout/components/content/breadcrumbs";
 import CustomizedTables from "../../common/BaseTable";
 import { options } from "less";
+import FormItem from "antd/lib/form/FormItem";
 // import InfoProfile from "./personel-information";
 // import MenuProfile from "./menu";
 // import PasswordProfile from "./password-change";
@@ -28,54 +29,28 @@ import { options } from "less";
 
 export default function Projects() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-
-
+  const [clients, setClients] = useState([]);
   const columns = [
+
     {
-      title: "Client Id",
-      dataIndex: "id",
-      key: "id",
+      title: "Company Name",
+      dataIndex: "companyName",
+      key: "companyName",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Name",
-      dataIndex: "clientName",
-      key: "clientName",
+      title: "Company Address",
+      dataIndex: "companyAddress",
+      key: "companyAddress",
       render: (text) => <a>{text}</a>,
     },
-    {
-      title: "Client Email",
-      dataIndex: "email",
-      key: "email",
-      render: (text) => <a>{text}</a>,
-    },
-    // {
-    //   title: "Tags",
-    //   key: "tags",
-    //   dataIndex: "tags",
-    //   render: (_, { tags }) => (
-    //     <>
-    //       {tags.map((tag) => {
-    //         let color = tag.length > 5 ? "geekblue" : "green";
-    //         if (tag === "loser") {
-    //           color = "volcano";
-    //         }
-    //         return (
-    //           <Tag color={color} key={tag}>
-    //             {tag.toUpperCase()}
-    //           </Tag>
-    //         );
-    //       })}
-    //     </>
-    //   ),
-    // },
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
+      render: (_, r) => (
         <Space size="middle">
           <a>Change Actions</a>
-          <a onClick={() => statusModalShow(record)}>Add Status</a>
+          <a onClick={() => statusModalShow(r)}>Show Employees</a>
           <a>Delete</a>
         </Space>
       ),
@@ -88,12 +63,25 @@ export default function Projects() {
     { label: "Pending", value: "pending" },
   ];
   const [statusModalVisible, setStatusModalVisible] = useState(false);
+  const [showModalVisible, setShowModalVisible] = useState(false);
+// const[record,setRecord ] = useState("")
+
+const [employee,setEmployee] = useState([])
 const [selectedStatus, setSelectedStatus] = useState("");
 const [ clientModalVisible,setClientModalVisible] = useState(false)
+const[companyName,setCompanyName] = useState("")
 const[clientName,setClientName] = useState("")
+
 const[email,setEmail] = useState("")
+const[clientCompany,setClientCompany] = useState("")
+
+const[companyAddress,setCompanyAddress] = useState("")
+const[companyContact,setCompanyContact] = useState("")
+
 const[projects,setProjects] = useState([])
 const [data, setData] = useState([]);
+
+
 const fetchData = async () => {
   try {
     const response = await axios.get(
@@ -105,23 +93,47 @@ const fetchData = async () => {
         },
       }
     );
-      console.log(response.data);
+      console.log(response.data,"data");
+      const companyOptions = response.data.map(company => ({
+        value: company.id,
+        label: company.companyName,
+      }));
+      console.log("Options",companyOptions);
+      setClients(companyOptions)
       setData(response.data)
   } catch (error) {
    
     console.error("Error fetching clients:", error?.message);
   }
 };
-
+const fetchEmployees = async(record)=>{
+  try {
+    console.log(record,"id");
+    const response = await axios.get(
+      `http://127.0.0.1:8083/api/clients/official?companyId=${record.id}`,
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    );
+      console.log(response.data,"data");
+      setEmployee(response.data)
+  } catch (error) {
+    console.error("Error fetching employees:", error?.message);
+  }
+}
 const addClient = async () => {
   try {
 
     const response = await axios.post(
       `http://127.0.0.1:8083/api/clients`,
       {
-        clientName,
+        companyName,
         companyId:user?.user?.companyId,
-        email,
+        companyAddress,
+        companyContact
         // departmentId,
         // inHouseStatus,
         // clientStatus,
@@ -142,6 +154,36 @@ const addClient = async () => {
   } catch (error) {
     // Handle errors
     console.error("Error adding client:", error);
+    // message.error("Error adding user");
+  }
+}
+
+const addClientOfficials = async () => {
+  try {
+
+    const response = await axios.post(
+      `http://127.0.0.1:8083/api/clients`,
+      {
+        clientName,
+        companyId:clientCompany,
+        Email:email,
+      },
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    );
+
+    // Handle the response as needed
+    console.log(response);
+    message.success(response?.data?.message);
+    fetchData();
+    showModalCancel();
+  } catch (error) {
+    // Handle errors
+    console.error("Error adding client official:", error);
     // message.error("Error adding user");
   }
 }
@@ -183,7 +225,6 @@ useEffect(()=>{
   setUser(JSON.parse(localStorage?.getItem("user")));
   fetchProjects()
   fetchData()
-
 },[])
 
 const clientModalShow = () => {
@@ -193,7 +234,20 @@ const clientModalShow = () => {
 const clientModalCancel = () => {
   setClientModalVisible(false);
 };
-const statusModalShow = () => {
+
+const showModalShow = () => {
+  setShowModalVisible(true);
+};
+
+const showModalCancel = () => {
+  setShowModalVisible(false);
+};
+
+const statusModalShow = (record) => {
+  console.log("record",record);
+  // setRecord(record)
+  console.log(record,"recordingggg");
+  fetchEmployees(record)
   setStatusModalVisible(true);
 };
 
@@ -210,7 +264,7 @@ const handleStatusChange = (selectedStatus) => {
 };
   return <>
 <Modal
-  title="Change Status"
+  title="Employees"
   width={400}
   centered
   visible={statusModalVisible}
@@ -221,41 +275,14 @@ const handleStatusChange = (selectedStatus) => {
   <Row justify="space-between" align="center">
     <Col span={20}>
       <Form layout="vertical" name="basic">
-        <Form.Item
-          label="Select Status"
-          name="selectedStatus"
-          rules={[
-            {
-              required: true,
-              message: "Please select a status",
-            },
-          ]}
-        >
-          <Select
-            options={[
-              { label: "On-going", value: "on-going" },
-              { label: "Completed", value: "completed" },
-              { label: "Pending", value: "pending" },
-              // ... (add other status options)
-            ]}
-            value={selectedStatus}
-            onChange={(value) => setSelectedStatus(value)}
-          />
-        </Form.Item>
-
-
-        {/* ... (your existing code) */}
+        <FormItem>
+        <ul>
+        {employee.map((rec, index) => (
+          <li key={index}>{rec.clientName}-{rec.Email}</li>
+        ))}
+      </ul>
+          </FormItem>        
         <Row>
-          <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              onClick={() => handleStatusChange(selectedStatus)}
-            >
-              Submit
-            </Button>
-          </Col>
           <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
             <Button block onClick={statusModalCancel}>
               Cancel
@@ -269,7 +296,7 @@ const handleStatusChange = (selectedStatus) => {
 
 
 <Modal
-        title="Add Client"
+        title="Add Company"
         width={416}
         centered
         visible={clientModalVisible}
@@ -281,7 +308,7 @@ const handleStatusChange = (selectedStatus) => {
       >
         <Form layout="vertical" name="basic">
           <Form.Item
-            label="Client Name"
+            label="Company Name:"
             name="firstName"
             rules={[
               {
@@ -291,28 +318,41 @@ const handleStatusChange = (selectedStatus) => {
             ]}
           >
             <Input
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
             />
           </Form.Item>
           <Form.Item
-            label="E-mail :"
-            name="email"
+            label="Address :"
+            name="companyAddress"
             rules={[
               {
-                type: "email",
-                message: "The input is not valid E-mail!",
-              },
-              {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Please input your Address!",
               },
             ]}
           >
             <Input
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="companyAddress"
+              value={companyAddress}
+              onChange={(e) => setCompanyAddress(e.target.value)}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Contact :"
+            name="companyContact"
+            rules={[
+              {
+                required: true,
+                message: "Please input your -Contact!",
+              },
+            ]}
+          >
+            <Input
+              id="companyContact"
+              value={companyContact}
+              onChange={(e) => setCompanyContact(e.target.value)}
             />
           </Form.Item>
                       {/* <Form.Item
@@ -375,9 +415,10 @@ const handleStatusChange = (selectedStatus) => {
                 htmlType="submit"
                 onClick={() => addClient()}
               >
-                Add Client
+                Add Company
               </Button>
             </Col>
+            
 
             <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
               <Button block onClick={clientModalCancel}>
@@ -387,10 +428,123 @@ const handleStatusChange = (selectedStatus) => {
           </Row>
         </Form>
       </Modal>
+
+
+      <Modal
+        title="Add Client"
+        width={416}
+        centered
+        visible={showModalVisible}
+        onCancel={showModalCancel}
+        footer={null}
+        closeIcon={
+          <RiCloseFill className="remix-icon text-color-black-100" size={24} />
+        }
+      >
+        <Form layout="vertical" name="basic">
+          <Form.Item
+            label="Client Name:"
+            name="clientName"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Name!",
+              },
+            ]}
+          >
+            <Input
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Email :"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Email!",
+              },
+            ]}
+          >
+            <Input
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Item>
+
+          <Form.Item
+                label="Company"
+                name="company"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Company",
+                  },
+                ]}
+              >
+              <Select
+                  options={clients}
+                  value={clientCompany}
+                  onChange={(value) => setClientCompany(value)}
+                />              
+                </Form.Item>
+                
+          {/* <Form.Item
+            label="Contact :"
+            name="companyContact"
+            rules={[
+              {
+                required: true,
+                message: "Please input your -Contact!",
+              },
+            ]}
+          >
+            <Input
+              id="companyContact"
+              value={companyContact}
+              onChange={(e) => setCompanyContact(e.target.value)}
+            />
+          </Form.Item> */}
+
+          <Row>
+            <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                onClick={() => addClientOfficials()}
+              >
+                Add Client
+              </Button>
+            </Col>
+            
+            <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
+              <Button block onClick={showModalCancel}>
+                Cancel
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
+
+
+
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
         <Button
           type="primary"
           onClick={clientModalShow}
+          style={{ marginRight: '10px' }}
+
+          disabled={user?.user?.roleId != 1}
+        >
+          Add Company
+        </Button>
+
+        <Button
+          type="primary"
+          onClick={showModalShow}
           disabled={user?.user?.roleId != 1}
         >
           Add Client

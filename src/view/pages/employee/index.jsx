@@ -47,7 +47,7 @@ const EmployeeForm = ({ onSubmit }) => {
       );
       const options = [];
       for (const item of response?.data) {
-        options.push({ value: item?.title, label: item?.title });
+        options.push({ value:{id:item?.id,title:item?.title}, label: item?.title });
       }
       setDepartmentOptions(options)
     } catch (error) {
@@ -58,12 +58,15 @@ const EmployeeForm = ({ onSubmit }) => {
   const [department,setDepartment] = useState("")
   const addUser = async () => {
     try {
+      console.log(department,"department");
       const response = await axios.post(
         `http://127.0.0.1:8083/api/users`,
         {
           email,
           firstName,
           lastName,
+          department:department[0].title,
+          departmentId:department[0].id,
           roleId,
           companyId:user?.user?.companyId
         },

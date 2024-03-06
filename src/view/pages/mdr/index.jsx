@@ -80,7 +80,6 @@ export default function MDR() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
-
   const [projectCode,setProjectCode] = useState()
   
 
@@ -127,7 +126,8 @@ export default function MDR() {
     
   const documentModalShow = () => {
     setDocumentModalVisible(true);
-    setProjectCode(record.projectCode)
+    // setProjectCode(record.projectCode)
+
   };
 
   const documentModalShowing = (record) => {
@@ -152,15 +152,16 @@ export default function MDR() {
   const assignModalCancel = () => {
     setAssignModalVisible(false);
   };
-
+let count=0;
   const createModalShow = (record) => {
     console.log("record",record)
     setRecord(record)
-    setCreateModalVisible(true);
+    setDocumentModalVisible(true);
+    // setCreateModalVisible(true);
   };
 
   const showModalShow = (record) => {
-    console.log(record,"record")
+    console.log(record)
     setRecord(record)
     showDocs(record)
     setShowModalVisible(true);
@@ -179,6 +180,41 @@ const showDocs = async(record)=>{
 
 
 }
+const convertToCSV = (data) => {
+  const csvRows = [];
+  
+  const headers = Object.keys(data[0]);
+  csvRows.push(headers.join(','));
+
+  data.forEach((object) => {
+    const values = headers.map(header => {
+      const needsQuotes = typeof object[header] === 'string' && object[header].includes(',');
+      if (needsQuotes) {
+        return `"${object[header].replace(/"/g, '""')}"`;
+      }
+      return object[header];
+    });
+    csvRows.push(values.join(','));
+  });
+
+  return csvRows.join('\n');
+};
+
+const handleExport = async (record) => {
+  await fetchDepartmentDocs(record);
+  console.log(count,'counttt');
+  if (docData.length > 0) {
+    const csvData = convertToCSV(docData);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `MDR ${docData[0].masterDocumentId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
 
 const fetchDepartmentDocs = async (record) => {
   try {
@@ -192,7 +228,6 @@ const fetchDepartmentDocs = async (record) => {
         },
       }
     );
-    console.log(response.data);
       setDocData(response.data);
       console.log(docData,'hiiiiiiiii');
     console.log(response.data,"received");
@@ -203,7 +238,9 @@ const fetchDepartmentDocs = async (record) => {
     console.error("Error fetching documents:", error?.message);
   }
 };
-
+useEffect(() => {
+  
+}, [docData]);
   const assignMDR = async(assignedEmployees,allUsers)=>{
     try {
       // console.log(allUsers);
@@ -281,7 +318,7 @@ const fetchDepartmentDocs = async (record) => {
     try {
       console.log(record);
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents?projectId${record?.projectId}?companyId=${user?.user?.companyId}?masterDocumentId=${record.mdrCode}`,
+        `http://127.0.0.1:8083/api/documents/export/${record?.id}?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -731,17 +768,6 @@ const fetchDepartmentDocs = async (record) => {
             dataIndex: "title",
             key: "title",
           },
-          // {
-          //   title: "Dept Id",
-          //   dataIndex: "departmentId",
-          //   key: "departmentId",
-          // },
-
-          // {
-          //   title: "Project Id",
-          //   dataIndex: "projectId",
-          //   key: "projectId",
-          // },
           {
             title: "Project Code",
             dataIndex: "projectCode",
@@ -752,11 +778,7 @@ const fetchDepartmentDocs = async (record) => {
             dataIndex: "departmentName",
             key: "departmentName",
           },
-          // {
-          //   title: "Author Id",
-          //   dataIndex: "authorId",
-          //   key: "authorId",
-          // },
+
           {
             title: "Author Name",
             dataIndex: "authorName",
@@ -781,9 +803,7 @@ const fetchDepartmentDocs = async (record) => {
 
                   <Button
                     key={record?.id}
-                    onClick={() => {
-                      exportCSV(record);
-                    }}
+                    onClick={() => handleExport(record)}
                     disabled={user?.user?.roleId != 1}
                   >
                     Export
