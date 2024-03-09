@@ -1,22 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Divider,
-  Form,
-  Space,
-  Table,
-  Select,
-  Tag,
-  Input,
-  DatePicker,
-  TimePicker,
-  Button,
-  Modal,
-  message,
-  Upload,
-  Checkbox
-} from 'antd';
+import {  Row,  Col,  Divider,  Form,  Space,  Table,  Select,  Tag,  Input,  DatePicker,  TimePicker,  Button,  Modal,  message,} from 'antd';
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
@@ -35,17 +18,15 @@ console.log(jsondata);
     const status= params.get('status');
 
     const departmentId = params.get('departmentId');
-  console.log(ProjectCode,getMdrCode);
+  // console.log(ProjectCode,getMdrCode);
    let departmentOptionsString = params.get('departmentOptions');
-  console.log(departmentOptionsString);
+  // console.log(departmentOptionsString);
   let departmentOptionSuffix = params.get('departmentOption');
-  console.log("Suffix",departmentOptionSuffix);
+  // console.log("Suffix",departmentOptionSuffix);
 
   const projectOptions = params.get('projectOptions');
   const approver = params.get('approver');
   const reviewer = params.get('reviewer');
-  // const projectCode = params.get('projectCode');
-
     const [customFieldValues, setCustomFieldValues] = useState({});
     const [templateModalVisible,setTemplateModalVisible] = useState(false)
     const [selectedFieldVisible,setSelectedFieldVisible]  = useState(false)
@@ -60,26 +41,27 @@ console.log(jsondata);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
     const [count,setCount] = useState(1)
-    // const [dataArray,setDataArray] = useState([])
 
 
     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
-console.log("hehe",departmentOptionSuffixes)
+    // console.log("hehe",departmentOptionSuffixes)
     const departmentOptions = JSON.parse(departmentOptionsString);
-    console.log("department",departmentOptions);
+    // console.log("department",departmentOptions);
     const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
-    console.log("departmentmap",departmentOptionsMap);
+    // console.log("departmentmap",departmentOptionsMap);
     const departmentIds = departmentId.split(',').map(Number);
     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
-    console.log("id",departmentIds,"labels",departmentLabels);
+    // console.log("id",departmentIds,"labels",departmentLabels);
     const departmentLabelsString = departmentLabels.join(', ');
-    console.log("strings",departmentLabelsString);
+    // console.log("strings",departmentLabelsString);
     const [data, setData] = useState(jsondata);
     const [dataArray,setDataArray] = useState(jsondata)
+    const [documentCounts, setDocumentCounts] = useState({});
+    // console.log("jsonData",jsondata);
+    const [documentTitles, setDocumentTitles] = useState({});
+    const [information,setInformation] = useState([])
+    const [titles,setTitles] = useState([])
 
-    console.log("jsonData",jsondata);
-
-  
     const columns = [
       {
         title: 'Sr.#',
@@ -91,11 +73,6 @@ console.log("hehe",departmentOptionSuffixes)
         dataIndex: 'documentTitle',
         key: 'documentTitle',
       },
-      // {
-      //   title: 'Area Code',
-      //   dataIndex: 'areaCode',
-      //   key: 'areaCode',
-      // },
       {
         title: 'Department Code',
         dataIndex: 'departmentCode',
@@ -106,18 +83,10 @@ console.log("hehe",departmentOptionSuffixes)
         dataIndex: 'documentContentCode',
         key: 'documentContentCode',
       },
-      // {
-      //   title: 'Sequence Number',
-      //   dataIndex: 'sequenceNumber',
-      //   key: 'sequenceNumber',
-      // },
       {
         title: 'DOCUMENT NUMBER',
         dataIndex: 'document', // Use 'documentNumber' as the dataIndex
         key: 'document',
-        // render: (_, record) => (
-        //   <span>{codes}</span>
-        // ),
       },
       {
         title: "No Of Documents",
@@ -125,11 +94,11 @@ console.log("hehe",departmentOptionSuffixes)
         render: (_, record) => (
           <Space size="middle" align="center">
             <Button onClick={() => handleCount(record)}>Add </Button>
-            <Tag style={{color:"white",backgroundColor:"blue"}}>{count}</Tag>
+            <Tag style={{ color: "white", backgroundColor: "blue" }}>{documentCounts[record.document] || 1}</Tag>
           </Space>
-          
         ),
       },
+      
       // {
       //   title: "Update Code",
       //   key: "updateCode",
@@ -148,10 +117,71 @@ console.log("hehe",departmentOptionSuffixes)
       }, 1000);
   
       return () => clearTimeout(timeout);
-    }, []);
+    }, [])
 
-    const handleCount=()=>{
-    }
+    const handleCount = (record) => {
+      setDocumentCounts(prevCounts => {
+        const updatedCounts = { ...prevCounts };
+        const currentCount = updatedCounts[record.document] || 1;
+        updatedCounts[record.document] = currentCount + 1;
+        console.log("documents", updatedCounts);
+        return updatedCounts;
+      });
+    };
+
+    const templateModalShow = () => {
+      setTemplateModalVisible(true);  
+      const updatedData = [...data];
+      console.log(selectedRows,"rowsss");
+      let allInfos = [];
+
+      selectedRows.forEach((index, sequenceNumber) => {
+        const count = documentCounts[data[index].document] || 1;
+        console.log(count, "counting");
+        
+        for (let i = 0; i < count; i++) {
+          let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("2014",ProjectCode)
+
+          console.log("documents...........",newDocument);
+          // Save the document name in allInfos array
+          if (!allInfos[index]) {
+            allInfos[index] = {};
+          }
+          allInfos[index][i] = newDocument;
+      
+          updatedData[index] = {
+            ...data[index],
+            count: documentCounts[data[index].document]
+          };
+          
+          console.log('Updated index', updatedData[index]);
+        }
+      
+        console.log('allInfos', allInfos);
+      });
+      setInformation(allInfos)
+      console.log("Updated Data:", updatedData);
+      setData(updatedData);
+      
+    };
+
+    const handleChangingTitle = (title, document, index, i) => {
+      setTitles((prevTitles) => {
+        const newTitles = [...prevTitles];
+        if (!newTitles[index]) {
+          newTitles[index] = [];
+        }
+        if (!newTitles[index][i]) {
+          newTitles[index][i] = {};
+        }
+        newTitles[index][i] = { ...newTitles[index][i], title };
+        return newTitles;
+      });
+      console.log("titles",titles);
+    };
+  // useEffect(() => {
+  //   updatingTitles();
+  // }, [documentTitles, selectedRows]);
 
     const departmentWiseShow = () => {
       setDepartmentWise(true);
@@ -163,59 +193,61 @@ console.log("hehe",departmentOptionSuffixes)
     const addDocument = async () => {
       
       const departmentOptions = await JSON.parse(departmentOptionsString);
-      console.log(getMdrTitle,projectOptions,departmentOptions,projectId,departmentId);
- 
+      // console.log(getMdrTitle,projectOptions,departmentOptions,projectId,departmentId);
+      // console.log(data,"datas");
       try {
-//         const department = departmentOptions.filter(item => departmentId.includes(item?.value));
-// const departmentNames = departments.map(item => item.label);
-
-        // console.log(department);
         var title=getMdrTitle;
         var mdrCode=getMdrCode;
         mdrCode=mdrCode.replace(/\s/g, '');
         var count = selectedRows.length
         selectedRows.forEach(async (index) => {
           let documentValue = data[index].document;
+          let count = data[index].count
           documentValue = documentValue.replace("2014", ProjectCode)
-          console.log(documentValue,);
-
+          // console.log(documentValue,);
          const masterDocumentName=title;
-          console.log(documentValue);
+          // console.log(documentValue);
           const assignedBy=user.user.id;
           const assignedFrom=user.user.roleId;
-          console.log('This is coming from param',approver,reviewer);
-          try {
-            var title=documentValue;
-            var version='000';
-            const responseDoc = await axios.post(
-              "http://127.0.0.1:8083/api/documents/",
-              {
-                title,
-                departmentId,
-                projectId,
-                companyId: user?.user?.companyId,
-                userId: user?.user?.id,
-                userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
-                masterDocumentId: mdrCode,
-                masterDocumentName,
-                projectCode: ProjectCode,
-                departmentName:departmentLabelsString,
-                status : "Initialized",
-                assignedBy,
-                assignedFrom,
-                 approver,
-                 reviewer,
-                 version
-              },
-              {
-                headers: {
-                  Authorization: user?.accessToken,
+          // console.log('This is coming from param',approver,reviewer);
+          for (let i = 0; i < count; i++) {
+            try {
+              var docTitle = titles[index][i].title;
+              var title=information[index][i];
+              var version='000';
+              console.log("doctitle",docTitle);
+              const responseDoc = await axios.post(
+                "http://127.0.0.1:8083/api/documents/",
+                {
+                  title,
+                  docTitle,
+                  departmentId,
+                  projectId,
+                  companyId: user?.user?.companyId,
+                  userId: user?.user?.id,
+                  userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+                  masterDocumentId: mdrCode,
+                  masterDocumentName,
+                  projectCode: ProjectCode,
+                  departmentName:departmentLabelsString,
+                  status : "Initialized",
+                  assignedBy,
+                  assignedFrom,
+                   approver,
+                   reviewer,
+                   version
                 },
-              }
-            );
-          } catch (error) {
-            console.log(error);
+                {
+                  headers: {
+                    Authorization: user?.accessToken,
+                  },
+                }
+              );
+            } catch (error) {
+              console.log(error);
+            }  
           }
+          
         });
 
         const response = await axios.post(
@@ -240,7 +272,7 @@ console.log("hehe",departmentOptionSuffixes)
           }
         );
         // Handle the response as needed
-        console.log(response);
+        // console.log(response);
         message.success(response?.data?.message);
         if (selectedRows.length === 0) {
           message.error('Please select at least one row.');
@@ -263,15 +295,7 @@ console.log("hehe",departmentOptionSuffixes)
     };
 
     const filterData = (selectedDepartment) => {
-      // Assuming data is an array of users with each object having a 'department' and 'roleTitle' property
-      const filteredData = dataArray.filter(data => String(data.category).toUpperCase() === String(selectedDepartment).toUpperCase());
-    
-      // Define the order of roles
-      // const roleOrder = ['Head', 'Senior', 'Junior', 'Designer'];
-    
-      // Sort the filtered data based on the order of roles
-      // filteredData.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
-  
+      const filteredData = dataArray.filter(data => String(data.category).toUpperCase() === String(selectedDepartment).toUpperCase());  
       console.log("filter",filteredData);
       setData(filteredData);
     };
@@ -280,29 +304,14 @@ console.log("hehe",departmentOptionSuffixes)
       departmentWiseCancel();
       setData(dataArray)
     };
-
-    const templateModalShow = () => {
-      setTemplateModalVisible(true);
-      
-      // Update the document field for the selected rows with sequential numbers
-      const updatedData = [...data];
-      selectedRows.forEach((index, sequenceNumber) => {
-        const newDocument = data[index].document.replace('00X', (sequenceNumber + 1).toString().padStart(3, '0'));
-        updatedData[index] = {
-          ...data[index],
-          document: newDocument,
-        };
-      });
     
-      setData(updatedData);
-      
-
-      const navigateBackToMDR = () => {
-
-        history.push(`/pages/MDR`)};
-      
+    const navigateBackToMDR = () => {
+      history.push(`/pages/MDR`)
     };
     const mydocumentSaved = async() => {
+
+    // updatingTitles()
+    //   console.log("documents",updatingTitles());
       // Check if a row is selected
     await addDocument();
       // Display success message
@@ -332,6 +341,19 @@ console.log("hehe",departmentOptionSuffixes)
       setSelectedFieldVisible(false);
     };
     
+    // const handleChangingTitle = (a,b)=>{
+    //     setDocumentT(prevCounts => {
+    //       const updatedCounts = { ...prevCounts };
+    //       const currentCount = updatedCounts[record.document] || 1;
+    //       updatedCounts[record.document] = currentCount + 1;
+    //       console.log("documents", updatedCounts);
+    //       return updatedCounts;
+    //     });
+    //   };  
+    
+
+
+
 
     const handleSelect = (record) => {
       selectedModalShow()
@@ -369,6 +391,11 @@ console.log("hehe",departmentOptionSuffixes)
     useEffect(()=>{
       getAllCodes()
     },[])
+
+    useEffect(() => {
+      // This will be executed after the state is updated
+      console.log('Updated Information:', information);
+    }, [information]);
 
     const customModalShow = () => {
       setCustomModalVisible(true);
@@ -475,23 +502,24 @@ console.log("hehe",departmentOptionSuffixes)
         <div>
           <h3>Selected Documents:</h3>
           <ul style={{ margin: "2px" ,padding:"2px"}}>
-            {selectedRows.map((index) => (
-              <li key={index} style={{ margin: "2px" ,padding:"2px"}}>
-                <strong style={{color:"blue"}}>Category:</strong> {data[index].category} <br />
-                <strong style={{color:"blue"}}>Code:</strong> {data[index].code} <br />
-                <strong style={{color:"blue"}}>Document Title:</strong> {data[index].documentTitle} <br />
-                <strong style={{color:"blue"}}>Document Number:</strong> {data[index].document} <br />
-                {/* Add other properties as needed */}
+          {selectedRows.map((index) => (
+  <React.Fragment key={index}>
+    {Array.from({ length: (data[index].count) || 1 }, (_, i) => (
+      <li key={i} style={{ margin: "2px", padding: "2px" }}>
+        <strong style={{ color: "blue" }}>Category:</strong> {data[index].category} <br />
+        <strong style={{ color: "blue" }}>Code:</strong> {data[index].code} <br />
+        <strong style={{ color: "blue" }}>Document Number:</strong> {information[index]?.[i] || ''} <br />
+        <Input
+        style={{ margin: "6px" }}
+        placeholder="Enter Document Title"
+        value={titles[index]?.[i]?.title || ''}
+        onChange={(e) => handleChangingTitle(e.target.value, data[index].document, index, i)}
+/>
+      </li>
+    ))}
+  </React.Fragment>
+))}
 
-                {/* Input for Document Title */}
-                <Input
-                style={{ margin: "6px" }}
-                  placeholder="Enter Document Title"
-                  value={customFieldValues.title || ''} // You may adjust this based on your state
-                  onChange={(e) => handleCustomFieldChange('title', e.target.value)}
-                />
-              </li>
-            ))}
           </ul>
         </div>
       </Row>
@@ -553,7 +581,6 @@ console.log("hehe",departmentOptionSuffixes)
         <div style={{ textAlign: 'center', marginTop: 20 }}>
         <h1>Select Dcuments For MDR</h1>
       </div>
-
       <div style={{ marginBottom: "16px" ,justifyContent:"space-between"}}>
         <h1>MDR Templates</h1>
         <div>
@@ -632,13 +659,6 @@ console.log("hehe",departmentOptionSuffixes)
           ))}
         </Form>
       </Modal>
-
-         
-      {/* <div style={{ marginTop: '16px' }}>
-        Selected Rows: {selectedRows.join(', ')}
-      </div> */}
-
-
     </div>
     </>
 

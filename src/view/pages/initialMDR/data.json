@@ -1,14 +1,5 @@
+
 [
-    {
-        "category": "PROJECT MANAGEMENT",
-        "code": "A",
-        "documentTitle": "Scope of Work",
-        "areaCode": "01",
-        "departmentCode": "PM",
-        "documentContentCode": "SOW",
-        "sequenceNumber": "00X",
-        "document": "2014-01-PM-SOW-00X"
-    },
     {
         "category": "PROJECT MANAGEMENT",
         "code": "A.1",
@@ -17,7 +8,7 @@
         "departmentCode": "PM",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-SOW-00X"
+        "document": "xxxx-01-PM-SOW-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -27,7 +18,7 @@
         "departmentCode": "PM",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-SP-00X"
+        "document": "xxxx-01-PM-SP-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -37,7 +28,7 @@
         "departmentCode": "PM",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-REP-00X"
+        "document": "xxxx-01-PM-REP-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -47,7 +38,7 @@
         "departmentCode": "PM",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-DS-00X"
+        "document": "xxxx-01-PM-DS-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -57,7 +48,7 @@
         "departmentCode": "PM",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-SCH-00X"
+        "document": "xxxx-01-PM-SCH-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -67,7 +58,7 @@
         "departmentCode": "PM",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-TBE-00X"
+        "document": "xxxx-01-PM-TBE-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -77,7 +68,7 @@
         "departmentCode": "PM",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-PR-00X"
+        "document": "xxxx-01-PM-PR-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -87,7 +78,7 @@
         "departmentCode": "PM",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-MS-00X"
+        "document": "xxxx-01-PM-MS-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -97,7 +88,7 @@
         "departmentCode": "PM",
         "documentContentCode": "MP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-MP-00X"
+        "document": "xxxx-01-PM-MP-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -107,7 +98,7 @@
         "departmentCode": "PM",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-CPR-00X"
+        "document": "xxxx-01-PM-CPR-00X"
     },
     {
         "category": "PROJECT MANAGEMENT",
@@ -117,7 +108,7 @@
         "departmentCode": "PM",
         "documentContentCode": "DOC",
         "sequenceNumber": "00X",
-        "document": "2014-01-PM-DOC-00X"
+        "document": "xxxx-01-PM-DOC-00X"
     },
     {
         "category": "PROCESS",
@@ -127,7 +118,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-SOW-00X"
+        "document": "xxxx-01-PRO-SOW-00X"
     },
     {
         "category": "PROCESS",
@@ -137,7 +128,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-SOW-00X"
+        "document": "xxxx-01-PRO-SOW-00X"
     },
     {
         "category": "PROCESS",
@@ -147,7 +138,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-SP-00X"
+        "document": "xxxx-01-PRO-SP-00X"
     },
     {
         "category": "PROCESS",
@@ -157,7 +148,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-REP-00X"
+        "document": "xxxx-01-PRO-REP-00X"
     },
     {
         "category": "PROCESS",
@@ -167,7 +158,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-DS-00X"
+        "document": "xxxx-01-PRO-DS-00X"
     },
     {
         "category": "PROCESS",
@@ -177,7 +168,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-SCH-00X"
+        "document": "xxxx-01-PRO-SCH-00X"
     },
     {
         "category": "PROCESS",
@@ -187,7 +178,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-TBE-00X"
+        "document": "xxxx-01-PRO-TBE-00X"
     },
     {
         "category": "PROCESS",
@@ -197,7 +188,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-PR-00X"
+        "document": "xxxx-01-PRO-PR-00X"
     },
     {
         "category": "PROCESS",
@@ -207,7 +198,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-MS-00X"
+        "document": "xxxx-01-PRO-MS-00X"
     },
     {
         "category": "PROCESS",
@@ -217,7 +208,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-CPR-00X"
+        "document": "xxxx-01-PRO-CPR-00X"
     },
     {
         "category": "PROCESS",
@@ -227,7 +218,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "BOD",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-BOD-00X"
+        "document": "xxxx-01-PRO-BOD-00X"
     },
     {
         "category": "PROCESS",
@@ -237,7 +228,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "CAL",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-CAL-00X"
+        "document": "xxxx-01-PRO-CAL-00X"
     },
     {
         "category": "PROCESS",
@@ -247,7 +238,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "LL",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-LL-00X"
+        "document": "xxxx-01-PRO-LL-00X"
     },
     {
         "category": "PROCESS",
@@ -257,7 +248,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "PID",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-PID-00X"
+        "document": "xxxx-01-PRO-PID-00X"
     },
     {
         "category": "PROCESS",
@@ -267,7 +258,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "PFS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-PFS-00X"
+        "document": "xxxx-01-PRO-PFS-00X"
     },
     {
         "category": "PROCESS",
@@ -277,7 +268,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "PEFS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-PEFS-00X"
+        "document": "xxxx-01-PRO-PEFS-00X"
     },
     {
         "category": "PROCESS",
@@ -287,7 +278,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "CD",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-CD-00X"
+        "document": "xxxx-01-PRO-CD-00X"
     },
     {
         "category": "PROCESS",
@@ -297,7 +288,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "GA",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-GA-00X"
+        "document": "xxxx-01-PRO-GA-00X"
     },
     {
         "category": "PROCESS",
@@ -307,7 +298,7 @@
         "departmentCode": "PRO",
         "documentContentCode": "LGD",
         "sequenceNumber": "00X",
-        "document": "2014-01-PRO-LGD-00X"
+        "document": "xxxx-01-PRO-LGD-00X"
     },
     {
         "category": "PIPING",
@@ -317,7 +308,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-SOW-00X"
+        "document": "xxxx-01-PIP-SOW-00X"
     },
     {
         "category": "PIPING",
@@ -327,7 +318,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-SOW-00X"
+        "document": "xxxx-01-PIP-SOW-00X"
     },
     {
         "category": "PIPING",
@@ -337,7 +328,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-SP-00X"
+        "document": "xxxx-01-PIP-SP-00X"
     },
     {
         "category": "PIPING",
@@ -347,7 +338,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-REP-00X"
+        "document": "xxxx-01-PIP-REP-00X"
     },
     {
         "category": "PIPING",
@@ -357,7 +348,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-DS-00X"
+        "document": "xxxx-01-PIP-DS-00X"
     },
     {
         "category": "PIPING",
@@ -367,7 +358,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-SCH-00X"
+        "document": "xxxx-01-PIP-SCH-00X"
     },
     {
         "category": "PIPING",
@@ -377,7 +368,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-TBE-00X"
+        "document": "xxxx-01-PIP-TBE-00X"
     },
     {
         "category": "PIPING",
@@ -387,7 +378,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-PR-00X"
+        "document": "xxxx-01-PIP-PR-00X"
     },
     {
         "category": "PIPING",
@@ -397,7 +388,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-MS-00X"
+        "document": "xxxx-01-PIP-MS-00X"
     },
     {
         "category": "PIPING",
@@ -407,7 +398,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-CPR-00X"
+        "document": "xxxx-01-PIP-CPR-00X"
     },
     {
         "category": "PIPING",
@@ -417,7 +408,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "DT",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-DT-00X"
+        "document": "xxxx-01-PIP-DT-00X"
     },
     {
         "category": "PIPING",
@@ -427,7 +418,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "GA",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-GA-00X"
+        "document": "xxxx-01-PIP-GA-00X"
     },
     {
         "category": "PIPING",
@@ -437,7 +428,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "ISO",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-ISO-00X"
+        "document": "xxxx-01-PIP-ISO-00X"
     },
     {
         "category": "PIPING",
@@ -447,7 +438,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "KPP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-KPP-00X"
+        "document": "xxxx-01-PIP-KPP-00X"
     },
     {
         "category": "PIPING",
@@ -457,7 +448,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "PL",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-PL-00X"
+        "document": "xxxx-01-PIP-PL-00X"
     },
     {
         "category": "PIPING",
@@ -467,7 +458,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "PP",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-PP-00X"
+        "document": "xxxx-01-PIP-PP-00X"
     },
     {
         "category": "PIPING",
@@ -477,7 +468,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "LO",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-LO-00X"
+        "document": "xxxx-01-PIP-LO-00X"
     },
     {
         "category": "PIPING",
@@ -487,7 +478,7 @@
         "departmentCode": "PIP",
         "documentContentCode": "DL",
         "sequenceNumber": "00X",
-        "document": "2014-01-PIP-DL-00X"
+        "document": "xxxx-01-PIP-DL-00X"
     },
     {
         "category": "MECHANICAL",
@@ -497,7 +488,7 @@
         "departmentCode": "TK",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-SOW-00X"
+        "document": "xxxx-01-TK-SOW-00X"
     },
     {
         "category": "MECHANICAL",
@@ -507,7 +498,7 @@
         "departmentCode": "TK",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-SOW-00X"
+        "document": "xxxx-01-TK-SOW-00X"
     },
     {
         "category": "MECHANICAL",
@@ -517,7 +508,7 @@
         "departmentCode": "TK",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-SP-00X"
+        "document": "xxxx-01-TK-SP-00X"
     },
     {
         "category": "MECHANICAL",
@@ -527,7 +518,7 @@
         "departmentCode": "TK",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-REP-00X"
+        "document": "xxxx-01-TK-REP-00X"
     },
     {
         "category": "MECHANICAL",
@@ -537,7 +528,7 @@
         "departmentCode": "TK",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-DS-00X"
+        "document": "xxxx-01-TK-DS-00X"
     },
     {
         "category": "MECHANICAL",
@@ -547,7 +538,7 @@
         "departmentCode": "TK",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-SCH-00X"
+        "document": "xxxx-01-TK-SCH-00X"
     },
     {
         "category": "MECHANICAL",
@@ -557,7 +548,7 @@
         "departmentCode": "TK",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-TBE-00X"
+        "document": "xxxx-01-TK-TBE-00X"
     },
     {
         "category": "MECHANICAL",
@@ -567,7 +558,7 @@
         "departmentCode": "TK",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-PR-00X"
+        "document": "xxxx-01-TK-PR-00X"
     },
     {
         "category": "MECHANICAL",
@@ -577,7 +568,7 @@
         "departmentCode": "TK",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-MS-00X"
+        "document": "xxxx-01-TK-MS-00X"
     },
     {
         "category": "MECHANICAL",
@@ -587,7 +578,7 @@
         "departmentCode": "TK",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-CPR-00X"
+        "document": "xxxx-01-TK-CPR-00X"
     },
     {
         "category": "MECHANICAL",
@@ -597,7 +588,7 @@
         "departmentCode": "TK",
         "documentContentCode": "DT",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-DT-00X"
+        "document": "xxxx-01-TK-DT-00X"
     },
     {
         "category": "MECHANICAL",
@@ -607,7 +598,7 @@
         "departmentCode": "TK",
         "documentContentCode": "GA",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-GA-00X"
+        "document": "xxxx-01-TK-GA-00X"
     },
     {
         "category": "MECHANICAL",
@@ -617,7 +608,7 @@
         "departmentCode": "TK",
         "documentContentCode": "ST",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-ST-00X"
+        "document": "xxxx-01-TK-ST-00X"
     },
     {
         "category": "MECHANICAL",
@@ -627,7 +618,7 @@
         "departmentCode": "TK",
         "documentContentCode": "APST",
         "sequenceNumber": "00X",
-        "document": "2014-01-TK-APST-00X"
+        "document": "xxxx-01-TK-APST-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -637,7 +628,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-SOW-00X"
+        "document": "xxxx-01-CIV-SOW-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -647,7 +638,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-SOW-00X"
+        "document": "xxxx-01-CIV-SOW-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -657,7 +648,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-SP-00X"
+        "document": "xxxx-01-CIV-SP-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -667,7 +658,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-REP-00X"
+        "document": "xxxx-01-CIV-REP-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -677,7 +668,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-DS-00X"
+        "document": "xxxx-01-CIV-DS-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -687,7 +678,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-SCH-00X"
+        "document": "xxxx-01-CIV-SCH-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -697,7 +688,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-TBE-00X"
+        "document": "xxxx-01-CIV-TBE-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -707,7 +698,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-PR-00X"
+        "document": "xxxx-01-CIV-PR-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -717,7 +708,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-MS-00X"
+        "document": "xxxx-01-CIV-MS-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -727,7 +718,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-CPR-00X"
+        "document": "xxxx-01-CIV-CPR-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -737,7 +728,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "DT",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-DT-00X"
+        "document": "xxxx-01-CIV-DT-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -747,7 +738,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "GA",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-GA-00X"
+        "document": "xxxx-01-CIV-GA-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -757,7 +748,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "SL",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-SL-00X"
+        "document": "xxxx-01-CIV-SL-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -767,7 +758,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "KPP",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-KPP-00X"
+        "document": "xxxx-01-CIV-KPP-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -777,7 +768,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "PP",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-PP-00X"
+        "document": "xxxx-01-CIV-PP-00X"
     },
     {
         "category": "CIVIL/STRUCTURE",
@@ -787,7 +778,7 @@
         "departmentCode": "CIV",
         "documentContentCode": "DP",
         "sequenceNumber": "00X",
-        "document": "2014-01-CIV-DP-00X"
+        "document": "xxxx-01-CIV-DP-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -797,7 +788,7 @@
         "departmentCode": "STR",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-SOW-00X"
+        "document": "xxxx-01-STR-SOW-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -807,7 +798,7 @@
         "departmentCode": "STR",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-SOW-00X"
+        "document": "xxxx-01-STR-SOW-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -817,7 +808,7 @@
         "departmentCode": "STR",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-SP-00X"
+        "document": "xxxx-01-STR-SP-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -827,7 +818,7 @@
         "departmentCode": "STR",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-REP-00X"
+        "document": "xxxx-01-STR-REP-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -837,7 +828,7 @@
         "departmentCode": "STR",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-SCH-00X"
+        "document": "xxxx-01-STR-SCH-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -847,7 +838,7 @@
         "departmentCode": "STR",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-TBE-00X"
+        "document": "xxxx-01-STR-TBE-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -857,7 +848,7 @@
         "departmentCode": "STR",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-PR-00X"
+        "document": "xxxx-01-STR-PR-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -867,7 +858,7 @@
         "departmentCode": "STR",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-MS-00X"
+        "document": "xxxx-01-STR-MS-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -877,7 +868,7 @@
         "departmentCode": "STR",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-CPR-00X"
+        "document": "xxxx-01-STR-CPR-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -887,7 +878,7 @@
         "departmentCode": "STR",
         "documentContentCode": "DT",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-DT-00X"
+        "document": "xxxx-01-STR-DT-00X"
     },
     {
         "category": "CIVIL (STRUCTURE)",
@@ -897,7 +888,7 @@
         "departmentCode": "STR",
         "documentContentCode": "GA",
         "sequenceNumber": "00X",
-        "document": "2014-01-STR-GA-00X"
+        "document": "xxxx-01-STR-GA-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -907,7 +898,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-SOW-00X"
+        "document": "xxxx-01-ELE-SOW-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -917,7 +908,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-SOW-00X"
+        "document": "xxxx-01-ELE-SOW-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -927,7 +918,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-SP-00X"
+        "document": "xxxx-01-ELE-SP-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -937,7 +928,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-REP-00X"
+        "document": "xxxx-01-ELE-REP-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -947,7 +938,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-DS-00X"
+        "document": "xxxx-01-ELE-DS-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -957,7 +948,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-SCH-00X"
+        "document": "xxxx-01-ELE-SCH-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -967,7 +958,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-TBE-00X"
+        "document": "xxxx-01-ELE-TBE-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -977,7 +968,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-PR-00X"
+        "document": "xxxx-01-ELE-PR-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -987,7 +978,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-MS-00X"
+        "document": "xxxx-01-ELE-MS-00X"
     },
     {
         "category": "ELECTRICAL",
@@ -997,7 +988,7 @@
         "departmentCode": "ELE",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-ELE-CPR-00X"
+        "document": "xxxx-01-ELE-CPR-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1007,7 +998,7 @@
         "departmentCode": "INS",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-SOW-00X"
+        "document": "xxxx-01-INS-SOW-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1017,7 +1008,7 @@
         "departmentCode": "INS",
         "documentContentCode": "SOW",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-SOW-00X"
+        "document": "xxxx-01-INS-SOW-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1027,7 +1018,7 @@
         "departmentCode": "INS",
         "documentContentCode": "SP",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-SP-00X"
+        "document": "xxxx-01-INS-SP-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1037,7 +1028,7 @@
         "departmentCode": "INS",
         "documentContentCode": "REP",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-REP-00X"
+        "document": "xxxx-01-INS-REP-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1047,7 +1038,7 @@
         "departmentCode": "INS",
         "documentContentCode": "DS",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-DS-00X"
+        "document": "xxxx-01-INS-DS-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1057,7 +1048,7 @@
         "departmentCode": "INS",
         "documentContentCode": "SCH",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-SCH-00X"
+        "document": "xxxx-01-INS-SCH-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1067,7 +1058,7 @@
         "departmentCode": "INS",
         "documentContentCode": "TBE",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-TBE-00X"
+        "document": "xxxx-01-INS-TBE-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1077,7 +1068,7 @@
         "departmentCode": "INS",
         "documentContentCode": "PR",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-PR-00X"
+        "document": "xxxx-01-INS-PR-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1087,7 +1078,7 @@
         "departmentCode": "INS",
         "documentContentCode": "MS",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-MS-00X"
+        "document": "xxxx-01-INS-MS-00X"
     },
     {
         "category": "INSTRUMENTATION",
@@ -1097,6 +1088,6 @@
         "departmentCode": "INS",
         "documentContentCode": "CPR",
         "sequenceNumber": "00X",
-        "document": "2014-01-INS-CPR-00X"
+        "document": "xxxx-01-INS-CPR-00X"
     }
 ]
