@@ -53,11 +53,9 @@ const EmployeeManagement = () => {
          
         </div>
   
-        {/* Right side - Organization Chart */}
-        <div style={{ flex: 1 }}>
-          {/* Uncomment the following line once the simple test is successful */}
+        {/* <div style={{ flex: 1 }}>
           <OrganizationChart employees={employees} />
-        </div>
+        </div> */}
       </div>
     );
   };

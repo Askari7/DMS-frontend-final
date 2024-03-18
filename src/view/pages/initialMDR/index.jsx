@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  Row,  Col,  Divider,  Form,  Space,  Table,  Select,  Tag,  Input,  DatePicker,  TimePicker,  Button,  Modal,  message,} from 'antd';
+import {  Row,  Col,  Divider,Checkbox,  Form,  Space,  Table,  Select,  Tag,  Input,  DatePicker,  TimePicker,  Button,  Modal,  message,} from 'antd';
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
@@ -60,8 +60,10 @@ console.log(jsondata);
     // console.log("jsonData",jsondata);
     const [documentTitles, setDocumentTitles] = useState({});
     const [information,setInformation] = useState([])
-    const [titles,setTitles] = useState([])
+    const [titles,setValues] = useState([])
 
+    const [documentInfo, setDocumentInfo] = useState([]);
+    
     const columns = [
       {
         title: 'Sr.#',
@@ -140,7 +142,7 @@ console.log(jsondata);
         console.log(count, "counting");
         
         for (let i = 0; i < count; i++) {
-          let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("2014",ProjectCode)
+          let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
 
           console.log("documents...........",newDocument);
           // Save the document name in allInfos array
@@ -165,24 +167,95 @@ console.log(jsondata);
       
     };
 
-    const handleChangingTitle = (title, document, index, i) => {
-      setTitles((prevTitles) => {
-        const newTitles = [...prevTitles];
-        if (!newTitles[index]) {
-          newTitles[index] = [];
-        }
-        if (!newTitles[index][i]) {
-          newTitles[index][i] = {};
-        }
-        newTitles[index][i] = { ...newTitles[index][i], title };
-        return newTitles;
-      });
-      console.log("titles",titles);
-    };
+    // const handleChangingTitle = (title, document, index, i) => {
+    //   setValues((prevTitles) => {
+    //     const newTitles = [...prevTitles];
+    //     if (!newTitles[index]) {
+    //       newTitles[index] = [];
+    //     }
+    //     if (!newTitles[index][i]) {
+    //       newTitles[index][i] = {};
+    //     }
+    //     newTitles[index][i] = { ...newTitles[index][i], title };
+    //     return newTitles;
+    //   });
+    //   console.log("titles",titles);
+    // };
   // useEffect(() => {
   //   updatingTitles();
   // }, [documentTitles, selectedRows]);
-
+  const handleChangingTitle = (title, document, index, i) => {
+    setDocumentInfo((prevDocumentInfo) => {
+      const newDocumentInfo = [...prevDocumentInfo];
+      newDocumentInfo[index] = newDocumentInfo[index] || [];
+      newDocumentInfo[index][i] = {
+        ...newDocumentInfo[index][i],
+        title,
+      };
+      return newDocumentInfo;
+    });
+    console.log("documentInfo", documentInfo);
+  };
+  
+  const handleStartDateChange = (date, document, index, i) => {
+    setDocumentInfo((prevDocumentInfo) => {
+      const newDocumentInfo = [...prevDocumentInfo];
+      newDocumentInfo[index] = newDocumentInfo[index] || [];
+      newDocumentInfo[index][i] = {
+        ...newDocumentInfo[index][i],
+        startDate: date ? date.toDate() : null,
+      };
+      return newDocumentInfo;
+    });
+    console.log("documentInfo", documentInfo);
+  };
+  
+  const handleEndDateChange = (date, document, index, i) => {
+    setDocumentInfo((prevDocumentInfo) => {
+      const newDocumentInfo = [...prevDocumentInfo];
+      newDocumentInfo[index] = newDocumentInfo[index] || [];
+      newDocumentInfo[index][i] = {
+        ...newDocumentInfo[index][i],
+        endDate: date ? date.toDate() : null,
+      };
+      return newDocumentInfo;
+    });
+    console.log("documentInfo", documentInfo);
+  };
+  
+  
+  const handleCheckboxChange = (isCheckedValue, document, index, i) => {
+    setDocumentInfo((prevDocumentInfo) => {
+      const newDocumentInfo = [...prevDocumentInfo];
+      newDocumentInfo[index] = newDocumentInfo[index] || [];
+  
+      // If checkbox is unchecked, restore previous startDate and endDate values
+      if (!isCheckedValue) {
+        newDocumentInfo[index][i] = {
+          title: newDocumentInfo[index]?.[i]?.title || '',
+          isChecked: false,
+          startDate: newDocumentInfo[index]?.[i]?.prevStartDate || '',
+          endDate: newDocumentInfo[index]?.[i]?.prevEndDate || '',
+          prevStartDate: undefined,
+          prevEndDate: undefined,
+        };
+      } else {
+        // If checkbox is checked, save current startDate and endDate values
+        newDocumentInfo[index][i] = {
+          title: newDocumentInfo[index]?.[i]?.title || '',
+          isChecked: true,
+          prevStartDate: newDocumentInfo[index]?.[i]?.startDate,
+          prevEndDate: newDocumentInfo[index]?.[i]?.endDate,
+        };
+      }
+  
+      return newDocumentInfo;
+    });
+  
+    console.log("documentInfo", documentInfo);
+  };
+  
+  
     const departmentWiseShow = () => {
       setDepartmentWise(true);
     };
@@ -197,29 +270,36 @@ console.log(jsondata);
       // console.log(data,"datas");
       try {
         var title=getMdrTitle;
+        console.log(title,"titleee");
         var mdrCode=getMdrCode;
         mdrCode=mdrCode.replace(/\s/g, '');
         var count = selectedRows.length
         selectedRows.forEach(async (index) => {
           let documentValue = data[index].document;
           let count = data[index].count
-          documentValue = documentValue.replace("2014", ProjectCode)
-          // console.log(documentValue,);
+          documentValue = documentValue.replace("xxxx", ProjectCode)
+          console.log(documentValue,"documentvalue");
          const masterDocumentName=title;
-          // console.log(documentValue);
           const assignedBy=user.user.id;
           const assignedFrom=user.user.roleId;
           // console.log('This is coming from param',approver,reviewer);
           for (let i = 0; i < count; i++) {
             try {
-              var docTitle = titles[index][i].title;
+              var docTitle = documentInfo[index][i].title;
+              var startedDate = documentInfo[index][i].startDate
+              var expectedEndedDate = documentInfo[index][i].endDate
+
               var title=information[index][i];
+              console.log(title,"titlee");
+              title.replace("xxxx", ProjectCode)
               var version='000';
               console.log("doctitle",docTitle);
               const responseDoc = await axios.post(
                 "http://127.0.0.1:8083/api/documents/",
                 {
                   title,
+                  startedDate,
+                  expectedEndedDate,
                   docTitle,
                   departmentId,
                   projectId,
@@ -243,6 +323,7 @@ console.log(jsondata);
                   },
                 }
               );
+              console.log(response.data,"responding");
             } catch (error) {
               console.log(error);
             }  
@@ -309,21 +390,14 @@ console.log(jsondata);
       history.push(`/pages/MDR`)
     };
     const mydocumentSaved = async() => {
-
-    // updatingTitles()
-    //   console.log("documents",updatingTitles());
-      // Check if a row is selected
     await addDocument();
-      // Display success message
       message.success('Document values saved successfully.');
     
-      // Log the saved data to the console
       selectedRows.forEach((index) => {
         const savedData = loadData(`doc-${index}`);
         console.log(`Saved Data for Key ${index}:`, savedData);
       });
     
-      // Close the template modal
       templateModalCancel();
 
     };
@@ -504,20 +578,51 @@ console.log(jsondata);
           <ul style={{ margin: "2px" ,padding:"2px"}}>
           {selectedRows.map((index) => (
   <React.Fragment key={index}>
-    {Array.from({ length: (data[index].count) || 1 }, (_, i) => (
-      <li key={i} style={{ margin: "2px", padding: "2px" }}>
-        <strong style={{ color: "blue" }}>Category:</strong> {data[index].category} <br />
-        <strong style={{ color: "blue" }}>Code:</strong> {data[index].code} <br />
-        <strong style={{ color: "blue" }}>Document Number:</strong> {information[index]?.[i] || ''} <br />
+  {Array.from({ length: data[index].count || 1 }, (_, i) => (
+    <li key={i} style={{ margin: "2px", padding: "2px" }}>
+      <strong style={{ color: "blue" }}>Category:</strong> {data[index].category} <br />
+      <strong style={{ color: "blue" }}>Code:</strong> {data[index].code} <br />
+      <strong style={{ color: "blue" }}>Document Number:</strong> {information[index]?.[i] || ''} <br />
+      <br />
+      <Form.Item label="Start Date" name={`startedDate[${index}][${i}]`}>
+        <DatePicker
+          style={{ width: '100%' }}
+          onChange={(date) => handleStartDateChange(date, data[index].document, index, i)}
+          disabled={documentInfo[index]?.[i]?.isChecked}
+        />
+      </Form.Item>
+
+      <Form.Item label="End Date" name={`endedDate[${index}][${i}]`}>
+        <DatePicker
+          style={{ width: '100%' }}
+          onChange={(date) => handleEndDateChange(date, data[index].document, index, i)}
+          disabled={documentInfo[index]?.[i]?.isChecked}
+        />
+      </Form.Item>
+
+      <Form.Item label="Title" name={`title[${index}][${i}]`}>
         <Input
-        style={{ margin: "6px" }}
-        placeholder="Enter Document Title"
-        value={titles[index]?.[i]?.title || ''}
-        onChange={(e) => handleChangingTitle(e.target.value, data[index].document, index, i)}
-/>
-      </li>
-    ))}
-  </React.Fragment>
+          style={{ margin: "6px" }}
+          placeholder="Enter Document Title"
+          value={documentInfo[index]?.[i]?.title || ''}
+          onChange={(e) => handleChangingTitle(e.target.value, data[index].document, index, i)}
+        />
+      </Form.Item>
+
+      <Form.Item>
+        <Checkbox
+          checked={documentInfo[index]?.[i]?.isChecked || false}
+          onChange={(e) => handleCheckboxChange(e.target.checked, data[index].document, index, i)}
+          style={{ marginLeft: "10px" }}
+        >
+          Same as Project Dates
+        </Checkbox>
+      </Form.Item>
+    </li>
+  ))}
+</React.Fragment>
+
+
 ))}
 
           </ul>
@@ -579,7 +684,7 @@ console.log(jsondata);
     
     <div>
         <div style={{ textAlign: 'center', marginTop: 20 }}>
-        <h1>Select Dcuments For MDR</h1>
+        <h1>Select Documents For MDR</h1>
       </div>
       <div style={{ marginBottom: "16px" ,justifyContent:"space-between"}}>
         <h1>MDR Templates</h1>

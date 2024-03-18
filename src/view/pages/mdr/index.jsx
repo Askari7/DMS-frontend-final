@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from 'react-router-dom'; 
+import { DownOutlined } from '@ant-design/icons';
 
 import {
   Row,
   Col,
   Divider,
+  Dropdown,
   Form,
   Space,
   Table,
+  Menu,
   Select,
   Tag,
   Input,
@@ -29,6 +32,10 @@ import { UploadOutlined } from "@ant-design/icons";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ProtectedAppPage from "../Protected";
+import { useLocation } from 'react-router-dom';
+
+
+
 const uploadProps = {
   name: "file",
   action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
@@ -48,11 +55,13 @@ const uploadProps = {
 };
 
 export default function MDR() {
+  
+
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [showModalVisible, setShowModalVisible] = useState(false);
-
+  const [params,setParams] = useState()
 
 
   const [title, setTitle] = useState("");
@@ -65,6 +74,8 @@ export default function MDR() {
   const [projectOptions, setProjects] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
+
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedReviewer, setSelectedReviewer] = useState([]);
   const [docData, setDocData] = useState([]);
@@ -81,8 +92,29 @@ export default function MDR() {
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
   const [projectCode,setProjectCode] = useState()
-  
+  const location = useLocation();
+  const { matchingRecord } = location.state || {}
+  console.log(matchingRecord,"recordinggggg");
+  console.log(location,"location");
+  const handleAll=()=>{
+    setData(dataArray)
+  }
+  const handleCompleted=()=>{
+    const completedData = dataArray.filter(item => item.status === 'completed');
+    setData(completedData)
+  }
+  const handleOnGoing=()=>{
+    const ongoingData = dataArray.filter(item => item.status === 'Ongoing');
+    setData(ongoingData)
 
+  }
+const menu = (
+  <Menu>
+    <Menu.Item onClick={() => handleAll()}>All</Menu.Item>
+    <Menu.Item onClick={() => handleCompleted()}>Completed</Menu.Item>
+    <Menu.Item onClick={() => handleOnGoing()}>Ongoing</Menu.Item>
+  </Menu>
+);
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
   };
@@ -108,9 +140,6 @@ export default function MDR() {
     &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
     &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
     &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
-
-
- 
   const navigate = () => {
     const project = record.projectId;
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
@@ -126,16 +155,12 @@ export default function MDR() {
     
   const documentModalShow = () => {
     setDocumentModalVisible(true);
-    // setProjectCode(record.projectCode)
-
   };
 
   const documentModalShowing = (record) => {
     console.log("record",record);
-
     setRecord(record);
     setDocumentModalVisible(true);
-    // setProjectId()
   };
   const documentModalCancel = () => {
     setTitle("");
@@ -157,7 +182,6 @@ let count=0;
     console.log("record",record)
     setRecord(record)
     setDocumentModalVisible(true);
-    // setCreateModalVisible(true);
   };
 
   const showModalShow = (record) => {
@@ -177,34 +201,136 @@ const showDocs = async(record)=>{
   console.log("record",record);
 
   fetchDepartmentDocs(record)
-
-
 }
-const convertToCSV = (data) => {
-  const csvRows = [];
-  
-  const headers = Object.keys(data[0]);
-  csvRows.push(headers.join(','));
 
-  data.forEach((object) => {
-    const values = headers.map(header => {
-      const needsQuotes = typeof object[header] === 'string' && object[header].includes(',');
-      if (needsQuotes) {
-        return `"${object[header].replace(/"/g, '""')}"`;
-      }
-      return object[header];
+// const convertToCSV = (data) => {
+//   console.log(data,"data");
+//   const csvRows = [];
+//   const headers = Object.keys(data[0]);
+//   console.log(headers,"headers");
+//   csvRows.push(headers.join(','));
+
+//   data.forEach((object) => {
+//     const values = headers.map(header => {
+//       const needsQuotes = typeof object[header] === 'string' && object[header].includes(',');
+//       if (needsQuotes) {
+//         return `"${object[header].replace(/"/g, '""')}"`;
+//       }
+//       return object[header];
+//     });
+//     csvRows.push(values.join(','));
+//   });
+
+//   return csvRows.join('\n');
+// };
+
+// const convertToCSV = (data) => {
+//   const csvRows = [];
+  
+//   // Iterate over each key in the data
+//   data.forEach((obj) => {
+//     const key = Object.keys(obj)[0]; // Extract the key
+//     const titles = obj[key]; // Extract the array of document titles
+
+//     console.log(titles,"titles");
+//     csvRows.push('Document Titles');    
+//     // Add key as heading
+//     csvRows.push(`Key,${key}`);
+    
+//         // Add document titles to the CSV
+//     titles.forEach(title => csvRows.push(`,${title}`));
+    
+//     // Separate each key's data with an empty line
+//     csvRows.push('');
+//   });
+
+//   return csvRows.join('\n');
+// };
+
+
+// const convertToCSV = (data) => {
+//   const csvRows = [];
+
+//   // Iterate over each key in the data
+//   data.forEach((obj) => {
+//     const key = Object.keys(obj)[0]; // Extract the key
+//     const documents = obj[key]; // Extract the array of documents
+
+//     // Add key as heading
+//     csvRows.push(`Key,${key}`);
+    
+//     // Add headers for each document
+//     const headers = Object.keys(documents[0]);
+//     csvRows.push(headers.join(','));
+
+//     // Add fields for each document
+//     documents.forEach((document) => {
+//       const values = headers.map((header) => document[header]);
+//       csvRows.push(values.join(','));
+//     });
+
+//     // Separate each key's data with an empty line
+//     csvRows.push('');
+//   });
+
+//   return csvRows.join('\n');
+// };
+
+// Example usage
+// const dataforCSV = [
+//   { PM: [{ id: 2, title: '2014-01-PM-SP-001', docTitle: '3rd', version: '000', companyId: 1 }] },
+//   { SOW: [{ id: 1, title: '2014-01-PM-SOW-001', docTitle: '1st', version: '000', companyId: 1 }] },
+// ];
+
+// console.log(convertToCSV(dataforCSV),"checking");
+
+const convertToCSV = (data) => {
+  console.log('data',data);
+  const csvRows = [];
+  data.forEach((obj) => {
+    const key = Object.keys(obj)[0]; // Extract the key
+    console.log("key",key);
+    const documents = obj[key]; // Extract the array of documents
+    console.log("objKeys",documents);
+
+    csvRows.push(`Key,${key}`);
+    
+    const headers = Object.keys(documents[0]);
+    csvRows.push(`"${headers.join('","')}"`);
+
+    documents.forEach((document) => {
+      const values = headers.map((header) => {
+        const cellValue = document[header];
+        return Array.isArray(cellValue) ? `"${cellValue.join(',')}"` : `"${cellValue}"`;
+      });
+      csvRows.push(values.join(','));
     });
-    csvRows.push(values.join(','));
+
+    csvRows.push('');
   });
 
   return csvRows.join('\n');
 };
 
+// Example usage
+// const dataForCSV = [
+//   { PM: [{ id: 2, title: '2014-01-PM-SP-001', docTitle: '1st, 2nd, 3rd', version: '000', companyId: 1 }] },
+//   { SOW: [{ id: 1, title: '2014-01-PM-SOW-001', docTitle: '4th', version: '000', companyId: 1 }] },
+// ];
+
+// console.log(convertToCSV(dataForCSV),"checked");
+
 const handleExport = async (record) => {
   await fetchDepartmentDocs(record);
+
   console.log(count,'counttt');
+
   if (docData.length > 0) {
+    console.log(docData,"docData");
     const csvData = convertToCSV(docData);
+
+    console.log(csvData,"data for csv");
+
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -228,18 +354,60 @@ const fetchDepartmentDocs = async (record) => {
         },
       }
     );
-      setDocData(response.data);
-      console.log(docData,'hiiiiiiiii');
+//     const organizedData = {};
+
+// response.data.forEach(item => {
+//   const key = item.title.split('-')[2]; // Extract the third part of the title (e.g., 'PM')
+  
+//   if (!organizedData[key]) {
+//     organizedData[key] = [];
+//   }
+  
+//   organizedData[key].push(item.docTitle);
+// });
+
+// const resultArray = Object.keys(organizedData).map(key => ({ [key]: organizedData[key] }));
+
+// console.log(resultArray,"result");
+console.log("response",response.data);
+const fieldsToRemove = ['version', 'companyId','departmentId','projectId','masterDocumentId','masterDocumentName','content','extension','fileName'];
+const modified = response.data.map((obj) => {
+  const { version, companyId, departmentId, projectId, masterDocumentId, masterDocumentName, content, extension, fileName, ...newObj } = obj;
+  return newObj;
+});
+
+const modifiedData = {};
+
+// Iterate through the data
+modified.forEach(item => {
+  // Extract the key (third part of the title)
+  const key = item.title.split('-')[2];
+  
+  // If the key doesn't exist in modifiedData, create an array for it
+  if (!modifiedData[key]) {
+    modifiedData[key] = [];
+  }
+  
+  // Add the current item to the array of the corresponding key
+  modifiedData[key].push(item);
+});
+
+// Convert the modifiedData object to an array of objects
+const result = Object.keys(modifiedData).map(key => ({ [key]: modifiedData[key] }));
+
+console.log(result);
+
+
     console.log(response.data,"received");
-    // Check if response.data is an array before including it in the setData call
-    // const newData = Array.isArray(response.data) ? response.data : [];
-    // setData([...newData]);
+    // setDocData(response.data);
+    setDocData(result)
+    console.log(docData,'hiiiiiiiii');
+
   } catch (error) {
     console.error("Error fetching documents:", error?.message);
   }
 };
 useEffect(() => {
-  
 }, [docData]);
   const assignMDR = async(assignedEmployees,allUsers)=>{
     try {
@@ -377,12 +545,17 @@ useEffect(() => {
         const data = response.data.filter(item => item.authorId === user?.user?.id);
         console.log("data",data);
         setData(data);
+        setDataArray(response.data);
+
       }else if(user?.user?.roleId ===2){
         const data = response.data.filter(item => item.authorId === user?.user?.id);
         setData(data);
+        setDataArray(response.data);
+
       }
       else{
         setData(response.data)
+        setDataArray(response.data);
       }
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
@@ -726,17 +899,24 @@ useEffect(() => {
             ))}
           </ul> */}
     <ul>
-      {docData.map((doc,index) => (
+      {docData.map((doc, index) => (
         <li key={index}>
-          {/* <strong>Category:</strong> {data[index].category} <br /> */}
-          {/* <strong>Code:</strong> {data[index].code} <br /> */}
-          <strong>Document Title:</strong> {doc.title} <br />
-          {/* <strong>Document Number:</strong> {data[index].document} <br /> */}
-          {/* Add other properties as needed */}
+          {Object.entries(doc).map(([key, values]) => (
+            <div key={key}>
+              <strong>{key}:</strong>
+              <ul>
+                {values.map((item, itemIndex) => (
+                  <li key={itemIndex}>
+                    <strong>Document Title:</strong> {item.docTitle} <br />
+                    {/* Add other properties as needed */}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </li>
       ))}
-    </ul>
-        </div>
+    </ul>        </div>
           </Col>
         </Row>
       </Modal>
@@ -790,9 +970,18 @@ useEffect(() => {
             key: "noOfDocuments",
           },
           {
-            title: "Status",
-            dataIndex: "status",
+            title: (
+              <div>
+                Status
+                <Dropdown overlay={menu}>
+                  <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                    <DownOutlined />
+                  </a>
+                </Dropdown>
+              </div>
+            ),
             key: "status",
+            dataIndex: "status",
           },
           {
             title: "Action",
@@ -836,6 +1025,12 @@ useEffect(() => {
           },
         ]}
         dataSource={data}
+        rowClassName={(record) => {
+          if (matchingRecord && record.id === matchingRecord.selectedRecord.id) {
+            return 'highlighted-row'; // Apply CSS class for highlighting
+          }
+          return '';
+        }}
       /></div>
       <ProtectedAppPage />
     </>

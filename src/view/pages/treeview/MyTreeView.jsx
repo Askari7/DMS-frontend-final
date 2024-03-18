@@ -15,18 +15,18 @@ const useStyles = makeStyles({
     maxWidth: 1000,
   },
   projectNode: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
     fontSize: '24px',
     padding: '12px',
     borderRadius: '4px',
     marginBottom: '12px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
-      backgroundColor: '#f0f0f0',
+      backgroundColor: '#ffffff',
     },
   },
   mdrNode: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
     fontSize: '18px',
     padding: '12px',
     borderRadius: '4px',
@@ -34,11 +34,11 @@ const useStyles = makeStyles({
     marginBottom: '12px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
-      backgroundColor: '#f0f0f0',
+      backgroundColor: '#ffffff',
     },
   },
   departmentIdNode: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
     fontSize: '16px',
     padding: '12px',
     borderRadius: '4px',
@@ -46,18 +46,18 @@ const useStyles = makeStyles({
     marginBottom: '12px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
-      backgroundColor: '#f0f0f0',
+      backgroundColor: '#ffffff',
     },
   },
   titleNode: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
     fontSize: '12px',
     padding: '8px',
     borderRadius: '4px',
     marginLeft: '16px',
     transition: 'background-color 0.3s ease',
     '&:hover': {
-      backgroundColor: '#f0f0f0',
+      backgroundColor: '#ffffff',
     },
   },
   icon: {
@@ -75,82 +75,71 @@ const useStyles = makeStyles({
     fontWeight: 'bold',
   },
 });
-
-
-const projects = [
-  { id: 1, title: '2014-01-PM-REP-001', companyId: 1, departmentId: '1', projectId: '1', mdr: "1" },
-  { id: 2, title: '2014-01-PRO-REP-001', companyId: 1, departmentId: '2', projectId: '2', mdr: "2" },
-  { id: 3, title: '2014-01-PM-SOW-001', companyId: 1, departmentId: '3', projectId: '3', mdr: "3" },
-  { id: 4, title: '2014-01-PM-SP-002', companyId: 1, departmentId: '3', projectId: '3', mdr: "3" },
-  { id: 5, title: '2014-01-PRO-REP-004', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
-  { id: 6, title: '2014-01-PRO-SOW-002', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
-  { id: 7, title: '2014-01-PRO-SOW-001', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
-  { id: 8, title: '2014-01-PRO-SP-003', companyId: 1, departmentId: '4', projectId: '4', mdr: "4" },
-  { id: 9, title: '2014-01-PIP-SOW-001', companyId: 1, departmentId: '5,6', projectId: '5', mdr: "5" },
-  ];
-
-const data = {};
-
-projects.forEach(project => {
-  if (!data[project.projectId]) {
-    data[project.projectId] = {};
-  }
-  if (!data[project.projectId][project.mdr]) {
-    data[project.projectId][project.mdr] = {};
-  }
-  const departmentIds = project.departmentId.split(',');
-  departmentIds.forEach(departmentId => {
-    if (!data[project.projectId][project.mdr][departmentId]) {
-      data[project.projectId][project.mdr][departmentId] = [];
-    }
-    data[project.projectId][project.mdr][departmentId].push(project.title);
-  });
-});
-
 const MyTreeView = () => {
   const [information,setInformation]=useState()
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  const [data, setData] = useState({});
+
   console.log("user",user)
-  const fetchInformation = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
-        {
-          headers: {
-            Authorization: user?.accessToken,
-          },
-        }
-      );  
-      console.log('Information response data',response.data);
-      setInformation(response.data); // Assuming the response.data is an array of projects
-    } catch (error) {
-      console.error("Error fetching projects:", error?.message);
-    }
-  };
+  useEffect(() => {
+    let isMounted = true;
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.roleId}&department=${user.user.departmentId}`,
-        {
-          headers: {
-            Authorization: user?.accessToken,
-            // Add other headers if needed
-          },
-        }
-      );
-      console.log(response.data,"received");
+    const fetchInformation = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+          {
+            headers: {
+              Authorization: user?.accessToken,
+            },
+          }
+        );
 
-    }
-      catch(error){
-    console.log(error,"error fetching documents");
+        if (isMounted) {
+          setInformation(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error?.message);
       }
-    }
-  useEffect(()=>{
-    fetchData()
-    fetchInformation()
-    
-  },[])
+    };
+
+    fetchInformation();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.user?.companyId]);
+
+  useEffect(() => {
+    const processData = () => {
+      if (!information || information.length === 0) {
+        // Handle the case where information is undefined or an empty array
+        return;
+      }
+
+      const newData = {};
+
+      information.forEach(info => {
+        if (!newData[info.projectCode]) {
+          newData[info.projectCode] = {};
+        }
+        if (!newData[info.projectCode][info.mdrCode]) {
+          newData[info.projectCode][info.mdrCode] = {};
+        }
+        const departmentIds = info.departmentId.split(',');
+        departmentIds.forEach(departmentId => {
+          if (!newData[info.projectCode][info.mdrCode][departmentId]) {
+            newData[info.projectCode][info.mdrCode][departmentId] = [];
+          }
+          newData[info.projectCode][info.mdrCode][departmentId].push(info.title);
+        });
+      });
+
+      setData(newData);
+    };
+
+    processData();
+  }, [information]);
   const classes = useStyles();
 
   const handleOpenDocument = (title) => {

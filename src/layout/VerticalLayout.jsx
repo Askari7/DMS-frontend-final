@@ -31,7 +31,7 @@ export default function VerticalLayout(props) {
                     <Row justify="center">
                         {
                             customise.contentWidth === "full" && (
-                                <Col xxl={17} xl={22} span={24}>
+                                <Col xxl={36} xl={24} span={30}>
                                     {children}
                                 </Col>
                             )
@@ -39,7 +39,7 @@ export default function VerticalLayout(props) {
 
                         {
                             customise.contentWidth === "boxed" && (
-                                <Col className="hp-w-100" style={{ maxWidth: 936 }}>
+                                <Col className="hp-w-100" style={{ maxWidth: 1024 }}>
                                     {children}
                                 </Col>
                             )

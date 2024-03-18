@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { DownOutlined } from '@ant-design/icons';
 
 import {
   Button,
@@ -9,6 +10,8 @@ import {
   Table,
   Select,
   Input,
+  Dropdown,
+  Menu,
   DatePicker,
   TimePicker,
   Modal,
@@ -19,16 +22,62 @@ import {
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
+
 
 import ProtectedAppPage from "../Protected";
-const handleDelete = (record) => {
-  record.delete = true;
-  fetchData().catch(error => {
-    console.error("Error deleting project:", error);
-  });
-};
 
+export default function Projects() {
 
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [departmentName,setDepartmentName] = useState('')
+  const [projectModalVisible, setProjectModalVisible] = useState(false);
+  const [permissionModalVisible, setPermissionModalVisible] = useState(false);
+  const [projName, setProjName] = useState("");
+  const [projCode, setProjCode] = useState("");
+
+  const [clientEmail, setClientEmail] = useState("");
+  const [startedDate, setStartDate] = useState("");
+  const [endedDate, setEndDate] = useState("");
+  const [departmentId, setDepartmentId] = useState([]);
+  const [status, setStatus] = useState("");
+  const [code, setCode] = useState("");
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  const [data, setData] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
+
+  const [departmentOptions, setDepartmentOptions] = useState([]);
+  const [projectOptions, setProjects] = useState([]);
+  const [clients,setClients] = useState([])
+  const [projectId, setProjectId] = useState("");
+  const history = useHistory();
+
+  const rowClickHandler=(record)=>{
+    console.log(record,"recordingggg");
+    history.push({
+      pathname: './mdr',
+      state: { selectedRecord: record },
+    });
+  }
+  const handleAll=()=>{
+    setData(dataArray)
+  }
+  const handleCompleted=()=>{
+    const completedData = dataArray.filter(item => item.status === 'completed');
+    setData(completedData)
+  }
+  const handleOnGoing=()=>{
+    const ongoingData = dataArray.filter(item => item.status === 'Ongoing');
+    setData(ongoingData)
+
+  }
+const menu = (
+  <Menu>
+    <Menu.Item onClick={() => handleAll()}>All</Menu.Item>
+    <Menu.Item onClick={() => handleCompleted()}>Completed</Menu.Item>
+    <Menu.Item onClick={() => handleOnGoing()}>Ongoing</Menu.Item>
+  </Menu>
+);
 const columns = [
   {
     title: "Project Code",
@@ -45,11 +94,11 @@ const columns = [
     dataIndex: "clientEmail",
     key: "clientEmail",
   },
-  {
-    title: "No of Users",
-    dataIndex: "noOfUsers",
-    key: "noOfUsers",
-  },
+  // {
+  //   title: "No of Users",
+  //   dataIndex: "noOfUsers",
+  //   key: "noOfUsers",
+  // },
   {
     title: "Start Date",
     dataIndex: "startedDate",
@@ -62,9 +111,18 @@ const columns = [
     key: "endedDate",
   },
   {
-    title: "Status",
-    dataIndex: "status",
+    title: (
+      <div>
+        Status
+        <Dropdown overlay={menu}>
+          <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+            <DownOutlined />
+          </a>
+        </Dropdown>
+      </div>
+    ),
     key: "status",
+    dataIndex: "status",
   },
   {
     title: "Action",
@@ -76,27 +134,6 @@ const columns = [
     )
   },
 ];
-
-export default function Projects() {
-  const [selectedDepartments, setSelectedDepartments] = useState([]);
-  const [departmentName,setDepartmentName] = useState('')
-  const [projectModalVisible, setProjectModalVisible] = useState(false);
-  const [permissionModalVisible, setPermissionModalVisible] = useState(false);
-  const [projName, setProjName] = useState("");
-  const [projCode, setProjCode] = useState("");
-
-  const [clientEmail, setClientEmail] = useState("");
-  const [startedDate, setStartDate] = useState("");
-  const [endedDate, setEndDate] = useState("");
-  const [departmentId, setDepartmentId] = useState([]);
-  const [status, setStatus] = useState("");
-  const [code, setCode] = useState("");
-  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-  const [data, setData] = useState([]);
-  const [departmentOptions, setDepartmentOptions] = useState([]);
-  const [projectOptions, setProjects] = useState([]);
-  const [clients,setClients] = useState([])
-  const [projectId, setProjectId] = useState("");
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -228,6 +265,7 @@ export default function Projects() {
       });
       
       setData(formattedData);
+      setDataArray(formattedData)
       const options = [];
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
@@ -431,7 +469,13 @@ export default function Projects() {
           Add Project
         </Button>
       </div>
-      <Table columns={columns} dataSource={transformData(data)} />
+      <Table 
+        columns={columns} 
+        dataSource={transformData(data)} 
+        onRow={(record) => ({
+          onClick: () => rowClickHandler(record),
+        })}
+      />      
       <ProtectedAppPage />
     </>
   );

@@ -1,74 +1,75 @@
 import React, { useState } from 'react';
 import { CarryOutOutlined, CheckOutlined, FormOutlined } from '@ant-design/icons';
 import { Select, Switch, Tree } from 'antd';
-const treeData = [
-  {
-    title: 'CEO Shoaib',
-    key: 'Shoaib',
-    icon: <CarryOutOutlined />,
-    children: [
-      {
-        title: 'Mechanical Lead Zubair',
-        key: 'Zubair',
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: 'leaf',
-            key: '0-0-0-0',
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: (
-              <>
-                <div>multiple line title</div>
-                <div>multiple line title</div>
-              </>
-            ),
-            key: '0-0-0-1',
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: 'leaf',
-            key: '0-0-0-2',
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: 'parent 1-1',
-        key: '0-0-1',
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: 'leaf',
-            key: '0-0-1-0',
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: 'parent 1-2',
-        key: '0-0-2',
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: 'leaf',
-            key: '0-0-2-0',
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: 'leaf',
-            key: '0-0-2-1',
-            icon: <CarryOutOutlined />,
-            switcherIcon: <FormOutlined />,
-          },
-        ],
-      },
-    ],
-  },
- 
-];
-const EmployeeTree = ({ data }) => {
+
+const EmployeeTree = () => {
+  const data = [
+    {
+      title: 'CEO Shoaib',
+      key: 'Shoaib',
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: 'Mechanical Lead Zubair',
+          key: 'Zubair',
+          icon: <CarryOutOutlined />,
+          children: [
+            {
+              title: 'leaf',
+              key: '0-0-0-0',
+              icon: <CarryOutOutlined />,
+            },
+            {
+              title: (
+                <>
+                  <div>multiple line title</div>
+                  <div>multiple line title</div>
+                </>
+              ),
+              key: '0-0-0-1',
+              icon: <CarryOutOutlined />,
+            },
+            {
+              title: 'leaf',
+              key: '0-0-0-2',
+              icon: <CarryOutOutlined />,
+            },
+          ],
+        },
+        {
+          title: 'parent 1-1',
+          key: '0-0-1',
+          icon: <CarryOutOutlined />,
+          children: [
+            {
+              title: 'leaf',
+              key: '0-0-1-0',
+              icon: <CarryOutOutlined />,
+            },
+          ],
+        },
+        {
+          title: 'parent 1-2',
+          key: '0-0-2',
+          icon: <CarryOutOutlined />,
+          children: [
+            {
+              title: 'leaf',
+              key: '0-0-2-0',
+              icon: <CarryOutOutlined />,
+            },
+            {
+              title: 'leaf',
+              key: '0-0-2-1',
+              icon: <CarryOutOutlined />,
+              switcherIcon: <FormOutlined />,
+            },
+          ],
+        },
+      ],
+    },
+   
+  ];
     const users = [
         // ... your user data with id, companyId, roleId, department, departmentId, email, firstName, lastName
       ];

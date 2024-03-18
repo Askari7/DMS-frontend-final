@@ -3,7 +3,8 @@ import { FormattedMessage } from "react-intl";
 import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
 import MyTreeView from "../treeview/MyTreeView";
-import {Row,Col,Divider,Form,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
+import { DownOutlined } from '@ant-design/icons';
+import {Row,Col,Divider,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
 } from "antd";
 import { Radio } from "antd";
 import axios from "axios";
@@ -34,6 +35,34 @@ const uploadProps = {
 };
 
 export default function Document() {
+  const menu = (
+    <Menu>
+      <Menu.Item onClick={() => handleAll()}>All</Menu.Item>
+      <Menu.Item onClick={() => handleReviewed()}>Reviewed</Menu.Item>
+      <Menu.Item onClick={() => handleApproved()}>Approved</Menu.Item>
+      <Menu.Item onClick={() => handleCompleted()}>Completed</Menu.Item>
+      <Menu.Item onClick={() => handleUploaded()}>Uploaded</Menu.Item>
+    </Menu>
+  );
+
+  const handleAll=()=>{
+    setData(dataArray)
+  }
+  const handleReviewed=()=>{
+    setData(dataArray)
+  }
+  const handleApproved=()=>{
+    setData(dataArray)
+  }
+  const handleCompleted=()=>{
+    const completedData = dataArray.filter(item => item.status === 'completed');
+    setData(completedData)
+  }
+  const handleUploaded=()=>{
+    const ongoingData = dataArray.filter(item => item.status === 'ongoing');
+    setData(ongoingData)
+
+  }
   const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
 
   const history = useHistory();
@@ -54,9 +83,18 @@ export default function Document() {
     //   key: "extension",
     // },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: (
+        <div>
+          Status
+          <Dropdown overlay={menu}>
+            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+              <DownOutlined />
+            </a>
+          </Dropdown>
+        </div>
+      ),
       key: "status",
+      dataIndex: "status",
     },
     {
       title: "Assigned To",
@@ -120,6 +158,7 @@ export default function Document() {
   const [mdrOptions, setMdrData] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
   const [projectCode, setProjectCode] = useState("");
   const [areaCode, setAreaCode] = useState("");
   const [deptSuffix, setDeptSuffix] = useState("");
@@ -144,14 +183,13 @@ const [myrecord,setMyRecord]=useState({});
     setAssignModalVisible(false);
   };
 
-  const handleProjectWiseClick = () => {
-    console.log("clicked");
-    setShowTreeView(true);
+  const handleDoubleClick = () => {
+    setShowTreeView(false);
   };
 
   const handleDocumentWiseClick = () => {
     console.log("clicked");
-    setShowTreeView(false);
+    setShowTreeView(true);
   };
 
   
@@ -870,20 +908,13 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
           Add Documents
         </Button>
 
-        <Button
-          type="primary"
-          onClick={handleProjectWiseClick}
-          style={{ marginRight: '10px' }}
-
-          disabled={user?.user?.roleId == 3}
-        >Project Wise
-        </Button>
 
         <Button
           type="primary"
           onClick={handleDocumentWiseClick}
           disabled={user?.user?.roleId == 3}
-        >Documents
+          onDoubleClick={handleDoubleClick}
+        >Document Tree
         </Button>
       </div>
       {

@@ -22,6 +22,9 @@ import axios from "axios";
 // import PasswordProfile from "./password-change";
 // import ProtectedAppPage from "../Protected";
 import ProtectedAppPage from "../Protected";
+import UserTreeView from "../treeview/UserTreeView";
+import OrganizationChart from "../organizationChart";
+import EmployeeTree from "../employee_tree";
 const columns = [
   {
     title: "Name",
@@ -78,6 +81,8 @@ export default function Users() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
   const [dataArray,setDataArray] = useState([])
+  const [showTreeView, setShowTreeView] = useState(false);
+
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -128,10 +133,10 @@ export default function Users() {
   const addUser = async () => {
     try {
       const roleOptions = {
-        "head":2,
-        "seniorEngineer":3,
-        "juniorEngineer":4,
-        "designer":5
+        "head":"2",
+        "seniorEngineer":"3",
+        "juniorEngineer":"4",
+        "designer":"5"
       }
       console.log("selectedDeparment",selectedDepartments);
       console.log("role",role);
@@ -178,7 +183,7 @@ export default function Users() {
         }
       );
       console.log(response.data);
-      const roleOrder = ['Head', 'Senior', 'Junior', 'Designer'];
+      const roleOrder = ['Head of Department', 'Senior Engineer', 'Junior Engineer', 'Designer/Draughtsmen'];
       // Sort the filtered data based on the order of roles
       response.data.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
       setData(response.data); // Assuming the response.data is an array of projects
@@ -199,12 +204,18 @@ export default function Users() {
   };
 
 
+  const handleUserTreeViewClick = () => {
+    setShowTreeView(true);
+  };
+  const handleDoubleClick = () => {
+    setShowTreeView(false);
+  };
   const filterData = (selectedDepartment) => {
     // Assuming data is an array of users with each object having a 'department' and 'roleTitle' property
     const filteredData = dataArray.filter(user => user.department === selectedDepartment);
   
     // Define the order of roles
-    const roleOrder = ['Head', 'Senior', 'Junior', 'Designer'];
+    const roleOrder = ['Head of Department', 'Senior Engineer', 'Junior Engineer', 'Designer/Draugthsmen'];
   
     // Sort the filtered data based on the order of roles
     filteredData.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
@@ -405,10 +416,26 @@ export default function Users() {
         >
           Department Wise
         </Button>
+
+        <Button
+          type="primary"
+          onClick={handleUserTreeViewClick}
+          onDoubleClick={handleDoubleClick}
+          disabled={user?.user?.roleId != 1}
+          style={{margin:"4px"}}
+        >
+          User Tree
+        </Button>
       </div>
       
-      <Table columns={columns} dataSource={data} />
-      <ProtectedAppPage />
+      {
+        showTreeView?
+        <div style={{ overflowX: 'auto', width: '1300px' }}>
+          <OrganizationChart employees={dataArray} />
+        </div>:<div style={{ overflowX: "auto" }}>
+        <Table columns={columns} dataSource={data} /></div>
+
+      }      <ProtectedAppPage />
     </>
   );
 }

@@ -49,9 +49,9 @@ export default function Projects() {
       key: "action",
       render: (_, r) => (
         <Space size="middle">
-          <a>Change Actions</a>
+          {/* <a>Change Actions</a> */}
           <a onClick={() => statusModalShow(r)}>Show Employees</a>
-          <a>Delete</a>
+          {/* <a>Delete</a> */}
         </Space>
       ),
     },
@@ -273,15 +273,18 @@ const handleStatusChange = (selectedStatus) => {
   closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
 >
   <Row justify="space-between" align="center">
-    <Col span={20}>
+    <Col span={30}>
       <Form layout="vertical" name="basic">
         <FormItem>
-        <ul>
-        {employee.map((rec, index) => (
-          <li key={index}>{rec.clientName}-{rec.Email}</li>
-        ))}
-      </ul>
-          </FormItem>        
+          <h3>Our Employees</h3>
+          <ul>
+            {employee.map((rec, index) => (
+              <li key={index}>
+                <strong>{rec.clientName}</strong> - <span style={{ color: 'blue' }}>{rec.Email}</span>
+              </li>
+            ))}
+          </ul>
+        </FormItem>        
         <Row>
           <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
             <Button block onClick={statusModalCancel}>
@@ -293,6 +296,7 @@ const handleStatusChange = (selectedStatus) => {
     </Col>
   </Row>
 </Modal>
+
 
 
 <Modal

@@ -10,6 +10,7 @@ import ProtectedAppPage from "../Protected";
 import DonutChart from "../../main/widgets/charts/donutChart";
 import scurve from "../../.././assets/images/components/s_curve.png";
 import axios from 'axios'
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 export default function Analytics() {
   // Redux
   const customise = useSelector((state) => state.customise);
@@ -23,6 +24,28 @@ export default function Analytics() {
   const [mdr,setMdr] = useState([])
   const [systemLog, setSystemLog] = useState([]);
   const [departmentCounts,setDepartmentCounts] = useState()
+  const history = useHistory();
+
+  const handleUser = () => {
+    // Navigate to the user page
+    history.push('./users'); // Replace '/user' with the actual URL of your user page
+  };
+  const handleDepartment = () => {
+    // Navigate to the user page
+    history.push('./departments'); // Replace '/user' with the actual URL of your user page
+  };
+  const handleProject = () => {
+    // Navigate to the user page
+    history.push('./projects'); // Replace '/user' with the actual URL of your user page
+  };
+  const handleClient = () => {
+    // Navigate to the user page
+    history.push('./clients'); // Replace '/user' with the actual URL of your user page
+  };
+  const handleMDR = () => {
+    // Navigate to the user page
+    history.push('./mdr'); // Replace '/user' with the actual URL of your user page
+  };
 const fetchDepartments = async () => {
   try {
     const response = await axios.get(
@@ -183,28 +206,28 @@ setDepartmentCounts(userDepartmentCount)
                 <Col span={24}>
                   <h1 className="hp-mb-0">Analytics Of Company</h1>
                 </Col>
-                  <Col span={6}>
+                  <Col span={6} onClick={handleDepartment}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Departments"
                       count={data?.departmentCount || "0"}
                     />
                   </Col>
-                  <Col span={6}>
+                  <Col span={6} onClick={handleProject}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Projects"
                       count={data?.projectCount || "0"}
                     />
                   </Col>
-                  <Col span={6}>
+                  <Col span={6} onClick={handleClient}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Clients"
                       count={data?.clientCount || "0"}
                     />
                   </Col>
-                  <Col span={6}>
+                  <Col span={6} onClick={handleMDR}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="MDR"
@@ -213,12 +236,14 @@ setDepartmentCounts(userDepartmentCount)
                   </Col>
                 </Row>
               </Col>
-              <Col span={24}>
-                <FeatureCard
-                  icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                  title="Employees"
-                  count={data?.employeeCount || "0"}
-                />
+              <Col span={24} onClick={handleUser} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                title="Employees"
+                count={data?.employeeCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+      />
               </Col>
             </Row>
           </Col>
@@ -281,7 +306,7 @@ setDepartmentCounts(userDepartmentCount)
                 <Col span={24}>
                   <h1 className="hp-mb-0">Analytics Of Company</h1>
                 </Col>
-                  <Col span={6}>
+                  <Col span={6} onClick={handleClick}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Total Strength"

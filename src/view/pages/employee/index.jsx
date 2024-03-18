@@ -16,6 +16,7 @@ const EmployeeForm = ({ onSubmit }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const handleSubmit = () => {
+    console.log("data from form",email,firstName,lastName,roleId,department);
     form.validateFields().then((values) => {
         addUser()
       onSubmit(values);
@@ -59,6 +60,7 @@ const EmployeeForm = ({ onSubmit }) => {
   const addUser = async () => {
     try {
       console.log(department,"department");
+      console.log("firstName",firstName);
       const response = await axios.post(
         `http://127.0.0.1:8083/api/users`,
         {
@@ -79,7 +81,7 @@ const EmployeeForm = ({ onSubmit }) => {
       );
 
       // Handle the response as needed
-      console.log(response);
+      console.log(response,"response");
       message.success(response?.data?.message);
   
     } catch (error) {

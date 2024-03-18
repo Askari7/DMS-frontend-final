@@ -11,9 +11,9 @@ import VerticalDivider from "./vertical";
 
 export default function Divider() {
   return (
-    <Row gutter={[32, 32]} className="hp-mb-32">
-      <Col span={24}>
-        <Row gutter={[32, 32]}>
+    <Row gutter={[16, 16]} className="hp-mb-32">
+      <Col span={12}>
+        <Row gutter={[12, 12]}>
           <Breadcrumbs
             breadCrumbParent="Main"
             breadCrumbParent2="Layouts"

@@ -6,7 +6,7 @@ export default function HorizontalDivider() {
   return (
     <Card className="hp-border-color-black-40">
       <Row>
-        <Col className="hp-mb-16" span={24}>
+        <Col className="hp-mb-16" span={12}>
           <h4>Horizontal</h4>
 
           <p className="hp-p1-body">
