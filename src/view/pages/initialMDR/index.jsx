@@ -27,6 +27,9 @@ console.log(jsondata);
   const projectOptions = params.get('projectOptions');
   const approver = params.get('approver');
   const reviewer = params.get('reviewer');
+  const record = params.get('record');
+
+  console.log(record,"recordddddddddddddd");
     const [customFieldValues, setCustomFieldValues] = useState({});
     const [templateModalVisible,setTemplateModalVisible] = useState(false)
     const [selectedFieldVisible,setSelectedFieldVisible]  = useState(false)
@@ -266,8 +269,6 @@ console.log(jsondata);
     const addDocument = async () => {
       
       const departmentOptions = await JSON.parse(departmentOptionsString);
-      // console.log(getMdrTitle,projectOptions,departmentOptions,projectId,departmentId);
-      // console.log(data,"datas");
       try {
         var title=getMdrTitle;
         console.log(title,"titleee");
@@ -294,6 +295,8 @@ console.log(jsondata);
               title.replace("xxxx", ProjectCode)
               var version='000';
               console.log("doctitle",docTitle);
+
+
               const responseDoc = await axios.post(
                 "http://127.0.0.1:8083/api/documents/",
                 {
@@ -331,27 +334,53 @@ console.log(jsondata);
           
         });
 
-        const response = await axios.post(
-          "http://127.0.0.1:8083/api/documents/mdr",
-          {
-            title,
-            departmentId,
-            projectId,
-            noOfDocuments:count,
-            status:"Ongoing",
-            companyId: user?.user?.companyId,
-            authorId: user?.user?.id,
-            authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
-            mdrCode,
-            projectCode: ProjectCode,
-            departmentName: departmentLabelsString,
-          },
-          {
-            headers: {
-              Authorization: user?.accessToken,
+        if(record){
+          const response = await axios.put(
+            "http://127.0.0.1:8083/api/documents/mdr",
+            {
+              record,
+              title,
+              departmentId,
+              projectId,
+              noOfDocuments:count,
+              status:"Ongoing",
+              companyId: user?.user?.companyId,
+              authorId: user?.user?.id,
+              authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+              mdrCode,
+              projectCode: ProjectCode,
+              departmentName: departmentLabelsString,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: user?.accessToken,
+              },
+            }
+          );     
+        }else{
+          const response = await axios.post(
+            "http://127.0.0.1:8083/api/documents/mdr",
+            {
+              title,
+              departmentId,
+              projectId,
+              noOfDocuments:count,
+              status:"Ongoing",
+              companyId: user?.user?.companyId,
+              authorId: user?.user?.id,
+              authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+              mdrCode,
+              projectCode: ProjectCode,
+              departmentName: departmentLabelsString,
+            },
+            {
+              headers: {
+                Authorization: user?.accessToken,
+              },
+            }
+          );
+        }
+        
         // Handle the response as needed
         // console.log(response);
         message.success(response?.data?.message);
@@ -359,9 +388,6 @@ console.log(jsondata);
           message.error('Please select at least one row.');
           return;
         }
-      
-        // Save the document field value for each selected row
-
       } catch (error) {
         // Handle errors
         console.error("Error adding documents:", error);

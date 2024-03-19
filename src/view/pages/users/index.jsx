@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
 import {
   Button,
@@ -66,6 +67,8 @@ const columns = [
 ];
 
 export default function Users() {
+  const location = useLocation();
+
   const [loading, setLoading] = useState(true);
   const [displayNames, setDisplayNames] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState("");
@@ -82,7 +85,9 @@ export default function Users() {
   const [data, setData] = useState([]);
   const [dataArray,setDataArray] = useState([])
   const [showTreeView, setShowTreeView] = useState(false);
-
+  const users = location.state?.users || null; 
+  // const dataArray = location.state?.users ||null
+  console.log(users,'users');// Access the users array from location.state
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -172,7 +177,22 @@ export default function Users() {
     }
   };
   const fetchData = async () => {
+    console.log(user.user.roleId,"roleId");
     try {
+      if(user.user.roleId==2){
+        const response = await axios.get(
+          `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user.user.departmentId}`,
+          {
+            headers: {
+              Authorization: user?.accessToken,
+              // Add other headers if needed
+            },
+          }
+        );
+        setData(response.data)
+        setDataArray(response.data)
+      }
+      else{
       const response = await axios.get(
         `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}`,
         {
@@ -188,6 +208,7 @@ export default function Users() {
       response.data.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
       setData(response.data); // Assuming the response.data is an array of projects
       setDataArray(response.data)
+      console.log("response",response.data);}
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
     }
@@ -225,8 +246,13 @@ export default function Users() {
   };
   useEffect(() => {
     setUser(JSON.parse(localStorage?.getItem("user")));
-    fetchDepartments();
-    fetchData();
+    if (users) {
+      setData(users)
+    }
+    else{
+      fetchDepartments();
+      fetchData();
+    }
   }, []);
 
   return (
@@ -421,7 +447,7 @@ export default function Users() {
           type="primary"
           onClick={handleUserTreeViewClick}
           onDoubleClick={handleDoubleClick}
-          disabled={user?.user?.roleId != 1}
+          // disabled={user?.user?.roleId != 1}
           style={{margin:"4px"}}
         >
           User Tree
@@ -429,13 +455,19 @@ export default function Users() {
       </div>
       
       {
-        showTreeView?
-        <div style={{ overflowX: 'auto', width: '1300px' }}>
-          <OrganizationChart employees={dataArray} />
-        </div>:<div style={{ overflowX: "auto" }}>
-        <Table columns={columns} dataSource={data} /></div>
+  showTreeView ?
+  <div style={{ overflowX: 'auto', width: '1300px' }}>
+        {user?.user?.roleId === 2 &&
+          <OrganizationChart employees={users} />
+        }
+        <OrganizationChart employees={dataArray} />
+      </div> :
+      <div style={{ overflowX: "auto" }}>
+        <Table columns={columns} dataSource={data} />
+      </div>
+    }
+    <ProtectedAppPage />
 
-      }      <ProtectedAppPage />
     </>
   );
 }

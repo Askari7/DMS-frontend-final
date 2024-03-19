@@ -225,12 +225,6 @@ const columns = [
       // Handle the response as needed
       console.log(response);
       message.success(response?.data?.message);
-      
-      setCode("");
-      setStatus("");
-      setProjName("");
-      setClientEmail("");
-      setDepartmentId([]);
       setProjectModalVisible(false);      
       fetchData();
     } catch (error) {
@@ -238,6 +232,13 @@ const columns = [
       console.error("Error adding projects:", error);
     }
   };
+  // useEffect(()=>{
+  //   setCode("");
+  //   setStatus("");
+  //   setProjName("");
+  //   setClientEmail("");
+  //   setDepartmentId([]);
+  // },[projectModalVisible])
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -322,15 +323,6 @@ const columns = [
         title="Add Project"
         width={416}
         centered
-        onFinish={() => {
-          addProject();
-          setCode("");
-          setStatus("");
-          setProjName("");
-          setClientEmail("");
-          setDepartmentId([]);
-          setProjectModalVisible(false);
-        }}
         visible={projectModalVisible}
         onCancel={projectModalCancel}
         footer={null}
@@ -350,9 +342,7 @@ const columns = [
               onChange={(e) => setProjName(e.target.value)}
             />
           </Form.Item>
-          {/* <Form.Item label="Project Code" name="code">
-            <Input value={code} onChange={(e) => setCode(e.target.value)} />
-          </Form.Item> */}
+ 
             <Form.Item
                 label="Client Email"
                 name="clientEmail"
@@ -379,26 +369,6 @@ const columns = [
         <DatePicker style={{ width: '100%' }} onChange={handleEndDateChange} />
       </Form.Item>
          
-          {/* <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select start date' }]}>
-        <DatePicker style={{ width: '100%' }} />
-      </Form.Item>
-
-      <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select end date' }]}>
-        <DatePicker style={{ width: '100%' }} />
-      </Form.Item> */}
-
-          {/* <Form.Item label="Status" name="status">
-            <Select
-              default="ongoing"
-              options={[
-                { value: "ongoing", label: "Ongoing" },
-                { value: "complete", label: "Complete" },
-                { value: "notstarted", label: "Not Started" },
-              ]}
-              value={status}
-              onChange={(e) => setStatus(e)}
-            />
-          </Form.Item> */}
           <Row>
             <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
               <Button

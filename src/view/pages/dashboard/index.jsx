@@ -22,6 +22,7 @@ export default function Analytics() {
   const [assessment,setAssessment] = useState([])
   const [documents,setDocuments] = useState([])
   const [mdr,setMdr] = useState([])
+  const [users,setUsers] = useState([])
   const [systemLog, setSystemLog] = useState([]);
   const [departmentCounts,setDepartmentCounts] = useState()
   const history = useHistory();
@@ -30,6 +31,15 @@ export default function Analytics() {
     // Navigate to the user page
     history.push('./users'); // Replace '/user' with the actual URL of your user page
   };
+
+  const handleLeadTeam = () => {
+    // Navigate to the user page and pass the users array as state data
+    history.push({
+      pathname: './users', // Replace './users' with the actual URL of your user page
+      state: { users: users }, // Pass the users array as state data
+    });
+  };
+
   const handleDepartment = () => {
     // Navigate to the user page
     history.push('./departments'); // Replace '/user' with the actual URL of your user page
@@ -100,6 +110,26 @@ const fetchDepartments = async () => {
     }
   };
 
+  const fetchUsers = async()=>{
+    console.log(user,user.user.departmentId,"console");
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user?.user?.departmentId}`
+        ,{
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      console.log(user.user.departmentId,"userId");
+
+      console.log("users",response.data);
+      setUsers(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
@@ -180,6 +210,7 @@ setDepartmentCounts(userDepartmentCount)
     // Fetch data when the component mounts
     fetchData();
     // fetchSystemLogs();
+    fetchUsers()
     fetchProjects();
     fetchDocuments();
     fetchMdr();
@@ -295,57 +326,57 @@ setDepartmentCounts(userDepartmentCount)
       }      
 
       {user?.user?.roleId === 2 && ( // Check if roleId is 1
-        <Row gutter={[32, 32]} className="hp-mb-32">
-          <Col span={24}>
-            <Row gutter={[32, 32]}>
+        <Row gutter={[48, 48]} className="hp-mb-32">
+          <Col span={48}>
+            <Row gutter={[48, 48]}>
               <Col span={24}>
-                <Row gutter={[32, 32]}>
+                <Row gutter={[48, 48]}>
                 <Col span={24}>
                   <h1 className="hp-mb-0">{user.user.department} Lead {user.user.firstName} {user.user.lastName}</h1>
                 </Col>
                 <Col span={24}>
-                  <h1 className="hp-mb-0">Analytics Of Company</h1>
+                  <h1 className="hp-mb-0">Analytics Of Department</h1>
                 </Col>
-                  <Col span={6} onClick={handleClick}>
+                  <Col span={12} onClick={handleLeadTeam}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Total Strength"
                       count={departments|| "0"}
                     />
                   </Col>
-                  <Col span={6}>
+                  <Col span={12} onClick={handleProject}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Departments Project"
+                      title="Department Projects"
                       count={departmentCounts|| "0"}
                     />
                   </Col>
-                  <Col span={6}>
+                  <Col span={12} onClick={handleMDR}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Assigned MDRs"
                       count={data?.clientCount || "0"}
                     />
                   </Col>
-                  <Col span={6}>
+                  {/* <Col span={6}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="MDR"
                       count={data?.mdrCount || "0"}
                     />
-                  </Col>
+                  </Col> */}
                 </Row>
               </Col>
-              <Col span={24}>
+              {/* <Col span={24}>
                 <FeatureCard
                   icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                   title="Employees"
                   count={data?.employeeCount || "0"}
                 />
-              </Col>
+              </Col> */}
             </Row>
           </Col>
-          <Col span={24}>
+          {/* <Col span={24}>
             <Row gutter={[32, 32]}>
               {data?.roleCounts && (
                 <>
@@ -380,7 +411,7 @@ setDepartmentCounts(userDepartmentCount)
                 </>
               )}
             </Row>
-          </Col>
+          </Col> */}
           <Col span={24}>
             {user?.user?.roleId === 1 && (
               <ListCard title="System Logs" list={data?.logs} />

@@ -140,7 +140,24 @@ const menu = (
     &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
     &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
     &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
-  const navigate = () => {
+    const navigateToMdrTemplateForUpdate = () => {
+      const project = projectOptions.find((item) => item?.value == projectId);
+      console.log('departmentOptions',departmentOptions);
+      const serializedDepartmentOptions = JSON.stringify(departmentOptions);
+      const serializedDepartmentOption = JSON.stringify(departmentOption);
+      const serializedRecord = JSON.stringify(record);
+
+      console.log("serialized",serializedDepartmentOption)
+      const serializedProjectOptions = JSON.stringify(projectOptions);
+      const serializedSelectedApprover = JSON.stringify(selectedApprover);
+      const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+      history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}
+      &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
+      &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
+      &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}&record=${serializedRecord}`)};
+  
+
+    const navigate = () => {
     const project = record.projectId;
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
     const serializedDepartmentOption = JSON.stringify(departmentOption);
@@ -545,12 +562,12 @@ useEffect(() => {
         const data = response.data.filter(item => item.authorId === user?.user?.id);
         console.log("data",data);
         setData(data);
-        setDataArray(response.data);
+        setDataArray(data);
 
       }else if(user?.user?.roleId ===2){
         const data = response.data.filter(item => item.authorId === user?.user?.id);
         setData(data);
-        setDataArray(response.data);
+        setDataArray(data);
 
       }
       else{
@@ -808,7 +825,7 @@ useEffect(() => {
               </Form.Item>
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">MDR template</Button>
+                  <Button block onClick={navigateToMdrTemplateForUpdate} type="primary"htmlType="submit">MDR template</Button>
                 </Col>
                 <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">Create Custom</Button>
