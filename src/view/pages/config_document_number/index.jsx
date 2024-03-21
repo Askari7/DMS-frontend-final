@@ -20,8 +20,12 @@ const DocumentNumberingForm = () => {
 
   const handlePrefixChange = (index, field, value) => {
     const newPrefixes = [...prefixes];
-    newPrefixes[index][field] = value;
-  
+    if (field === 'length' && parseInt(value) < 0) {
+      // If length becomes negative, set it to 0
+      newPrefixes[index][field] = 0;
+    } else {
+      newPrefixes[index][field] = value;
+    }
     setPrefixes(newPrefixes);
   };
 
@@ -30,13 +34,14 @@ const DocumentNumberingForm = () => {
       .filter(({ prefix, length }) => prefix && length)
       .map(({ prefix, length }) => {
         const firstCharacter = prefix.charAt(0).toUpperCase();
-        return firstCharacter.repeat(parseInt(length, 6));
+        return firstCharacter.repeat(parseInt(length, 10));
       })
       .join('-');
       docNumber= generatedNumber;
        console.log(docNumber);
     return generatedNumber;
   };
+
   const history = useHistory();
   const navigateToMdrTemplate = async() => {
    await handleSubmit();

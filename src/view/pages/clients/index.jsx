@@ -329,12 +329,6 @@ const handleStatusChange = (selectedStatus) => {
           <Form.Item
             label="Address :"
             name="companyAddress"
-            rules={[
-              {
-                required: true,
-                message: "Please input your Address!",
-              },
-            ]}
           >
             <Input
               id="companyAddress"
@@ -346,12 +340,6 @@ const handleStatusChange = (selectedStatus) => {
           <Form.Item
             label="Contact :"
             name="companyContact"
-            rules={[
-              {
-                required: true,
-                message: "Please input your -Contact!",
-              },
-            ]}
           >
             <Input
               id="companyContact"

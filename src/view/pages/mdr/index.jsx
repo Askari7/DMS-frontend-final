@@ -94,8 +94,8 @@ export default function MDR() {
   const [projectCode,setProjectCode] = useState()
   const location = useLocation();
   const { matchingRecord } = location.state || {}
-  console.log(matchingRecord,"recordinggggg");
-  console.log(location,"location");
+  // console.log(matchingRecord,"recordinggggg");
+  // console.log(location,"location");
   const handleAll=()=>{
     setData(dataArray)
   }
@@ -124,15 +124,15 @@ const menu = (
   };
 
   const serializedDepartmentOption = JSON.stringify(departmentOption);
-  console.log("serialized",serializedDepartmentOption)
+  // console.log("serialized",serializedDepartmentOption)
 
   const history = useHistory();
   const navigateToMdrTemplate = () => {
     const project = projectOptions.find((item) => item?.value == projectId);
-    console.log('departmentOptions',departmentOptions);
+    // console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
     const serializedDepartmentOption = JSON.stringify(departmentOption);
-    console.log("serialized",serializedDepartmentOption)
+    // console.log("serialized",serializedDepartmentOption)
     const serializedProjectOptions = JSON.stringify(projectOptions);
     const serializedSelectedApprover = JSON.stringify(selectedApprover);
     const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
@@ -140,21 +140,23 @@ const menu = (
     &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
     &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
     &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
+    
     const navigateToMdrTemplateForUpdate = () => {
       const project = projectOptions.find((item) => item?.value == projectId);
-      console.log('departmentOptions',departmentOptions);
+      // console.log('departmentOptions',departmentOptions);
       const serializedDepartmentOptions = JSON.stringify(departmentOptions);
       const serializedDepartmentOption = JSON.stringify(departmentOption);
       const serializedRecord = JSON.stringify(record);
-
-      console.log("serialized",serializedDepartmentOption)
+      // console.log(serializedRecord,"serializedRecord");
+      // console.log("serialized",serializedDepartmentOption)
       const serializedProjectOptions = JSON.stringify(projectOptions);
       const serializedSelectedApprover = JSON.stringify(selectedApprover);
       const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
       history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}
       &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
       &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
-      &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}&record=${serializedRecord}`)};
+      &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}
+      &reviewer=${serializedSelectedReviewer}&record=${serializedRecord}`)};
   
 
     const navigate = () => {
@@ -175,7 +177,7 @@ const menu = (
   };
 
   const documentModalShowing = (record) => {
-    console.log("record",record);
+    // console.log("record",record);
     setRecord(record);
     setDocumentModalVisible(true);
   };
@@ -196,13 +198,13 @@ const menu = (
   };
 let count=0;
   const createModalShow = (record) => {
-    console.log("record",record)
+    // console.log("record",record)
     setRecord(record)
     setDocumentModalVisible(true);
   };
 
   const showModalShow = (record) => {
-    console.log(record)
+    // console.log(record)
     setRecord(record)
     showDocs(record)
     setShowModalVisible(true);
@@ -215,7 +217,7 @@ let count=0;
     setCreateModalVisible(false);
   };
 const showDocs = async(record)=>{
-  console.log("record",record);
+  // console.log("record",record);
 
   fetchDepartmentDocs(record)
 }
@@ -302,13 +304,13 @@ const showDocs = async(record)=>{
 // console.log(convertToCSV(dataforCSV),"checking");
 
 const convertToCSV = (data) => {
-  console.log('data',data);
+  // console.log('data',data);
   const csvRows = [];
   data.forEach((obj) => {
     const key = Object.keys(obj)[0]; // Extract the key
-    console.log("key",key);
+    // console.log("key",key);
     const documents = obj[key]; // Extract the array of documents
-    console.log("objKeys",documents);
+    // console.log("objKeys",documents);
 
     csvRows.push(`Key,${key}`);
     
@@ -340,13 +342,13 @@ const convertToCSV = (data) => {
 const handleExport = async (record) => {
   await fetchDepartmentDocs(record);
 
-  console.log(count,'counttt');
+  // console.log(count,'counttt');
 
   if (docData.length > 0) {
-    console.log(docData,"docData");
+    // console.log(docData,"docData");
     const csvData = convertToCSV(docData);
 
-    console.log(csvData,"data for csv");
+    // console.log(csvData,"data for csv");
 
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -361,7 +363,7 @@ const handleExport = async (record) => {
 
 const fetchDepartmentDocs = async (record) => {
   try {
-    console.log('recorddd',record);
+    // console.log('recorddd',record);
     const response = await axios.get(
       `http://127.0.0.1:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
       {
@@ -412,13 +414,13 @@ modified.forEach(item => {
 // Convert the modifiedData object to an array of objects
 const result = Object.keys(modifiedData).map(key => ({ [key]: modifiedData[key] }));
 
-console.log(result);
+// console.log(result);
 
 
-    console.log(response.data,"received");
+    // console.log(response.data,"received");
     // setDocData(response.data);
     setDocData(result)
-    console.log(docData,'hiiiiiiiii');
+    // console.log(docData,'hiiiiiiiii');/
 
   } catch (error) {
     console.error("Error fetching documents:", error?.message);
@@ -556,11 +558,11 @@ useEffect(() => {
         }
       );
 
-      console.log('mdr data',response.data);
+      // console.log('mdr data',response.data);
       setProjectCode(response.data.projectCode)
       if (user?.user?.roleId===3 || user?.user?.roleId ===4) {
         const data = response.data.filter(item => item.authorId === user?.user?.id);
-        console.log("data",data);
+        // console.log("data",data);
         setData(data);
         setDataArray(data);
 
@@ -596,12 +598,12 @@ useEffect(() => {
         option.push({ value: item?.suffix, label: item?.title });
 
       }
-      console.log("option",option);
-      console.log("options",options);
+      // console.log("option",option);
+      // console.log("options",options);
 
       setDepartmentOptions(options); 
       setDepartmentOption(option); 
-      console.log("option",option);
+      // console.log("option",option);
 
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -705,9 +707,9 @@ useEffect(() => {
       setUserData(options);
       setUserDatalist(option);
 
-      console.log('my options',options);
+      // console.log('my options',options);
 
-      console.log('my users',userOptions);
+      // console.log('my users',userOptions);
        // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -825,7 +827,7 @@ useEffect(() => {
               </Form.Item>
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button block onClick={navigateToMdrTemplateForUpdate} type="primary"htmlType="submit">MDR template</Button>
+                  <Button block onClick={record?navigateToMdrTemplateForUpdate:navigateToMdrTemplate} type="primary"htmlType="submit">MDR template</Button>
                 </Col>
                 <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">Create Custom</Button>

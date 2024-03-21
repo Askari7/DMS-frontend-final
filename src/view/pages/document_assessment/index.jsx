@@ -117,6 +117,7 @@ export default function DocumentPermissions() {
     const [statusModalVisible, setStatusModalVisible] = useState(false);
     const [clientModalVisible, setClientModalVisible] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState([]);
+    const [record, setRecord] = useState();
 
   const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =
     useState(false);
@@ -168,6 +169,11 @@ export default function DocumentPermissions() {
   };
 
   const clientModalShow = (record) => {
+    console.log(record,"record");
+    const serializedRecord = JSON.stringify(record);
+
+    setRecord(serializedRecord)
+    fetchClients()
     setClientModalVisible(true);
   };
   const clientModalCancel = () => {
@@ -219,22 +225,33 @@ export default function DocumentPermissions() {
     }
   }
 
+  // const fetchProjects=async()=>{
+  //   try {
+  //     const response = await axios.get(
+  //       `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&clientStatus=fetchClients`
+
+  //     )
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+
   const fetchClients = async()=>{
     try {
+      console.log(record,"coddd");
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}&recordId=${record}`,
         {
           headers: {
             Authorization: user?.accessToken,
-            // Add other headers if needed
           },
         }
       );
         
       console.log(response.data,"received");
       const clients = response.data.map(client => ({
-        value: client.companyName,
-        label: client.companyName,
+        value: client.Email,
+        label: client.Email,
       }));
       console.log("clients",clients);
        setClients(clients);
@@ -580,8 +597,12 @@ export default function DocumentPermissions() {
     await fetchData();
     fetchUsers();
     fetchMDR();
-    fetchClients();
+    // fetchClients();
   }, []);
+  useEffect(async () => {
+
+    await fetchClients();
+  }, [record]);
   return (
     <>
     <Modal

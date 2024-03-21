@@ -15,21 +15,19 @@ console.log(jsondata);
     const getMdrCode = params.get('mdrCode');
     const projectId = params.get('projectId');
     const getMdrTitle= params.get('title');
-    const status= params.get('status');
-
     const departmentId = params.get('departmentId');
-  // console.log(ProjectCode,getMdrCode);
-   let departmentOptionsString = params.get('departmentOptions');
-  // console.log(departmentOptionsString);
-  let departmentOptionSuffix = params.get('departmentOption');
-  // console.log("Suffix",departmentOptionSuffix);
 
-  const projectOptions = params.get('projectOptions');
-  const approver = params.get('approver');
-  const reviewer = params.get('reviewer');
-  const record = params.get('record');
+    let departmentOptionsString = params.get('departmentOptions');
+    let departmentOptionSuffix = params.get('departmentOption');
 
-  console.log(record,"recordddddddddddddd");
+    const projectOptions = params.get('projectOptions');
+    const approver = params.get('approver');
+    const reviewer = params.get('reviewer');
+    const record = params.get('record');
+
+    console.log("data from mdr to mdrtemplates",ProjectCode,getMdrCode,projectId,getMdrTitle,departmentId,
+    departmentOptionSuffix,departmentOptionsString,projectOptions,approver,reviewer,record);
+
     const [customFieldValues, setCustomFieldValues] = useState({});
     const [templateModalVisible,setTemplateModalVisible] = useState(false)
     const [selectedFieldVisible,setSelectedFieldVisible]  = useState(false)
@@ -43,7 +41,7 @@ console.log(jsondata);
     const [selectedRows, setSelectedRows] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
-    const [count,setCount] = useState(1)
+    // const [count,setCount] = useState(1)
 
 
     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
@@ -57,10 +55,18 @@ console.log(jsondata);
     // console.log("id",departmentIds,"labels",departmentLabels);
     const departmentLabelsString = departmentLabels.join(', ');
     // console.log("strings",departmentLabelsString);
-    const [data, setData] = useState(jsondata);
-    const [dataArray,setDataArray] = useState(jsondata)
+
+    const dataArrayWithIndexes = Object.entries(jsondata).map(([index, value]) => ({ index, value }));
+    console.log(dataArrayWithIndexes,"Data Array With Indexes");
+    
+
+    const [data, setData] = useState(Object.values(jsondata));
+    const [dataArray,setDataArray] = useState(Object.values(jsondata))
+
+    
+    
+
     const [documentCounts, setDocumentCounts] = useState({});
-    // console.log("jsonData",jsondata);
     const [documentTitles, setDocumentTitles] = useState({});
     const [information,setInformation] = useState([])
     const [titles,setValues] = useState([])
@@ -103,17 +109,6 @@ console.log(jsondata);
           </Space>
         ),
       },
-      
-      // {
-      //   title: "Update Code",
-      //   key: "updateCode",
-      //   render: (_, record) => (
-      //     <Space size="middle">
-      //       <Button onClick={() => handleUpdate(record)}>Update</Button>
-      //     </Space>
-          
-      //   ),
-      // },
     ];
     useEffect(() => {
       const timeout = setTimeout(() => {
@@ -137,17 +132,14 @@ console.log(jsondata);
     const templateModalShow = () => {
       setTemplateModalVisible(true);  
       const updatedData = [...data];
-      console.log(selectedRows,"rowsss");
+      console.log(updatedData,"updatedData");
       let allInfos = [];
-
       selectedRows.forEach((index, sequenceNumber) => {
         const count = documentCounts[data[index].document] || 1;
-        console.log(count, "counting");
-        
+        console.log(count, "counting");        
         for (let i = 0; i < count; i++) {
           let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-
-          console.log("documents...........",newDocument);
+          console.log("document",newDocument);
           // Save the document name in allInfos array
           if (!allInfos[index]) {
             allInfos[index] = {};
@@ -158,35 +150,19 @@ console.log(jsondata);
             ...data[index],
             count: documentCounts[data[index].document]
           };
+        console.log(updatedData[index],"updating count");
           
-          console.log('Updated index', updatedData[index]);
         }
       
-        console.log('allInfos', allInfos);
       });
+      console.log(documentCounts,"counts");
       setInformation(allInfos)
-      console.log("Updated Data:", updatedData);
+      console.log(allInfos,"allInfos");
+      console.log("Updated", updatedData);
       setData(updatedData);
       
     };
 
-    // const handleChangingTitle = (title, document, index, i) => {
-    //   setValues((prevTitles) => {
-    //     const newTitles = [...prevTitles];
-    //     if (!newTitles[index]) {
-    //       newTitles[index] = [];
-    //     }
-    //     if (!newTitles[index][i]) {
-    //       newTitles[index][i] = {};
-    //     }
-    //     newTitles[index][i] = { ...newTitles[index][i], title };
-    //     return newTitles;
-    //   });
-    //   console.log("titles",titles);
-    // };
-  // useEffect(() => {
-  //   updatingTitles();
-  // }, [documentTitles, selectedRows]);
   const handleChangingTitle = (title, document, index, i) => {
     setDocumentInfo((prevDocumentInfo) => {
       const newDocumentInfo = [...prevDocumentInfo];
@@ -195,9 +171,10 @@ console.log(jsondata);
         ...newDocumentInfo[index][i],
         title,
       };
+      console.log(newDocumentInfo,"newDataInfo");
+
       return newDocumentInfo;
     });
-    console.log("documentInfo", documentInfo);
   };
   
   const handleStartDateChange = (date, document, index, i) => {
@@ -210,7 +187,6 @@ console.log(jsondata);
       };
       return newDocumentInfo;
     });
-    console.log("documentInfo", documentInfo);
   };
   
   const handleEndDateChange = (date, document, index, i) => {
@@ -223,7 +199,6 @@ console.log(jsondata);
       };
       return newDocumentInfo;
     });
-    console.log("documentInfo", documentInfo);
   };
   
   
@@ -243,7 +218,6 @@ console.log(jsondata);
           prevEndDate: undefined,
         };
       } else {
-        // If checkbox is checked, save current startDate and endDate values
         newDocumentInfo[index][i] = {
           title: newDocumentInfo[index]?.[i]?.title || '',
           isChecked: true,
@@ -253,9 +227,7 @@ console.log(jsondata);
       }
   
       return newDocumentInfo;
-    });
-  
-    console.log("documentInfo", documentInfo);
+    });  
   };
   
   
@@ -271,32 +243,32 @@ console.log(jsondata);
       const departmentOptions = await JSON.parse(departmentOptionsString);
       try {
         var title=getMdrTitle;
-        console.log(title,"titleee");
+        console.log(title,"title for adding document");
         var mdrCode=getMdrCode;
+        console.log(mdrCode,"mdrcode for adding document");
         mdrCode=mdrCode.replace(/\s/g, '');
+        console.log(mdrCode,"mdrcode for adding document");
         var count = selectedRows.length
+        console.log(count,"selectedCount of docs");
         selectedRows.forEach(async (index) => {
+
           let documentValue = data[index].document;
-          let count = data[index].count
-          documentValue = documentValue.replace("xxxx", ProjectCode)
-          console.log(documentValue,"documentvalue");
-         const masterDocumentName=title;
+          let count = data[index].count||1
+          console.log(documentValue,count||1,"doc related Infomation");
+          // documentValue = documentValue.replace("xxxx", ProjectCode)
+          const masterDocumentName=title;
           const assignedBy=user.user.id;
           const assignedFrom=user.user.roleId;
-          // console.log('This is coming from param',approver,reviewer);
+          console.log(count,'count for loop');
           for (let i = 0; i < count; i++) {
             try {
               var docTitle = documentInfo[index][i].title;
               var startedDate = documentInfo[index][i].startDate
               var expectedEndedDate = documentInfo[index][i].endDate
-
               var title=information[index][i];
-              console.log(title,"titlee");
-              title.replace("xxxx", ProjectCode)
               var version='000';
-              console.log("doctitle",docTitle);
 
-
+              console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
               const responseDoc = await axios.post(
                 "http://127.0.0.1:8083/api/documents/",
                 {
@@ -311,7 +283,7 @@ console.log(jsondata);
                   userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
                   masterDocumentId: mdrCode,
                   masterDocumentName,
-                  projectCode: ProjectCode,
+                  projectCode,
                   departmentName:departmentLabelsString,
                   status : "Initialized",
                   assignedBy,
@@ -326,9 +298,8 @@ console.log(jsondata);
                   },
                 }
               );
-              console.log(response.data,"responding");
             } catch (error) {
-              console.log(error);
+              console.log(error,"error Adding Docs");
             }  
           }
           
@@ -378,11 +349,9 @@ console.log(jsondata);
                 Authorization: user?.accessToken,
               },
             }
+            
           );
         }
-        
-        // Handle the response as needed
-        // console.log(response);
         message.success(response?.data?.message);
         if (selectedRows.length === 0) {
           message.error('Please select at least one row.');
@@ -390,7 +359,7 @@ console.log(jsondata);
         }
       } catch (error) {
         // Handle errors
-        console.error("Error adding documents:", error);
+        console.error("Error adding MDR:", error);
       }
     };
 
@@ -401,28 +370,54 @@ console.log(jsondata);
       filterData(name);
     };
 
-    const filterData = (selectedDepartment) => {
-      const filteredData = dataArray.filter(data => String(data.category).toUpperCase() === String(selectedDepartment).toUpperCase());  
-      console.log("filter",filteredData);
-      setData(filteredData);
-    };
+    // const filterData = (selectedDepartment) => {
+
+    //   const filteredData = [];
+    //   for (const data of dataArray) {
+    //     if (String(data.category).toUpperCase() === String(selectedDepartment).toUpperCase()) {
+    //       filteredData.push(data);
+    //     }
+    //   }
+    //   console.log("filteredData",filteredData);
+    //   setData(filteredData);
+    // };
   
+    const filterData = (selectedDepartment) => {
+      const filteredIndexes = dataArrayWithIndexes
+        .filter(({ value }) => String(value.category).toUpperCase() === String(selectedDepartment).toUpperCase())
+        .map(({ index }) => index);
+    
+      const filteredDataWithIndexes = filteredIndexes.map(index => dataArrayWithIndexes[index]);
+      const filteredDataValues = filteredDataWithIndexes.map(({ value }) => value);
+      
+      console.log(filteredDataValues,filteredDataWithIndexes,"index");
+      setData(filteredDataValues);
+      // setFilteredValues(filteredDataWithIndexes); // Assuming you have a state variable for storing filtered values
+    };
+    
+
+    // const filterData = (selectedDepartment) => {
+    //   const filteredIndexes = dataArrayWithIndexes
+    //     .filter(({ value }) => String(value.category).toUpperCase() === String(selectedDepartment).toUpperCase())
+    //     .map(({ index }) => index);
+    
+      
+    //   setData(filteredDataValues);
+    // };
+
     const handleClick = () => {
       departmentWiseCancel();
       setData(dataArray)
     };
     
-    const navigateBackToMDR = () => {
-      history.push(`/pages/MDR`)
-    };
     const mydocumentSaved = async() => {
-    await addDocument();
+      console.log(data,"data",documentCounts,"counts",documentInfo,"documentInfo");
+      await addDocument();
       message.success('Document values saved successfully.');
-    
-      selectedRows.forEach((index) => {
-        const savedData = loadData(`doc-${index}`);
-        console.log(`Saved Data for Key ${index}:`, savedData);
-      });
+      // selectedRows.forEach((index) => {
+      //   const savedData = loadData(`doc-${index}`);
+      //   console.log(`Saved Data for Key ${index}:`, savedData);
+      // });
     
       templateModalCancel();
 
@@ -440,30 +435,7 @@ console.log(jsondata);
     const selectedModalCancel = () => {
       setSelectedFieldVisible(false);
     };
-    
-    // const handleChangingTitle = (a,b)=>{
-    //     setDocumentT(prevCounts => {
-    //       const updatedCounts = { ...prevCounts };
-    //       const currentCount = updatedCounts[record.document] || 1;
-    //       updatedCounts[record.document] = currentCount + 1;
-    //       console.log("documents", updatedCounts);
-    //       return updatedCounts;
-    //     });
-    //   };  
-    
 
-
-
-
-    const handleSelect = (record) => {
-      selectedModalShow()
-      const isSelected = selectedRows.includes(record.key);
-      if (isSelected) {
-        setSelectedRows(selectedRows.filter((rowKey) => rowKey !== record.key));
-      } else {
-        setSelectedRows([...selectedRows, record.key]);
-      }
-    };
     const handleUpdate = (record) => {
       setSelectedRowData(record);
       selectedModalShow();
@@ -494,7 +466,7 @@ console.log(jsondata);
 
     useEffect(() => {
       // This will be executed after the state is updated
-      console.log('Updated Information:', information);
+      // console.log('Updated Information:', information);
     }, [information]);
 
     const customModalShow = () => {

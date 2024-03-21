@@ -4,15 +4,15 @@ import { useHistory } from 'react-router-dom';
 import axios from "axios";
 
 const departmentsData = [
-  'Project Management',
-  'Process',
-  'Mechanical',
-  'Electrical',
-  'Instrumentation',
-  'Civil / Structure',
-  'Finance',
-  'HR / Admin',
-  'Quality',
+  { department: 'Project Management', suffix: 'PM' },
+  { department: 'Process', suffix: 'PRO' },
+  { department: 'Mechanical', suffix: 'ME' },
+  { department: 'Electrical', suffix: 'ELE' },
+  { department: 'Instrumentation', suffix: 'INS' },
+  { department: 'Civil / Structure', suffix: 'CIV' },
+  { department: 'Finance', suffix: 'FIN' },
+  { department: 'HR / Admin', suffix: 'HR' },
+  { department: 'Quality', suffix: 'QLT' },
 ];
 
 const DepartmentSelection = () => {
@@ -136,26 +136,35 @@ const addDepartments = async () => {
       >
         Add Department
       </Button>
-      <Row>
+      <Row >
         {departmentsData.map((department) => (
-          <Col span={8} key={department}>
-            <Checkbox
-              onChange={() => handleCheckboxChange(department)}
-              checked={selectedDepartments.includes(department)}
-            >
-              {department}
-            </Checkbox>
-          </Col>
+          <Col span={8} key={department.department} style={{ display: 'flex', alignItems: 'center' }}>
+        <Checkbox
+          onChange={() => handleCheckboxChange(department.department)}
+          checked={selectedDepartments.includes(department.department)}
+          style={{ marginRight: 10 }}
+        />
+        <div>
+          <span style={{ color: 'blue', marginRight: 5 }}>{department.department}</span>
+          <span style={{ fontStyle: 'italic', marginRight: 5 }}>{department.suffix}</span>
+        </div>
+
+      </Col>
         ))}
       </Row>
-      <div>
-        <h3>Selected Departments:</h3>
-        <ul>
-          {selectedDepartments.map((department) => (
-            <li key={department}>{department}</li>
-          ))}
-        </ul>
+      <div style={{ marginTop: 20 }}>
+  <h3>Selected Departments:</h3>
+  <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+    {selectedDepartments.map((department, index) => (
+      <div key={department} style={{ marginRight: 20, marginBottom: 10 }}>
+        <span style={{ fontSize: 16 }}>{department}</span>
+        {/* Add your styling for the department name */}
+        <span style={{ fontStyle: 'italic', marginLeft: 5 }}>{selectedSuffix[index]}</span>
+        {/* Assuming selectedSuffix is an array */}
       </div>
+    ))}
+  </div>
+</div>
 
       <Modal
         title="Add New Department"

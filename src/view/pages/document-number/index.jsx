@@ -98,6 +98,23 @@ export default function DocumentNumbering() {
   const DocumentPermissionModalShow = () => {
     setDocumentPermissionModalVisible(true);
   };
+  const fetchData = async()=>{
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/format?companyId=${user?.user?.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      console.log(response.data);
+      setData(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
@@ -116,6 +133,7 @@ export default function DocumentNumbering() {
       console.log(response);
       message.success(response?.data?.message);
       setDocumentPermissionModalVisible(false);
+      fetchData()
     } catch (error) {
       // Handle errors
 
@@ -138,13 +156,20 @@ export default function DocumentNumbering() {
 
   useEffect(() => {
     setUser(JSON.parse(localStorage?.getItem("user")));
+    fetchData()
     // Fetch data when the component mounts
   }, []);
   return (
     <>
-      <div style={{ textAlign: "left", marginBottom: "16px" }}>
-        <Form layout="vertical" name="basic">
-          <Form.Item
+
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div style={{ textAlign: "left", marginBottom: "16px" }}>
+    <strong style={{color:'blue', fontSize:"32px", justifyContent:"center",textAlign:"center"}}>{data.name}</strong>
+    <br />
+      <strong style={{color:'black', fontSize:"16px", justifyContent:"center",textAlign:"center"}}>{data.documentNumberFormat}</strong>
+
+      <Form layout="vertical" name="basic">
+      <Form.Item
             label="First Field"
             name="firstField"
             rules={[
@@ -235,7 +260,7 @@ export default function DocumentNumbering() {
             />
           </Form.Item>
 
-          <Row justify="left">
+          <Row justify="center">
             <Col md={10} span={10} className="hp-pr-sm-0 hp-pr-12">
               <Button
                 block
@@ -250,8 +275,9 @@ export default function DocumentNumbering() {
               </Button>
             </Col>
           </Row>
-        </Form>
-      </div>
+      </Form>
+    </div>
+  </div>
     </>
   );
 }

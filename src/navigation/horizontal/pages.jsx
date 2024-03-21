@@ -252,7 +252,7 @@ const pages = [
     id: "profile-personel-information",
     // header: <IntlMessages id="sidebar-dashboards" />,
     // header: <IntlMessages id="sidebar-pages-profile-personel-information" />,
-    icon: <Profile size={18} />,
+    icon: <Profile size={20} />,
     navLink: "/pages/profile/personel-information",
   },
   // {

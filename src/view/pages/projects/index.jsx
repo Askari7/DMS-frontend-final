@@ -91,8 +91,8 @@ const columns = [
   },
   {
     title: "Client",
-    dataIndex: "clientEmail",
-    key: "clientEmail",
+    dataIndex: "clientId",
+    key: "clientId",
   },
   // {
   //   title: "No of Users",
@@ -163,7 +163,7 @@ const columns = [
           uniqueTitlesSet.add(item.com);
   
           // Push the option to the result array
-          acc.push({ value: item.companyName, label: item.companyName, name: item.companyName });
+          acc.push({ value: item.id, label: item.companyName, name: item.companyName });
         }
   
         return acc;
@@ -207,7 +207,7 @@ const columns = [
           // departmentId,
           status:"Initialized",
           noOfUsers:0,
-          clientEmail,
+          clientId:clientEmail,
           code,
           companyId: user?.user?.companyId,
           authorId: user?.user?.id,
