@@ -42,6 +42,27 @@ const columns = [
     title: "Role",
     dataIndex: "roleTitle",
     key: "roleTitle",
+    filters: [
+
+      {
+        text: 'Lead',
+        value: 'Head',
+      },
+      {
+        text: 'Senior Engineer',
+        value: 'Senior',
+      },
+      {
+        text: 'Junior Engineer',
+        value: 'Junior',
+      },
+      {
+        text: 'Designer',
+        value: 'Designer',
+      },
+    ],
+    onFilter:  (value, record) =>record.roleTitle === value,
+
   },
 
   {
@@ -463,7 +484,9 @@ export default function Users() {
         <OrganizationChart employees={dataArray} />
       </div> :
       <div style={{ overflowX: "auto" }}>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} bordered
+    title={() => 'All Users'}
+    footer={() => 'You may filter users based on department and roles'}/>
       </div>
     }
     <ProtectedAppPage />

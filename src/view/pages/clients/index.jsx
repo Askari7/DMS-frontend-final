@@ -544,7 +544,9 @@ const handleStatusChange = (selectedStatus) => {
       </div>
 {user?.user?.roleId === 1 ? (
   
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} bordered size="middle"
+        title={() => 'All Clients Information'}
+        />
       ) : (
         <div>
           <Divider />

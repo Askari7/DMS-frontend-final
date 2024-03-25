@@ -987,6 +987,8 @@ useEffect(() => {
             title: "No of Documents",
             dataIndex: "noOfDocuments",
             key: "noOfDocuments",
+            sorter: (a, b) => a.noOfDocuments - b.noOfDocuments,
+
           },
           {
             title: (
@@ -1043,6 +1045,10 @@ useEffect(() => {
             ),
           },
         ]}
+        size="middle"
+        bordered
+      title={() => 'All Department Documents'}
+      footer={() => 'You may filter MDR'}
         dataSource={data}
         rowClassName={(record) => {
           if (matchingRecord && record.id === matchingRecord.selectedRecord.id) {

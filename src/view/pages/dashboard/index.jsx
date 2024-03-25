@@ -306,7 +306,7 @@ setDepartmentCounts(userDepartmentCount)
                   <Col span={6}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Designer or "
+                      title="Designer"
                       count={data.roleCounts['5'] || "0"}
                     />
                   </Col>
@@ -493,7 +493,7 @@ setDepartmentCounts(userDepartmentCount)
                   <Col span={6}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Designer or "
+                      title="Designer"
                       count={data.roleCounts['5'] || "0"}
                     />
                   </Col>

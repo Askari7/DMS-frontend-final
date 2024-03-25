@@ -141,6 +141,7 @@
         "document": "xxxx-01-PRO-SP-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.3",
         "documentTitle": "Report",
@@ -151,6 +152,7 @@
         "document": "xxxx-01-PRO-REP-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.4",
         "documentTitle": "Data Sheet",
@@ -161,6 +163,7 @@
         "document": "xxxx-01-PRO-DS-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.5",
         "documentTitle": "Schedule",
@@ -171,6 +174,7 @@
         "document": "xxxx-01-PRO-SCH-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.6",
         "documentTitle": "Technical Bid Evaluation",
@@ -181,6 +185,7 @@
         "document": "xxxx-01-PRO-TBE-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.7",
         "documentTitle": "Procedure / SOPs",
@@ -191,6 +196,7 @@
         "document": "xxxx-01-PRO-PR-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.8",
         "documentTitle": "Method Statements",
@@ -201,6 +207,7 @@
         "document": "xxxx-01-PRO-MS-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.9",
         "documentTitle": "Material Take Off List / Bill of Quantities",
@@ -211,6 +218,7 @@
         "document": "xxxx-01-PRO-CPR-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.10",
         "documentTitle": "Basis of Design",
@@ -221,6 +229,7 @@
         "document": "xxxx-01-PRO-BOD-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.11",
         "documentTitle": "Calculations",
@@ -231,6 +240,7 @@
         "document": "xxxx-01-PRO-CAL-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.12",
         "documentTitle": "Line List",
@@ -241,6 +251,7 @@
         "document": "xxxx-01-PRO-LL-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.13",
         "documentTitle": "Piping & Instrumentation Drawing",
@@ -251,6 +262,7 @@
         "document": "xxxx-01-PRO-PID-00X"
     },
     {
+
         "category": "PROCESS",
         "code": "B.14",
         "documentTitle": "Process Flow Scheme",

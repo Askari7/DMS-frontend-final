@@ -103,13 +103,21 @@ const columns = [
     title: "Start Date",
     dataIndex: "startedDate",
     key: "startedDate",
-  },
+    sorter: (a, b) => {
+      const dateA = new Date(a.startedDate.split('/').reverse().join('/'));
+      const dateB = new Date(b.startedDate.split('/').reverse().join('/'));
+      return dateA - dateB;
+    }  },
 
   {
     title: "Expected End Date",
     dataIndex: "endedDate",
     key: "endedDate",
-  },
+    sorter: (a, b) => {
+      const dateA = new Date(a.endedDate.split('/').reverse().join('/'));
+      const dateB = new Date(b.endedDate.split('/').reverse().join('/'));
+      return dateA - dateB;
+    }  },
   {
     title: (
       <div>
@@ -439,7 +447,11 @@ const columns = [
           Add Project
         </Button>
       </div>
-      <Table 
+      <Table
+      bordered
+      size="middle"
+      title={() => 'All Project Details'}
+      footer={() => 'You may filter Projects'} 
         columns={columns} 
         dataSource={transformData(data)} 
         onRow={(record) => ({

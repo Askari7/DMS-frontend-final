@@ -468,7 +468,7 @@ if(user.user.roleId==2 ){
       // Check if response.data is an array before including it in the setData call
       const newData = Array.isArray(response.data) ? response.data : [];
 
-
+      setDataArray([...newData])
       setData([...newData]);
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
@@ -919,7 +919,9 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
       </div>
       {
         showTreeView?<MyTreeView />:      <div style={{ overflowX: "auto" }}>
-        <Table columns={columns} dataSource={data} /></div>
+        <Table columns={columns} dataSource={data}  bordered size="middle"
+      title={() => 'All Documents Information'}
+      footer={() => 'You may filter Documents'}/></div>
       }
       
       <ProtectedAppPage />      

@@ -39,6 +39,8 @@ const columns = [
     title: "No of Users",
     dataIndex: "noOfUsers",
     key: "noOfUsers",
+    sorter: (a, b) => a.noOfUsers - b.noOfUsers,
+
   },
 
   {
@@ -365,7 +367,9 @@ setDepartmentId(record['id']);
       </div>
 
       <div style={{ overflowX: "auto" }}>
-      <Table columns={columns} dataSource={data} /></div>      <ProtectedAppPage />
+      <Table columns={columns} dataSource={data}  bordered size="middle"
+      title={() => 'All Department Information'}
+      footer={() => 'You may filter departments'}/></div>      <ProtectedAppPage />
     </>
   );
 }

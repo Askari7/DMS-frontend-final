@@ -808,7 +808,10 @@ export default function DocumentPermissions() {
         </Button>
       </div>
       <div style={{ overflowX: "auto" }}>
-      <Table columns={columns} dataSource={data} /></div>
+      <Table columns={columns} dataSource={data} bordered
+      size="middle"
+      title={() => 'All Documents Assessments'}
+      footer={() => 'You may filter Documents'}/></div>
     </>
   );
 }

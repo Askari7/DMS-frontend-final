@@ -56,12 +56,13 @@ console.log(jsondata);
     const departmentLabelsString = departmentLabels.join(', ');
     // console.log("strings",departmentLabelsString);
 
-    const dataArrayWithIndexes = Object.entries(jsondata).map(([index, value]) => ({ index, value }));
-    console.log(dataArrayWithIndexes,"Data Array With Indexes");
+    const dataArrayWithIndexes = Object.entries(jsondata).map(([index, value]) => ({  ...value, index: parseInt(index), checked: false }));
     
 
-    const [data, setData] = useState(Object.values(jsondata));
-    const [dataArray,setDataArray] = useState(Object.values(jsondata))
+    const [data, setData] = useState(Object.values(dataArrayWithIndexes));
+    const [dataArray,setDataArray] = useState(Object.values(dataArrayWithIndexes))
+    let changing = data
+    let changing2 = dataArray
 
     
     
@@ -88,6 +89,39 @@ console.log(jsondata);
         title: 'Department Code',
         dataIndex: 'departmentCode',
         key: 'departmentCode',
+        filters: [
+          {
+            text: 'Project Management',
+            value: 'PM',
+          },
+          {
+            text: 'Process',
+            value: 'PRO',
+          },
+          {
+            text: 'Piping',
+            value: 'PIP',
+          },
+          {
+            text: 'Mechanical',
+            value: 'TK',
+          },
+          {
+            text: 'Civil/Structure',
+            value: 'CIV',
+          },
+          {
+            text: 'Electrical',
+            value: 'ELE',
+          },
+          {
+            text: 'Instrumentation',
+            value: 'INS',
+          },
+        ],
+        filterMode: 'tree',
+        filterSearch: true,
+        onFilter:  (value, record) => record.departmentCode === value,
       },
       {
         title: 'Document Content Code',
@@ -200,7 +234,18 @@ console.log(jsondata);
       return newDocumentInfo;
     });
   };
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra);
+  };
   
+  const change=(selectedRows,selectedRowKeys)=>{
+    console.log(selectedRows,'row',selectedRowKeys);
+    const updatedSelectedRowKeys = selectedRowKeys.map(row => ({ ...row, checked: true }));
+    console.log(updatedSelectedRowKeys);
+    const indexes = updatedSelectedRowKeys.map(row => row.index);
+    console.log(indexes,"indexes");
+    setSelectedRows(indexes)
+  }
   
   const handleCheckboxChange = (isCheckedValue, document, index, i) => {
     setDocumentInfo((prevDocumentInfo) => {
@@ -383,15 +428,24 @@ console.log(jsondata);
     // };
   
     const filterData = (selectedDepartment) => {
-      const filteredIndexes = dataArrayWithIndexes
-        .filter(({ value }) => String(value.category).toUpperCase() === String(selectedDepartment).toUpperCase())
-        .map(({ index }) => index);
+      console.log(selectedRows,"selectedRows");
+      console.log(selectedDepartment,"selected");
+      const filteredIndexes = dataArray
+      .filter(item => item.category.toUpperCase() === selectedDepartment.toUpperCase())
     
-      const filteredDataWithIndexes = filteredIndexes.map(index => dataArrayWithIndexes[index]);
-      const filteredDataValues = filteredDataWithIndexes.map(({ value }) => value);
+      const filteredRowKeys = dataArray
+      .filter((row, index) => selectedRows.includes(index) && row.checked)
+      .map(row => row.index);
+      console.log(filteredRowKeys,"keys");
+    // Call setSelectedRows to update the selected rows
+      setSelectedRows(filteredRowKeys);
+  
+      console.log(filteredIndexes,"filteredIndexes");
+        // const filteredDataWithIndexes = filteredIndexes.map(index => dataArrayWithIndexes[index]);
+      // const filteredDataValues = filteredDataWithIndexes.map(({ value }) => value);
       
-      console.log(filteredDataValues,filteredDataWithIndexes,"index");
-      setData(filteredDataValues);
+      // console.log(filteredDataValues,filteredDataWithIndexes,"index");
+      setData(filteredIndexes);
       // setFilteredValues(filteredDataWithIndexes); // Assuming you have a state variable for storing filtered values
     };
     
@@ -703,10 +757,23 @@ console.log(jsondata);
       <Table
         columns={columns}
         dataSource={data.map((item, index) => ({ ...item, key: index }))}
+        // rowSelection={{
+        //   selectedRowKeys: selectedRows,
+        //   onChange: (selectedRowKeys,selectedRows) => setSelectedRows(selectedRows.includes("index")),
+        // }}
         rowSelection={{
           selectedRowKeys: selectedRows,
-          onChange: (selectedRowKeys) => setSelectedRows(selectedRowKeys),
+          onChange:(selectedRows,selectedRowKeys)=> change(selectedRows,selectedRowKeys),
         }}
+        // onChange={onChange}
+        bordered
+        size='middle'
+      title={() => 'All Department Documents'}
+      footer={() => 'You may filter docs'}
+    expandable={{
+      expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.document}</p>,
+      rowExpandable: (record) => record.departmentCode !== 'Not Expandable',
+    }}
       />
       <Space >
       <Button

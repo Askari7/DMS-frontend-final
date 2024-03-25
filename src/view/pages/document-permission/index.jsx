@@ -304,7 +304,9 @@ export default function DocumentPermissions() {
           Add Permissions
         </Button>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} bordered
+      title={() => 'All Documents Permissions'}
+      footer={() => 'You may filter Documents'}/>
     </>
   );
 }
