@@ -171,7 +171,7 @@ export default function DocumentPermissions() {
   const clientModalShow = (record) => {
     console.log(record,"record");
     const serializedRecord = JSON.stringify(record);
-
+    console.log(serializedRecord,"record");
     setRecord(serializedRecord)
     fetchClients()
     setClientModalVisible(true);

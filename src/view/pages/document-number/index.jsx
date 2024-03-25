@@ -95,6 +95,11 @@ export default function DocumentNumbering() {
   const [thirdField, setThirdField] = useState("");
   const [fourthField, setFourthField] = useState("");
 
+  const [first, setFirst] = useState("");
+  const [second, setSecond] = useState("");
+  const [third, setThird] = useState("");
+  const [fourth, setFourth] = useState("");
+
   const DocumentPermissionModalShow = () => {
     setDocumentPermissionModalVisible(true);
   };
@@ -111,6 +116,21 @@ export default function DocumentNumbering() {
       );
       console.log(response.data);
       setData(response.data)
+      console.log(response.data,"data");
+      const responseData = response.data;
+      const dataArray = responseData.documentNumberFormat.split(','); 
+      const { documentNumberFormat } = response.data;
+      const splitDocumentNumberFormat = documentNumberFormat.split('-');
+
+      const [first,second,third,fourth]= splitDocumentNumberFormat
+      console.log(first,second,third,fourth,'order');
+      setFirst(first)
+      setSecond(second)
+      setThird(third)
+      setFourth(fourth)
+      
+      console.log(splitDocumentNumberFormat,'array');
+
     } catch (error) {
       console.error(error)
     }
@@ -182,10 +202,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: "projectCode", label: "Project Code" },
-                { value: "departmentName", label: "Department Name" },
-                { value: "docNumber", label: "Document Number" },
-                { value: "mdrCode", label: "MDR Code" },
+                { value: first, label: first.toUpperCase() },
+                { value: second, label: second.toUpperCase() },
+                { value: third, label: third.toUpperCase() },
+                { value: fourth, label: fourth.toUpperCase() },
               ]}
               value={firstField}
               onChange={(e) => setFirstField(e)}
@@ -204,10 +224,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: "projectCode", label: "Project Code" },
-                { value: "departmentName", label: "Department Name" },
-                { value: "docNumber", label: "Document Number" },
-                { value: "mdrCode", label: "MDR Code" },
+                { value: first, label: first.toUpperCase() },
+                { value: second, label: second.toUpperCase() },
+                { value: third, label: third.toUpperCase() },
+                { value: fourth, label: fourth.toUpperCase() },
               ]}
               value={firstField}
               onChange={(e) => setSecondField(e)}
@@ -227,10 +247,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: "projectCode", label: "Project Code" },
-                { value: "departmentName", label: "Department Name" },
-                { value: "docNumber", label: "Document Number" },
-                { value: "mdrCode", label: "MDR Code" },
+                { value: first, label: first.toUpperCase() },
+                { value: second, label: second.toUpperCase() },
+                { value: third, label: third.toUpperCase() },
+                { value: fourth, label: fourth.toUpperCase() },
               ]}
               value={firstField}
               onChange={(e) => setThirdField(e)}
@@ -250,10 +270,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: "projectCode", label: "Project Code" },
-                { value: "departmentName", label: "Department Name" },
-                { value: "docNumber", label: "Document Number" },
-                { value: "mdrCode", label: "MDR Code" },
+                { value: first, label: first.toUpperCase() },
+                { value: second, label: second.toUpperCase() },
+                { value: third, label: third.toUpperCase() },
+                { value: fourth, label: fourth.toUpperCase() },
               ]}
               value={firstField}
               onChange={(e) => setFourthField(e)}

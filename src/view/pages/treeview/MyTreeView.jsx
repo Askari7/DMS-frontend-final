@@ -118,13 +118,16 @@ const MyTreeView = () => {
       }
 
       const newData = {};
-
+      console.log(information,"informtion");
       information.forEach(info => {
         if (!newData[info.projectCode]) {
           newData[info.projectCode] = {};
+          console.log(newData[info.projectCode]);
         }
         if (!newData[info.projectCode][info.mdrCode]) {
           newData[info.projectCode][info.mdrCode] = {};
+          console.log(newData[info.projectCode][info.mdrCode]);
+
         }
         const departmentIds = info.departmentId.split(',');
         departmentIds.forEach(departmentId => {
