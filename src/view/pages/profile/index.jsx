@@ -10,6 +10,8 @@ import MenuProfile from "./menu";
 import PasswordProfile from "./password-change";
 import ProtectedAppPage from "../Protected";
 import CompanyInfo from "./company-information";
+import ChangeProfileImagePage from "./change-profile";
+import ComingSoon from "../errors/coming-soon";
 
 export default function Profile() {
   const [visible, setVisible] = useState(false);
@@ -103,6 +105,10 @@ export default function Profile() {
               </Route>
               <Route path="/pages/profile/company-information">
                 <CompanyInfo />
+              </Route>
+              <Route path="/pages/profile/change-profile">
+                {/* <ChangeProfileImagePage /> */}
+                <ComingSoon/>
               </Route>
             </Switch>
           </Col>

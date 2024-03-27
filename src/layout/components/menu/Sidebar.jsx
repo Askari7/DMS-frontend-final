@@ -48,7 +48,7 @@ export default function Sidebar(props) {
             trigger={null}
             collapsible
             collapsed={collapsed}
-            width={240}
+            width={256}
             className="hp-sidebar hp-bg-black-20 hp-bg-color-dark-90 hp-border-right-1 hp-border-color-black-40 hp-border-color-dark-80"
         >
             <motion.div

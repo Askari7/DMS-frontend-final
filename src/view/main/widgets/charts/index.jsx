@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from "react";
-import { Row, Col } from "antd";
+import { Row, Col,Card,Breadcrumb } from "antd";
 import PageContent from "../../../../layout/components/content/page-content";
 import LineChart from "./lineChart";
 import ColumnChart from "./columnChart";
@@ -23,13 +23,10 @@ export default function Charts() {
   const [departments,setDepartments] = useState([])
   const [departmentTitles,setDepartmentTitles] = useState([])
   const [departmentUsers,setDepartmentUsers] = useState([])
-
-  const [projectTitles,setProjectTitles] = useState([])
-  
-  const fetchProjects = async () => {
+  const fetchData= async(req,res)=>{
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects/info?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -37,103 +34,38 @@ export default function Charts() {
           },
         }
       );
-      console.log('Project response data',response.data);
-      setProjects(response.data); 
-        const projectTitles = projects.map(project => project.title);
-        setProjectTitles(projectTitles)
-
-    } catch (error) {
-      console.error("Error fetching projects:", error?.message);
+      console.log("Response:", response.data); 
+      setData(response.data)  
+     } catch (error) {
+      console.error(error)
     }
-  };
-  const fetchDocuments = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}`,
-        {
-          headers: {
-            Authorization: user?.accessToken,
-            // Add other headers if needed
-          },
-        }
-      );
-      console.log('Documents response data',response.data);
-      setProjects(response.data); 
-    } catch (error) {
-      console.error("Error fetching documents:", error?.message);
-    }
-  };
-
-  const fetchDepartments = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
-        {
-          headers: {
-            Authorization: user?.accessToken,
-          },
-        }
-      );
-
-      const departmentTitles = response.data.map(department => department.title);
-      const departmentUsers = response.data.map(department => department.noOfUsers);
-
-    // Update state with the fetched data
-    setDepartments(response.data); 
-    setDepartmentTitles(departmentTitles);
-    setDepartmentUsers(departmentUsers);
-    } catch (error) {
-      console.error("Error fetching departments:", error?.message);
-    }
-  };
-
-  const fetchMdr = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
-        {
-          headers: {
-            Authorization: user?.accessToken,
-            // Add other headers if needed
-          },
-        }
-      );
-      
-      console.log('mdr response data',response.data);
-      setMdr(response.data); 
-    } catch (error) {
-      console.error("Error fetching mdr:", error?.message);
-    }
-  };
+  }
+ 
   useEffect(()=>{
-   fetchProjects()
-   fetchMdr()
-   fetchDepartments()
-  //  fetchDocuments()
+    fetchData()
   },[])
 
 
   return (
     <Row gutter={[32, 32]} className="hp-mb-32">
       <Col span={24}>
-        <PageContent
-          title={`Hello! ${user.user.firstName} ${user.user.lastName}`}
-          breadcrumb={[
-            {
-              title: "Main",
-            },
-            {
-              title: "Widgets",
-            },
-            {
-              title: "Charts",
-            }
-          ]}
-        />
-      </Col>
-      <Col xl={12} lg={24}>
+      <Card title={`Hello! ${user.user.firstName} ${user.user.lastName}`} style={{fontSize:"32px" ,fontWeight:"bolder", width: '100%', margin: '0 auto',alignItems:"center",textAlign:"center" }}>
+  <Breadcrumb>
+    <Breadcrumb.Item>Main</Breadcrumb.Item>
+    <Breadcrumb.Item>Widgets</Breadcrumb.Item>
+    <Breadcrumb.Item>Charts</Breadcrumb.Item>
+  </Breadcrumb>
+  {/* Add additional content here if needed */}
+</Card>
 
-        <DonutChart projects={projects} projectCount={data.projectCount}/>
+      </Col>
+
+      <Col xl={12} lg={24}>
+        <DonutChart projects={data.projects} projectCount={data.projectCount} projectsStatusCounts={data.projectsStatusCounts}/>
+      </Col>
+
+      <Col xl={12} lg={24}>
+        <DonutChart projects={data.mdrs} projectCount={data.mdrCount} projectsStatusCounts={data.mdrsStatusCounts}/>
       </Col>
 
       <Col xl={12} lg={24}>
@@ -144,7 +76,7 @@ export default function Charts() {
       </Col>
 
       <Col span={24}>
-        <ColumnChart titles={projectTitles}/>
+        <ColumnChart titles={departmentTitles}/>
       </Col>
 
       <Col span={24}>

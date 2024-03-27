@@ -3,7 +3,6 @@ import { FormattedMessage } from "react-intl";
 
 import {
   Row,
-  Col,
   Divider,
   Form,
   Input,
@@ -12,6 +11,7 @@ import {
   Button,
   Modal,
   message,
+  Col, List ,Typography 
 } from "antd";
 
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
@@ -233,41 +233,36 @@ export default function InfoProfile() {
           </Button>
         </Col>
 
-        <Col
-          span={24}
-          className="hp-profile-content-list hp-mt-8 hp-pb-sm-0 hp-pb-42"
-        >
-          <ul>
-            <li>
-              <span className={listTitle}>
-                <FormattedMessage id="pi-fname" />
-              </span>
-              <span className={listResult}>
-                {user?.user?.firstName} {user?.user?.lastName}
-              </span>
-            </li>
-
-            <li>
-              <span className={listTitle}>
-                <FormattedMessage id="pi-fn" />
-              </span>
-              <span className={listResult}>{user?.user?.firstName}</span>
-            </li>
-            <li>
-              <span className={listTitle}>
-                <FormattedMessage id="pi-ln" />
-              </span>
-              <span className={listResult}>{user?.user?.lastName}</span>
-            </li>
-
-            <li className="hp-mt-18">
-              <span className={listTitle}>
-                <FormattedMessage id="pi-email" />
-              </span>
-              <span className={listResult}>{user?.user?.email}</span>
-            </li>
-          </ul>
-        </Col>
+        <Col span={24} className="hp-profile-content-list hp-mt-8 hp-pb-sm-0 hp-pb-42">
+      <List size="small" bordered  style={{backgroundColor:"white"}}>
+        <List.Item>
+          <Typography.Text type="primary">
+            <FormattedMessage id="pi-fname" />
+          </Typography.Text>
+          <Typography.Text type="secondary"  style={{color:"blue"}}>
+            {user?.user?.firstName} {user?.user?.lastName}
+          </Typography.Text>
+        </List.Item>
+        <List.Item>
+          <Typography.Text type="primary">
+            <FormattedMessage id="pi-fn" />
+          </Typography.Text>
+          <Typography.Text type="secondary" style={{color:"blue"}}>{user?.user?.firstName}</Typography.Text>
+        </List.Item>
+        <List.Item>
+          <Typography.Text type="primary">
+            <FormattedMessage id="pi-ln" />
+          </Typography.Text>
+          <Typography.Text type="secondary"  style={{color:"blue"}}>{user?.user?.lastName}</Typography.Text>
+        </List.Item>
+        <List.Item>
+          <Typography.Text type="primary">
+            <FormattedMessage id="pi-email" />
+          </Typography.Text>
+          <Typography.Text type="secondary"  style={{color:"blue"}}>{user?.user?.email}</Typography.Text>
+        </List.Item>
+      </List>
+    </Col>
       </Row>
 
       <Divider className={dividerClass} />

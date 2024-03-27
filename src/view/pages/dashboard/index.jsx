@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Row, Col,Image } from "antd";
-import { WalletMinus, Login, Add, Logout } from "iconsax-react";
+import { WalletMinus, Login, Add, Logout, Task, UserMinus, TaskSquare, User } from "iconsax-react";
 import FeatureCard from "../../main/dashboard/analytics/featureCard";
 import ListCard from "../../main/dashboard/analytics/listCard";
 import AreaChart from "../../main/widgets/charts/areaChart";
@@ -11,6 +11,8 @@ import DonutChart from "../../main/widgets/charts/donutChart";
 import scurve from "../../.././assets/images/components/s_curve.png";
 import axios from 'axios'
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { RiHomeOfficeLine } from "react-icons/ri";
+import { TaskAlt } from "@mui/icons-material";
 export default function Analytics() {
   // Redux
   const customise = useSelector((state) => state.customise);
@@ -231,36 +233,37 @@ setDepartmentCounts(userDepartmentCount)
             <Row gutter={[32, 32]}>
               <Col span={24}>
                 <Row gutter={[32, 32]}>
-                <Col span={24}>
+                <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <h1 className="hp-mb-0">{data.companyName} CEO {user.user.firstName} {user.user.lastName}</h1>
                 </Col>
-                <Col span={24}>
+                <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <h1 className="hp-mb-0">Analytics Of Company</h1>
                 </Col>
                   <Col span={6} onClick={handleDepartment}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                    
+                      icon={<RiHomeOfficeLine  size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Departments"
                       count={data?.departmentCount || "0"}
                     />
                   </Col>
                   <Col span={6} onClick={handleProject}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<Task size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Projects"
                       count={data?.projectCount || "0"}
                     />
                   </Col>
                   <Col span={6} onClick={handleClient}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<UserMinus size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Clients"
                       count={data?.clientCount || "0"}
                     />
                   </Col>
                   <Col span={6} onClick={handleMDR}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<TaskSquare size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="MDR"
                       count={data?.mdrCount || "0"}
                     />
@@ -270,7 +273,7 @@ setDepartmentCounts(userDepartmentCount)
               <Col span={24} onClick={handleUser} // Add onClick event handler
 >
               <FeatureCard
-                icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                 title="Employees"
                 count={data?.employeeCount || "0"}
                 style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
@@ -284,28 +287,28 @@ setDepartmentCounts(userDepartmentCount)
                 <>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Lead"
                       count={data.roleCounts['2'] || "0"}
                     />
                   </Col>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Senior Engineer"
                       count={data.roleCounts['3'] || "0"}
                     />
                   </Col>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Junior Engineer"
                       count={data.roleCounts['4'] || "0"}
                     />
                   </Col>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Designer"
                       count={data.roleCounts['5'] || "0"}
                     />

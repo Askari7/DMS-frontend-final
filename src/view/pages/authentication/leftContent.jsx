@@ -10,7 +10,7 @@ import bgDark from "../../../assets/images/pages/authentication/authentication-b
 import MenuLogo from "../../../layout/components/menu/logo";
 import JobConnectLogo from "../../../assets/images/logo/logo2.jpeg";
 import DMSLogo from "../../../assets/images/logo/logo_novacon.jpg";
-import Logo from "../../../assets/images/logo/novacon.jpg";
+import Logo from "../../../assets/images/logo/novacon.png";
 
 // import ads from ""
 export default function LeftContent() {
@@ -25,6 +25,7 @@ export default function LeftContent() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor:"whitesmoke"
       }}
       className=""
     >
@@ -32,8 +33,8 @@ export default function LeftContent() {
       <img
   src={Logo}
   alt="logo"
-  height="75%"
-  width="75%"
+  height="70%"
+  width="70%"
   style={{
     position: 'relative',
     animation: 'floatUpDown 2s ease-in-out infinite',

@@ -47,7 +47,7 @@ export default function MenuLogo(props) {
           )
         } */}
 
-        <img className="hp-logo" src={DMSLogo}   style={{ width: '200px', height: '100px', background: 'transparent' }}
+        <img className="hp-logo" src={DMSLogo}   style={{ width: '240px', height: '120px', background: 'transparent' }}
  alt="logo" />
         {/* <h3>Job Connect</h3> */}
       </Link>

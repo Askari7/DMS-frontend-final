@@ -113,6 +113,17 @@ export default function SignUp() {
               onFinishFailed={onFinishFailed}
             >
               <Form.Item
+              label={<FormattedMessage id="upload-image" />} // Customize label as needed
+              name="image"
+              rules={[{ required: true, message: 'Please upload an image' }]} // Add validation rules as needed
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+            >
+              <Upload name="image" action="/upload.do" listType="picture">
+                <Button icon={<UploadOutlined />}>Click to upload</Button>
+              </Upload>
+            </Form.Item>
+              <Form.Item
                 label={<FormattedMessage id="first-name" />}
                 name="firstName"
                 rules={[{ required: true }, { type: "string", min: 4 }]}

@@ -83,7 +83,7 @@ export default function MenuProfile(props) {
             onClick={props.onCloseDrawer}
           >
             <Link to="/pages/profile/personel-information">
-              Personal Information
+              Information
             </Link>
           </Menu.Item>
 
@@ -125,6 +125,27 @@ export default function MenuProfile(props) {
               Company Information
             </Link>
           </Menu.Item>
+
+          <Menu.Item
+            key="1"
+            icon={<User set="curved" className={menuIconClass} />}
+            className={`
+              hp-mb-16 hp-pl-24 hp-pr-32
+              ${
+                splitLocation[splitLocation.length - 1] ===
+                "change-profile"
+                  ? "ant-menu-item-selected"
+                  : "ant-menu-item-selected-in-active"
+              }
+            `}
+            onClick={props.onCloseDrawer}
+          >
+            <Link to="/pages/profile/change-profile">
+              Change Profile Image
+            </Link>
+          </Menu.Item>
+
+
 
         </Menu>
       </div>

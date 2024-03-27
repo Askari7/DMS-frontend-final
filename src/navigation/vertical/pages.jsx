@@ -1,23 +1,26 @@
-import { ShopAdd, Profile, Bill } from "iconsax-react";
+import { ShopAdd, Profile, Bill, Document, DocumentFilter, Personalcard, Task, Home3, HomeHashtag, UserMinus, TaskSquare, Health } from "iconsax-react";
 
-import { Award, Home } from "iconsax-react";
+import { Award, Home,FolderCloud,FolderOpen } from "iconsax-react";
 
 import IntlMessages from "../../layout/components/lang/IntlMessages";
+import { AddTask, AddTaskSharp, Analytics, AnalyticsOutlined, AnalyticsRounded, AnalyticsSharp, AnalyticsTwoTone, LocalFireDepartmentSharp, TaskAltSharp, TaskSharp } from "@mui/icons-material";
+import { RiCustomerServiceLine, RiHomeOfficeLine, RiTaskLine } from "react-icons/ri";
+import { Work } from "react-iconly";
 
 const pages = [
-  // {
-  //     header: <IntlMessages id="sidebar-pages" />,
-  // },
+  {
+      header: <IntlMessages id="Dashboards" />,
+  },
   // {
   //     id: "user-interface-typography",
   //     title: <IntlMessages id="sidebar-user-interface-typography" />,
-  //     icon: <Grid5 size={18} />,
+  //     icon: <Grid5 size={30} />,
   //     navLink: "/components/general/style-guide",
   // },
   // {
   //     id: "authentication",
   //     title: <IntlMessages id="sidebar-pages-authentication" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     children: [
   //         {
   //             id: "login-v1-page",
@@ -64,7 +67,7 @@ const pages = [
   // {
   //     id: "errors",
   //     title: <IntlMessages id="sidebar-pages-error" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     children: [
   //         {
   //             id: "error-404",
@@ -106,7 +109,7 @@ const pages = [
   // {
   //     id: "profile",
   //     title: <IntlMessages id="sidebar-pages-profile" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     children: [
   //         {
   //             id: "profile-personel-information",
@@ -143,7 +146,7 @@ const pages = [
   // {
   //     id: "email",
   //     title: <IntlMessages id="sidebar-pages-email-templates" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     children: [
   //         {
   //             id: "email-hello",
@@ -180,7 +183,7 @@ const pages = [
   // {
   //     id: "lock-page",
   //     title: <IntlMessages id="sidebar-pages-lock-screen" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     children: [
   //         {
   //             id: "welcome",
@@ -207,20 +210,20 @@ const pages = [
   //   {
   // id: "landing",
   // title: <IntlMessages id="sidebar-pages-landing" />,
-  // icon: <Award size={18} />,
+  // icon: <Award size={30} />,
   // navLink: "/pages/landing",
   //   },
   {
   id: "home-workspace",
   title: <IntlMessages id="sidebar-pages-home" />,
-  icon: <Home size={18} />,
+  icon: <HomeHashtag size={30} />,
   navLink: "/pages/workspace",
   },
 
   // {
   //     id: "workspace",
   //     title: <IntlMessages id="sidebar-pages-workspace" />,
-  //     icon: <ShopAdd size={18} />,
+  //     icon: <ShopAdd size={30} />,
   //     children: [
   //         {
   //             id: "create-workspace",
@@ -238,7 +241,7 @@ const pages = [
   // {
   //     id: "credits",
   //     title: <IntlMessages id="sidebar-pages-credits" />,
-  //     icon: <ShopAdd size={18} />,
+  //     icon: <ShopAdd size={30} />,
   //     children: [
   //         {
   //             id: "purchases-token",
@@ -250,98 +253,112 @@ const pages = [
   // {
   //     id: "purchases-token",
   //     title: <IntlMessages id="sidebar-pages-purchases-token" />,
-  //     icon: <Bill size={18} />,
+  //     icon: <Bill size={30} />,
   //     navLink: "/pages/pricing",
   // },
 
   {
     id: "analytics",
     title: <IntlMessages id="sidebar-pages-analytics" />,
-    icon: <Profile size={18} />,
+    icon: <Health size={30} />,
     navLink: "/pages/analytics",
   },
   {
-    id: "projects",
-    title: <IntlMessages id="sidebar-pages-projects" />,
-    icon: <Profile size={18} />,
-    navLink: "/pages/projects",
-  },
+    header: <IntlMessages id="Company" />,
+},
   {
     id: "users",
     title: <IntlMessages id="sidebar-pages-users" />,
-    icon: <Profile size={18} />,
+    icon: <Profile size={30} />,
     navLink: "/pages/users",
-  },
-  {
-    id: "clients",
-    title: <IntlMessages id="sidebar-pages-clients" />,
-    icon: <Profile size={18} />,
-    navLink: "/pages/clients",
   },
   {
     id: "departments",
     title: <IntlMessages id="sidebar-pages-departments" />,
-    icon: <Profile size={18} />,
+    icon: <RiHomeOfficeLine size={30} />,
     navLink: "/pages/departments",
   },
   {
+    header: <IntlMessages id="Create Client Project"/>,
+},
+  {
+    id: "clients",
+    title: <IntlMessages id="sidebar-pages-clients" />,
+    icon: <UserMinus size={30} />,
+    navLink: "/pages/clients",
+  },
+  {
+    id: "projects",
+    title: <IntlMessages id="sidebar-pages-projects" />,
+    icon: <RiTaskLine size={30} />,
+    navLink: "/pages/projects",
+  },
+
+  {
     id: "mdr",
     title: <IntlMessages id="sidebar-pages-mdr" />,
-    icon: <Profile size={18} />,
+    icon: <Work size={30} />,
     navLink: "/pages/mdr",
   },
   {
+    header: <IntlMessages id="Document Information" />,
+},
+  {
     id: "documents",
     title: <IntlMessages id="sidebar-pages-documents" />,
-    icon: <Profile size={18} />,
+    icon: <FolderCloud size={30} />,
     navLink: "/pages/documents",
+  },
+
+  {
+    id: "document-assessment",
+    title: <IntlMessages id="Assessment" />,
+    icon: <FolderOpen size={30} />,
+    navLink: "/pages/document-assessment",
   },
   {
     id: "document-number",
-    title: <IntlMessages id="sidebar-pages-document-number" />,
-    icon: <Profile size={18} />,
+    title: <IntlMessages id="Numbering" />,
+    icon: <Document size={30} />,
     navLink: "/pages/document-number",
-  },
-  {
-    id: "document-assessment",
-    title: <IntlMessages id="sidebar-pages-document-assessment" />,
-    icon: <Profile size={18} />,
-    navLink: "/pages/document-assessment",
   },
   {
     id: "documents-permissions",
     title: <IntlMessages id="sidebar-pages-document-permissions" />,
-    icon: <Profile size={18} />,
+    icon: <DocumentFilter size={30} />,
     navLink: "/pages/document-permissions",
   },
   // {
   //   id: "clients",
   //   title: <IntlMessages id="sidebar-pages-clients" />,
-  //   icon: <Profile size={18} />,
+  //   icon: <Profile size={30} />,
   //   navLink: "/pages/profile/personel-information",
   // },
   {
+    header: <IntlMessages id="Settings" />,
+},
+  {
     id: "profile-personel-information",
     title: <IntlMessages id="sidebar-pages-profile-personel-information" />,
-    icon: <Profile size={18} />,
+    icon: <Personalcard size={30} />,
     navLink: "/pages/profile/personel-information",
   },
   // {
   //     id: "invoice",
   //     title: <IntlMessages id="sidebar-pages-invoice" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     navLink: "/pages/invoice",
   // },
   // {
   //     id: "faq",
   //     title: <IntlMessages id="sidebar-pages-faq" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     navLink: "/pages/faq",
   // },
   // {
   //     id: "blank-page",
   //     title: <IntlMessages id="sidebar-pages-blank-page" />,
-  //     icon: <Award size={18} />,
+  //     icon: <Award size={30} />,
   //     navLink: "/pages/blank-page",
   // },
 ];

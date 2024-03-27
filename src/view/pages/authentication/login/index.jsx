@@ -30,7 +30,7 @@ export default function Login() {
     // Hide the splash screen after 3 seconds
     const splashScreenTimeout = setTimeout(() => {
       setShowSplashScreen(false);
-    }, 3000);
+    }, 5000);
 
     // Cleanup the timeout to avoid memory leaks
     return () => clearTimeout(splashScreenTimeout);
@@ -82,7 +82,7 @@ export default function Login() {
       <SplashScreen />
     ) : (
       <>
-    <Row gutter={[32, 0]} className="hp-authentication-page">
+    <Row gutter={[6, 0]} className="hp-authentication-page">
       
       <LeftContent />
 
@@ -96,8 +96,8 @@ export default function Login() {
             sm={24}
             className="hp-px-sm-8 hp-pt-24 hp-pb-48"
           >
-            <h1 className="hp-mb-sm-0">Login</h1>
-            <p className="hp-mt-sm-0 hp-mt-8 hp-text-color-black-60">
+            <h1 className="hp-mb-sm-0" style={{textAlign:"center",fontWeight:"bold"}}>Login</h1>
+            <p className="hp-mt-sm-0 hp-mt-8 hp-text-color-black-60" style={{textAlign:"center"}}>
               {/* Welcome back, please login to your account.
                */}
               <FormattedMessage id="login-welcome-back" />
