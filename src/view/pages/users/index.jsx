@@ -210,6 +210,7 @@ export default function Users() {
             },
           }
         );
+        
         setData(response.data)
         setDataArray(response.data)
       }
@@ -447,22 +448,23 @@ export default function Users() {
       )}
     </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button
-          type="primary"
-          onClick={UserModalShow}
-          disabled={user?.user?.roleId != 1}
-        >
-          Add User
-        </Button>
+      {user?.user?.id == 1 && (
 
         <Button
           type="primary"
+          onClick={UserModalShow}
+        >
+          Add User
+        </Button>
+      )}
+
+        {/* <Button
+          type="primary"
           onClick={departmentWiseShow}
-          disabled={user?.user?.roleId != 1}
           style={{margin:"4px"}}
         >
           Department Wise
-        </Button>
+        </Button> */}
 
         <Button
           type="primary"

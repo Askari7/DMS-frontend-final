@@ -1,27 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Card, Row, Col, DatePicker } from "antd";
 import Chart from "react-apexcharts";
 import moment from "moment";
+export default function ColumnChart({ inputData, documents,completed,remaining}) {
+  console.log(documents,completed,remaining,"getting ");
+  const [informtion, setInformation] = useState([]);
+  const [document, setDocuments] = useState([]);
+  const [remain, setRemaining] = useState([]);
+  const [complete, setCompleted] = useState([]);
 
-export default function ColumnChart({titles,count}) {
+  
+
+
+useEffect(() => {
+  if (inputData && inputData.length > 0) {
+    // Extract titles from inputData
+    const titlesArray = inputData.map(obj => obj.title);
+  
+    // Update state with titlesArray
+    setInformation(titlesArray);    
+
+  }
+}, [inputData]);
+
+
+useEffect(() => {
+  if (documents && documents.length > 0) {
+
+      const completedCounts = [];
+      const remainingCounts = [];
+
+    for (const document of documents) {
+      let completedCount = 0;
+      let remainingCount = 0;
+
+      for (const statusArray of document.map(doc => doc.status)) {
+        console.log(statusArray,"array");
+          if (statusArray === "Completed") {
+            completedCount++;
+          } else {
+            remainingCount++;
+          }
+        }
+
+      completedCounts.push(completedCount);
+      remainingCounts.push(remainingCount);
+    }
+
+    console.log("Completed Counts:", completedCounts);
+    console.log("Remaining Counts:", remainingCounts);
+
+    setCompleted(completedCounts);
+    setRemaining(remainingCounts);
+  }
+}, [documents]);
+
+console.log(inputData, "inputData");
+console.log(informtion, "information");
+
+
+
   function onChange(date, dateString) {
     console.log(date, dateString);
   }
 
+  console.log(complete,remain);
   const [data] = useState({
     series: [
       {
-        name: "Complete %",
-        data: [
-          10,20,30,40
-        ],
+        name: "Approved Documents",
+        data: complete,
       },
       {
-        name: "Remaining %",
-        data: [
-          10,20,30,40
-        ],
+        name: "Remaining Documents",
+        data: remain,
       },
     ],
     options: {
@@ -43,7 +96,7 @@ export default function ColumnChart({titles,count}) {
       },
 
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
 
       grid: {
@@ -71,7 +124,7 @@ export default function ColumnChart({titles,count}) {
       },
       xaxis: {
         axisTicks: {
-          show: false,
+          show: true,
           borderType: "solid",
           color: "#78909C",
           height: 6,
@@ -86,8 +139,7 @@ export default function ColumnChart({titles,count}) {
             fontSize: "14px",
           },
         },
-        categories: titles
-        ,
+        categories: informtion,        
       },
       legend: {
         horizontalAlign: "right",
@@ -109,11 +161,12 @@ export default function ColumnChart({titles,count}) {
         },
 
         min: 0,
-        max: 100,
+        max: 12,
         tickAmount: 4,
       },
     },
   });
+  console.log(informtion)
 
   return (
     <Card className="hp-border-color-black-40">
@@ -121,7 +174,7 @@ export default function ColumnChart({titles,count}) {
         <Col className="hp-mb-16" span={24}>
           <Row justify="space-between">
             <Row align="bottom" className="hp-pb-16">
-              <h4 className="hp-mr-8">Project Progress</h4>
+              <h4 className="hp-mr-8">Document Assessment</h4>
             </Row>
             
             <Col>
@@ -136,13 +189,22 @@ export default function ColumnChart({titles,count}) {
 
         <Col span={24}>
           <div id="chart">
-            <Chart
-              options={data.options}
-              series={data.series}
-              type="bar"
-              height={350}
-              legend="legend"
-            />
+          <Chart
+            options={{
+              ...data.options,
+              xaxis: {
+                ...data.options.xaxis,
+                categories: informtion,
+              },
+            }}
+            series={[
+              { name: "Approved Documents", data: complete },
+              { name: "Remaining Documents", data: remain },
+            ]}            
+            type="bar"
+            height={350}
+            legend="legend"
+          />
           </div>
         </Col>
       </Row>

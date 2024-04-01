@@ -33,6 +33,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ProtectedAppPage from "../Protected";
 import { useLocation } from 'react-router-dom';
+import { string } from "prop-types";
 
 
 
@@ -567,10 +568,13 @@ useEffect(() => {
         setDataArray(data);
 
       }else if(user?.user?.roleId ===2){
-        const data = response.data.filter(item => item.authorId === user?.user?.id);
+        
+        console.log(user?.user?.departmentId,'departmentId')
+        const data = response.data.filter(item => 
+          item.departmentId.split(",").includes((user?.user?.departmentId))      
+          );       
         setData(data);
         setDataArray(data);
-
       }
       else{
         setData(response.data)
@@ -940,22 +944,30 @@ useEffect(() => {
         </Row>
       </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button
+        {
+          user.id ==1 &&       
+          <Button
           type="primary"
           onClick={documentModalShow}
-          disabled={user?.user?.roleId != 1}
+          // disabled={user?.user?.roleId != 1}
           style={{ marginRight: '10px' }}
         >
           Create MDR Yourself
         </Button>
+        }
 
-        <Button
-          type="primary"
-          onClick={assignModalShow}
-          disabled={user?.user?.roleId != 1}
-        >
-          Assign MDR 
-        </Button>
+        {
+                    user.id ==1 &&   
+                    <Button
+                    type="primary"
+                    onClick={assignModalShow}
+                    // disabled={user?.user?.roleId != 1}
+                  >
+                    Assign MDR 
+                  </Button>
+              
+
+        }
 
       {mdrTemplateVisible && <MdrTemplate />}
       </div>

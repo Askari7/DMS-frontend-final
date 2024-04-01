@@ -24,6 +24,8 @@ export default function Analytics() {
   const [assessment,setAssessment] = useState([])
   const [documents,setDocuments] = useState([])
   const [mdr,setMdr] = useState([])
+  const [departmentProjects,setDepartmentProjects] = useState()
+  const [assignedMDRS,setAssignedMDRS] = useState()
   const [users,setUsers] = useState([])
   const [systemLog, setSystemLog] = useState([]);
   const [departmentCounts,setDepartmentCounts] = useState()
@@ -61,7 +63,7 @@ export default function Analytics() {
 const fetchDepartments = async () => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8083/api/departments/count?departmentId=${user?.user.departmentId}`,
+      `http://127.0.0.1:8083/api/departments/count?departmentId=${user?.user.departmentId}&userId=${user?.user.id}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -69,10 +71,9 @@ const fetchDepartments = async () => {
       }
     );
     
-    console.log("users",response.data);
-    console.log("users",response.data.noOfUsers);
     setDepartments(response.data.noOfUsers)
-
+    setDepartmentProjects(response.data.departmentProjects)
+    setAssignedMDRS(response.data.mdrAssigned)
   } catch (error) {
     console.error("Error fetching departments:", error?.message);
   }
@@ -223,9 +224,9 @@ setDepartmentCounts(userDepartmentCount)
     <>
     
       {/* <Row gutter={[32, 32]} className="hp-mb-32">
-        {/* <Col span={24}>
+        <Col span={24}>
           <DonutChart projects={projects} projectCount={data.projectCount} />
-        </Col> */}
+        </Col>
       {/* </Row> */} 
       {user?.user?.roleId === 1 && ( // Check if roleId is 1
         <Row gutter={[32, 32]} className="hp-mb-32">
@@ -347,18 +348,20 @@ setDepartmentCounts(userDepartmentCount)
                       count={departments|| "0"}
                     />
                   </Col>
+
                   <Col span={12} onClick={handleProject}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Department Projects"
-                      count={departmentCounts|| "0"}
+                      count={departmentProjects|| "0"}
                     />
                   </Col>
+
                   <Col span={12} onClick={handleMDR}>
                     <FeatureCard
                       icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                       title="Assigned MDRs"
-                      count={data?.clientCount || "0"}
+                      count={assignedMDRS || "0"}
                     />
                   </Col>
                   {/* <Col span={6}>

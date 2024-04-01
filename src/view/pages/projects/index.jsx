@@ -250,7 +250,7 @@ const columns = [
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -437,16 +437,14 @@ const columns = [
           </Row>
         </Form>
       </Modal>
+<div style={{ textAlign: "right", marginBottom: "16px" }}>
+  {user?.user?.id == 1 && (
+    <Button type="primary" onClick={projectModalShow}>
+      Add Project
+    </Button>
+  )}
+</div>
 
-      <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button
-          type="primary"
-          onClick={projectModalShow}
-          disabled={user?.user?.roleId != 1}
-        >
-          Add Project
-        </Button>
-      </div>
       <Table
       bordered
       size="middle"

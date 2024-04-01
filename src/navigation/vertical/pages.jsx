@@ -334,15 +334,15 @@ const pages = [
   //   icon: <Profile size={30} />,
   //   navLink: "/pages/profile/personel-information",
   // },
-  {
-    header: <IntlMessages id="Settings" />,
-},
-  {
-    id: "profile-personel-information",
-    title: <IntlMessages id="sidebar-pages-profile-personel-information" />,
-    icon: <Personalcard size={30} />,
-    navLink: "/pages/profile/personel-information",
-  },
+//   {
+//     header: <IntlMessages id="Settings" />,
+// },
+//   {
+//     id: "profile-personel-information",
+//     title: <IntlMessages id="sidebar-pages-profile-personel-information" />,
+//     icon: <Personalcard size={30} />,
+//     navLink: "/pages/profile/personel-information",
+//   },
   // {
   //     id: "invoice",
   //     title: <IntlMessages id="sidebar-pages-invoice" />,
