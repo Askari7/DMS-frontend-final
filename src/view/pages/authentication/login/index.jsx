@@ -30,7 +30,7 @@ export default function Login() {
     // Hide the splash screen after 3 seconds
     const splashScreenTimeout = setTimeout(() => {
       setShowSplashScreen(false);
-    }, 5000);
+    }, 2000);
 
     // Cleanup the timeout to avoid memory leaks
     return () => clearTimeout(splashScreenTimeout);
@@ -60,6 +60,7 @@ export default function Login() {
       if (response?.data) {
         console.log(response?.data);
         localStorage.setItem("user", JSON.stringify(response?.data));
+        
         message.success("Signed In Successfully ");
         history.push("/pages/analytics");
       }

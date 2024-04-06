@@ -23,10 +23,10 @@ export default function RadialbarChart({inputData}) {
         fontFamily: "Manrope, sans-serif",
         type: "radialBar",
         toolbar: {
-          show: true,
+          show: false,
         },
         zoom: {
-          enabled: true,
+          enabled: false,
         },
       },
       colors: ["#00F7BF", "#0010F7", "#CC6CE7","#7DDA58"],

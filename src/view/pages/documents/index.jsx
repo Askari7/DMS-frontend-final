@@ -312,12 +312,14 @@ console.log(formData,'formdata');
       );
       console.log(response?.data, "Users");
       const option = [];
-let role='';
-console.log("uuuu",user?.user.roleId,user?.user.companyId,user?.user.id);
-if(user.user.roleId==1){
+      let role='';
+      console.log("uuuu",user?.user.roleId,user?.user.companyId,user?.user.id);
+if(user.user.roleId == 1){
+
   for (const item of response?.data) {
     console.log(myrecord,myrecord.departmentId,item.departmentId,"data");
-   if(item.roleId==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
+   if(item.roleId ==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
+
     role =`Head of ${item.department}`
     option.push({
       value:item?.id,
@@ -365,13 +367,13 @@ if(user.user.roleId==2 ){
        } }
        if(user.user.roleId==3){
         for (const item of response?.data) {
-      //    if(item.roleId==3 && item.departmentId==user.user.departmentId){
-      //     role =`Senior Engineer ${item.department}`
-      //     option.push({
-      //       value:item?.id,
-      //       label: `${item?.firstName} ${role} `,
-      //     });
-      //  } 
+         if(item.roleId==3 && item.departmentId==user.user.departmentId){
+          role =`Senior Engineer ${item.department}`
+          option.push({
+            value:item?.id,
+            label: `${item?.firstName} ${role} `,
+          });
+       } 
        if(item.roleId==4 && item.departmentId==user.user.departmentId){
          role = `Junior ${item.department}`
          option.push({

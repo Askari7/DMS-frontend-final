@@ -12,7 +12,7 @@ export default function BarChart({departments,departmentsMembers}) {
   const [data] = useState({
     series: [
       {
-        name: "Team Size",
+        name: "Department Size",
         data: departmentsMembers,
       },
     ],
@@ -30,7 +30,7 @@ export default function BarChart({departments,departmentsMembers}) {
       },
       plotOptions: {
         bar: {
-          borderRadius: 4,
+          borderRadius: 8,
           horizontal: true,
         },
       },
@@ -41,7 +41,7 @@ export default function BarChart({departments,departmentsMembers}) {
       },
 
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
 
       grid: {
@@ -61,15 +61,14 @@ export default function BarChart({departments,departmentsMembers}) {
         colors: ["transparent"],
       },
       xaxis: {
-        axisTicks: {
-          show: false,
+       axisTicks: {
+           show: false,
         },
-        tickAmount: 5,
 
         labels: {
           style: {
             colors: ["636E72"],
-            fontSize: "14px",
+            fontSize: "12px",
           },
         },
         categories:departments
@@ -101,16 +100,16 @@ export default function BarChart({departments,departmentsMembers}) {
         <Col span={24}>
           <Row justify="space-between" align="top">
             <Col className="hp-pb-16">
-              <h4 className="hp-mr-8">Team Size</h4>
+              <h4 className="hp-mr-8">Department Strengths</h4>
             </Col>
             
-            <Col>
+            {/* <Col>
               <DatePicker
                 onChange={onChange}
                 picker="week"
                 defaultValue={moment("2019-06-03", "YYYY-MM-DD")}
               />
-            </Col>
+            </Col> */}
           </Row>
         </Col>
 

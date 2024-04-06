@@ -23,14 +23,24 @@ const SplashScreen = () => {
             width: '180px',
             margin:"18px", 
             height: 'auto', 
-            transition: 'transform 0.5s ease', // Transition effect on transform property
+            animation: 'scaleAnimation 1s infinite alternate', // Animation effect
             cursor: 'pointer' // Optional: Change cursor to indicate interactivity
           }} 
-          onMouseOver={(e) => e.target.style.transform = 'scale(1.2)'} // Enlarge image on hover
-          onMouseOut={(e) => e.target.style.transform = 'scale(1)'} // Reset image size when mouse leaves
         />
         <h1 style={{ marginTop: '16px', color: '#333',fontSize:"64px" }}>Project Prosperity, Simplified.</h1>
       </Col>
+      <style>
+        {`
+          @keyframes scaleAnimation {
+            from {
+              transform: scale(0.9);
+            }
+            to {
+              transform: scale(1.25);
+            }
+          }
+        `}
+      </style>
     </Row>
   );
 };

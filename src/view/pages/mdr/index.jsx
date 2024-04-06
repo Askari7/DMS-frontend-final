@@ -70,7 +70,7 @@ export default function MDR() {
   const [departmentId, setDepartmentId] = useState("");
   const [mdrCode, setMdrCode] = useState("");
   const [noOfDocuments, setNoOfDocuments] = useState("");
-
+  const [pro, setPro] = useState([]);
   const [status, setStatus] = useState("");
   const [projectOptions, setProjects] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
@@ -573,6 +573,11 @@ useEffect(() => {
         const data = response.data.filter(item => 
           item.departmentId.split(",").includes((user?.user?.departmentId))      
           );       
+
+        const d =  data.map((d)=>d.projectId)
+
+        setPro(d)
+
         setData(data);
         setDataArray(data);
       }
@@ -602,12 +607,9 @@ useEffect(() => {
         option.push({ value: item?.suffix, label: item?.title });
 
       }
-      // console.log("option",option);
-      // console.log("options",options);
 
       setDepartmentOptions(options); 
       setDepartmentOption(option); 
-      // console.log("option",option);
 
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -766,6 +768,7 @@ useEffect(() => {
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </Form.Item>
+
               <Form.Item
                 label="MDR Code"
                 name="docCode"
@@ -782,13 +785,6 @@ useEffect(() => {
                 />
               </Form.Item>
 
-              <Form.Item
-        label="Departments"
-        name="departmentIds"
-        rules={[{ required: true, message: 'Please select at least one department' }]}
-      >
-        <Checkbox.Group options={departmentOptions} value={selectedDepartments} onChange={setSelectedDepartments} />
-      </Form.Item>
 
               <Form.Item
                 label="Project Name"
@@ -945,7 +941,7 @@ useEffect(() => {
       </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
         {
-          user.id ==1 &&       
+          user?.user.roleId == 1 &&       
           <Button
           type="primary"
           onClick={documentModalShow}
@@ -957,7 +953,7 @@ useEffect(() => {
         }
 
         {
-                    user.id ==1 &&   
+                    user?.user.roleId == 1 &&   
                     <Button
                     type="primary"
                     onClick={assignModalShow}

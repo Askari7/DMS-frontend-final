@@ -26,6 +26,8 @@ import ProtectedAppPage from "../Protected";
 import UserTreeView from "../treeview/UserTreeView";
 import OrganizationChart from "../organizationChart";
 import EmployeeTree from "../employee_tree";
+import ColumnGroup from "antd/lib/table/ColumnGroup";
+import Column from "antd/lib/table/Column";
 const columns = [
   {
     title: "Name",
@@ -448,7 +450,7 @@ export default function Users() {
       )}
     </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-      {user?.user?.id == 1 && (
+      {user?.user?.roleId == 1 && (
 
         <Button
           type="primary"
@@ -480,15 +482,50 @@ export default function Users() {
       {
   showTreeView ?
   <div style={{ overflowX: 'auto', width: '1300px' }}>
-        {user?.user?.roleId === 2 &&
+        {user?.user?.roleId === 2 && users ? (
           <OrganizationChart employees={users} />
-        }
-        <OrganizationChart employees={dataArray} />
+        ) : (
+          <OrganizationChart employees={dataArray} />
+        )}
+
       </div> :
       <div style={{ overflowX: "auto" }}>
-        <Table columns={columns} dataSource={data} bordered
+    <Table dataSource={data} title={() => 'All Users'} footer={() => 'You may filter users based on department and roles'}>
+      <ColumnGroup title="Name">
+        <Column title="First Name" dataIndex="firstName" key="firstName" />
+        <Column title="Last Name" dataIndex="lastName" key="lastName" />
+      </ColumnGroup>
+      <Column title="Department" dataIndex="department" key="department" 
+      filters={[
+        { text: 'Project Management', value: 'Project Management' },
+        { text: 'Mechanical', value: 'Mechanical' },
+        { text: 'Electrical', value: 'Electrical' },
+        { text: 'Process', value: 'Process' },
+        { text: 'Piping', value: 'Piping' },
+        { text: 'Instrumentation', value: 'Instrumentation' },
+        { text: 'Civil/Structure', value: 'Civil/Structure' },
+      ]}
+      onFilter={(value, record) => record.department === value}
+      />
+      <Column
+        title="Role"
+        dataIndex="roleTitle"
+        key="roleTitle"
+        filters={[
+          { text: 'Lead', value: 'Head' },
+          { text: 'Senior Engineer', value: 'Senior' },
+          { text: 'Junior Engineer', value: 'Junior' },
+          { text: 'Designer', value: 'Designer' },
+        ]}
+        onFilter={(value, record) => record.roleTitle === value}
+      />
+      <Column title="Reporting To" key="reported_to" dataIndex="reported_to"></Column>
+      <Column title="Email" key="email" dataIndex="email"></Column>
+
     title={() => 'All Users'}
-    footer={() => 'You may filter users based on department and roles'}/>
+    footer={() => 'You may filter users based on department and roles'}
+
+    </Table>
       </div>
     }
     <ProtectedAppPage />
@@ -498,4 +535,54 @@ export default function Users() {
 }
 
 
+
+
+//   {
+//     title: "Role",
+//     dataIndex: "roleTitle",
+//     key: "roleTitle",
+    // filters: [
+
+    //   {
+    //     text: 'Lead',
+    //     value: 'Head',
+    //   },
+    //   {
+    //     text: 'Senior Engineer',
+    //     value: 'Senior',
+    //   },
+    //   {
+    //     text: 'Junior Engineer',
+    //     value: 'Junior',
+    //   },
+    //   {
+    //     text: 'Designer',
+    //     value: 'Designer',
+    //   },
+    // ],
+    // onFilter:  (value, record) =>record.roleTitle === value,
+
+//   },
+
+//   {
+//     title: "Reporting To",
+//     dataIndex: "reported_to",
+//     key: "reported_to",
+//   },
+//   {
+//     title: "Email",
+//     dataIndex: "email",
+//     key: "email",
+//   },
+
+//   {
+//     title: "Action",
+//     key: "action",
+//     render: (_, record) => (
+//       <Space size="middle">
+//         <a>Delete</a>
+//       </Space>
+//     ),
+//   },
+// ];
 

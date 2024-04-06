@@ -121,7 +121,6 @@ export default function DocumentNumbering() {
       const dataArray = responseData.documentNumberFormat.split(','); 
       const { documentNumberFormat } = response.data;
       const splitDocumentNumberFormat = documentNumberFormat.split('-');
-
       const [first,second,third,fourth]= splitDocumentNumberFormat
       console.log(first,second,third,fourth,'order');
       setFirst(first)

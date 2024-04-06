@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Dropdown, Menu } from "antd";
 import Chart from "react-apexcharts";
-
+import './index.css'
 export default function DonutChart({ projects, projectCount ,projectsStatusCounts}) {
   console.log("projects",projects,"projectCount",projectCount,"projectsStatusCounts",projectsStatusCounts);
   const [statusCounts, setStatusCounts] = useState([0, 0, 0]);
@@ -48,7 +48,17 @@ export default function DonutChart({ projects, projectCount ,projectsStatusCount
   const [data] = useState({
     series: statusCounts,
     options: {
+      
+
       chart: {
+        dropShadow: {
+          enabled: true,
+          top: 0,
+          left: 0,
+          blur: 1.5,
+          opacity: 0.3
+          
+        },
         fontFamily: "Manrope, sans-serif",
         type: "donut",
         toolbar: {
@@ -63,6 +73,9 @@ export default function DonutChart({ projects, projectCount ,projectsStatusCount
       labels: ["Initialized", "Completed", " Ongoing"],
 
       dataLabels: {
+        style: {
+          colors: ['#55B1F3', '#0010F7', '#1BE7FF']
+        },
         enabled: true,
       },
       plotOptions: {
@@ -99,11 +112,11 @@ export default function DonutChart({ projects, projectCount ,projectsStatusCount
       legend: {
         itemMargin: {
           horizontal: 24,
-          vertical: 0,
+          vertical: 12,
         },
         horizontalAlign: "center",
         position: "bottom",
-        fontSize: "14px",
+        fontSize: "18px",
 
         markers: {
           radius: 12,

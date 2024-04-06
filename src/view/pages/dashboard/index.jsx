@@ -70,7 +70,7 @@ const fetchDepartments = async () => {
         },
       }
     );
-    
+    console.log(response.data,'data aya ');
     setDepartments(response.data.noOfUsers)
     setDepartmentProjects(response.data.departmentProjects)
     setAssignedMDRS(response.data.mdrAssigned)

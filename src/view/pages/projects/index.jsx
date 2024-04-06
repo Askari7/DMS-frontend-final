@@ -1,33 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DownOutlined } from '@ant-design/icons';
 
 import {
-  Button,
-  Form,
-  Row,
-  Col,
-  Space,
-  Table,
-  Select,
-  Input,
-  Dropdown,
-  Menu,
-  DatePicker,
-  TimePicker,
-  Modal,
-  message,
-  Checkbox,
-  
-  Upload,
+  Button,Form,Row,Col,Space,Table,Select,Input,Dropdown,Menu,DatePicker,TimePicker,Modal,message,Checkbox,Upload,
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
 import { useHistory } from 'react-router-dom';
-
-
 import ProtectedAppPage from "../Protected";
-
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 export default function Projects() {
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+
 
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [departmentName,setDepartmentName] = useState('')
@@ -35,7 +23,6 @@ export default function Projects() {
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
   const [projCode, setProjCode] = useState("");
-
   const [clientEmail, setClientEmail] = useState("");
   const [startedDate, setStartDate] = useState("");
   const [endedDate, setEndDate] = useState("");
@@ -47,13 +34,13 @@ export default function Projects() {
   const [dataArray, setDataArray] = useState([]);
 
   const [departmentOptions, setDepartmentOptions] = useState([]);
+  const [departmentInfo,setDepartmentInfo] = useState([])
   const [projectOptions, setProjects] = useState([]);
   const [clients,setClients] = useState([])
   const [projectId, setProjectId] = useState("");
   const history = useHistory();
 
   const rowClickHandler=(record)=>{
-    console.log(record,"recordingggg");
     history.push({
       pathname: './mdr',
       state: { selectedRecord: record },
@@ -71,6 +58,75 @@ export default function Projects() {
     setData(ongoingData)
 
   }
+
+  const handleClose = ()=>{
+    console.log('closing');
+  }
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button onClick={() => clearFilters && handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+            Reset
+          </Button>
+
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+
 const menu = (
   <Menu>
     <Menu.Item onClick={() => handleAll()}>All</Menu.Item>
@@ -83,11 +139,41 @@ const columns = [
     title: "Project Code",
     dataIndex: "code",
     key: "code",
+    ...getColumnSearchProps('code'),
   },
   {
     title: "Project ",
     dataIndex: "title",
     key: "title",
+    ...getColumnSearchProps('title'),
+
+  },
+  {
+    title: "Department ",
+    dataIndex: "departmentTitle",
+    key: "departmentTitle",
+    filters: [
+
+      {
+        text: 'Project Management',
+        value: 'Project Management',
+      },
+      {
+        text: 'Mechanical',
+        value: 'Mechanical',
+      },
+      {
+        text: 'Electrical',
+        value: 'Electrical',
+      },
+      {
+        text: 'Process',
+        value: 'Process',
+      },
+    ],
+    onFilter:  (value, record) =>record.departmentTitle === value,
+
+    
   },
   {
     title: "Client",
@@ -120,17 +206,35 @@ const columns = [
     }  },
   {
     title: (
-      <div>
-        Status
-        <Dropdown overlay={menu}>
-          <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown>
-      </div>
+      "Status"
+      // <div>
+      //   Status
+      //   <Dropdown overlay={menu}>
+      //     <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+      //       <DownOutlined />
+      //     </a>
+      //   </Dropdown>
+      // </div>
     ),
     key: "status",
     dataIndex: "status",
+
+filters: [
+
+      {
+        text: 'Initialized',
+        value: 'Initialized',
+      },
+      {
+        text: 'Ongoing',
+        value: 'Ongoing',
+      },
+      {
+        text: 'Completed',
+        value: 'Completed',
+      },
+    ],
+    onFilter:  (value, record) =>record.status === value,
   },
   {
     title: "Action",
@@ -205,14 +309,24 @@ const columns = [
     setPermissionModalVisible(false);
   };
   const addProject = async () => {
-    console.log("inside");
-    console.log("dates",startedDate,endedDate);
+
+    // console.log(selectedDepartments,'selectedDepartments');
+    // console.log(departmentInfo,"info agayi yaha bhi");
+    const mappedDepartments = selectedDepartments.map(departmentId => {
+      const department = departmentInfo.find(department => department.id === departmentId);
+      return {
+          suffix: department ? department.suffix : null,
+          title: department ? department.title : null
+      };
+  });
+  // console.log(mappedDepartments,"department bhi agaye");
     try {
       const response = await axios.post(
         "http://127.0.0.1:8083/api/projects/",
         {
           title: projName,
-          // departmentId,
+          departmentId:selectedDepartments,
+          departments:mappedDepartments,
           status:"Initialized",
           noOfUsers:0,
           clientId:clientEmail,
@@ -272,8 +386,19 @@ const columns = [
           endedDate: formattedEndDate,
         };
       });
-      
-      setData(formattedData);
+      const userId = user?.user.departmentId
+      const roleId = user?.user.roleId
+
+      console.log(userId,'userId');
+
+      if (userId !== undefined && roleId !==1) {
+        const userProjects = formattedData.filter(project => project.departmentIds.split(',').includes(userId.toString()));
+        console.log("User's Projects:", userProjects);
+        setData(userProjects);
+      } 
+      else{
+        setData(formattedData)
+      }
       setDataArray(formattedData)
       const options = [];
       for (const item of response?.data) {
@@ -285,6 +410,7 @@ const columns = [
       console.error("Error fetching projects:", error?.message);
     }
   };
+
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -296,10 +422,14 @@ const columns = [
           },
         }
       );
+      console.log(response.data,"data agaya");
       const options = [];
+      const option = []
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
+        option.push({id:item?.id,title:item?.title,suffix:item?.suffix});
       }
+      setDepartmentInfo(option)
       setDepartmentOptions(options)
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -344,7 +474,8 @@ const columns = [
               value={projCode}
               onChange={(e) => setCode(e.target.value)}
             />
-          </Form.Item>          <Form.Item label="Project Name" name="projName">
+          </Form.Item>         
+           <Form.Item label="Project Name" name="projName">
             <Input
               value={projName}
               onChange={(e) => setProjName(e.target.value)}
@@ -368,6 +499,16 @@ const columns = [
                   onChange={(value) => setClientEmail(value)}
                 />  
                 </Form.Item>
+
+
+                <Form.Item
+                label="Departments"
+                name="departmentIds"
+                rules={[{ required: true, message: 'Please select at least one department' }]}
+              >
+                <Checkbox.Group options={departmentOptions} value={selectedDepartments} onChange={setSelectedDepartments} />
+              </Form.Item>
+                
 
       <Form.Item label="Start Date" name="startedDate" rules={[{ required: true, message: 'Please select start date' }]}>
         <DatePicker style={{ width: '100%' }} onChange={handleStartDateChange} />
@@ -438,7 +579,7 @@ const columns = [
         </Form>
       </Modal>
 <div style={{ textAlign: "right", marginBottom: "16px" }}>
-  {user?.user?.id == 1 && (
+  {user?.user?.roleId == 1 && (
     <Button type="primary" onClick={projectModalShow}>
       Add Project
     </Button>
@@ -446,6 +587,8 @@ const columns = [
 </div>
 
       <Table
+
+      
       bordered
       size="middle"
       title={() => 'All Project Details'}

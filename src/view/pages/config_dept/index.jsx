@@ -18,7 +18,11 @@ const departmentsData = [
 const DepartmentSelection = () => {
   const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-var selectedSuffix=[];
+  const [selectedSuffix,setSelectedSuffix] = useState([])
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [newDepartment, setNewDepartment] = useState('');
+
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
   };
@@ -28,45 +32,45 @@ var selectedSuffix=[];
   };
 
   const history = useHistory();
-  const navigateToMdrTemplate = () => {
+  const navigateToMdrTemplate = async() => {
     console.log('my selected depts',selectedDepartments);
-    addDepartments();
+    await addDepartments();
      history.push('/pages/config_users'); // Replace '/path-to-mdr-template' with the actual route path to the MDR Template component
 };
 
 const addDepartments = async () => {
     try {
-      console.log(user);
-      if (selectedDepartments.includes('Project Management')) {
-        selectedSuffix.push('PM')
-      }
-      if (selectedDepartments.includes('Process')) {
-        selectedSuffix.push('PRO')
-      }
-      if (selectedDepartments.includes('Mechanical')) {
-        selectedSuffix.push('ME')
-      }
-      if (selectedDepartments.includes('Electrical')) {
-        selectedSuffix.push('ELE')
-      }
-      if (selectedDepartments.includes('Instrumentation')) {
-        selectedSuffix.push('INS')
-      }
-      if (selectedDepartments.includes('Civil / Structure')) {
-        selectedSuffix.push('CIV')
-      }
-      if (selectedDepartments.includes('Finance')) {
-        selectedSuffix.push('FIN')
-      }
-      if (selectedDepartments.includes('HR / Admin')) {
-        selectedSuffix.push('HR')
-      }
-      if (selectedDepartments.includes('Quality')) {
-        selectedSuffix.push('QLT')
-      }
-      if (selectedDepartments.includes('Piping')) {
-        selectedSuffix.push('PIP')
-      }
+      // console.log(user);
+      // if (selectedDepartments.includes('Project Management')) {
+      //   selectedSuffix.push('PM')
+      // }
+      // if (selectedDepartments.includes('Process')) {
+      //   selectedSuffix.push('PRO')
+      // }
+      // if (selectedDepartments.includes('Mechanical')) {
+      //   selectedSuffix.push('ME')
+      // }
+      // if (selectedDepartments.includes('Electrical')) {
+      //   selectedSuffix.push('ELE')
+      // }
+      // if (selectedDepartments.includes('Instrumentation')) {
+      //   selectedSuffix.push('INS')
+      // }
+      // if (selectedDepartments.includes('Civil / Structure')) {
+      //   selectedSuffix.push('CIV')
+      // }
+      // if (selectedDepartments.includes('Finance')) {
+      //   selectedSuffix.push('FIN')
+      // }
+      // if (selectedDepartments.includes('HR / Admin')) {
+      //   selectedSuffix.push('HR')
+      // }
+      // if (selectedDepartments.includes('Quality')) {
+      //   selectedSuffix.push('QLT')
+      // }
+      // if (selectedDepartments.includes('Piping')) {
+      //   selectedSuffix.push('PIP')
+      // }
       const response = await axios.post(
         "http://127.0.0.1:8083/api/departments/",
         {
@@ -93,10 +97,7 @@ const addDepartments = async () => {
       console.error("Error adding departments:", error?.message);
     }
   };
-  const [selectedDepartments, setSelectedDepartments] = useState([]);
-  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-  const [newDepartment, setNewDepartment] = useState('');
-
+  
   const showAddModal = () => {
     setIsAddModalVisible(true);
   };
@@ -116,10 +117,17 @@ const addDepartments = async () => {
   };
 
   const handleCheckboxChange = (department) => {
-    const updatedDepartments = selectedDepartments.includes(department)
-      ? selectedDepartments.filter((d) => d !== department)
-      : [...selectedDepartments, department];
-
+    console.log(department,"ana wala ");
+    console.log(selectedDepartments,"selectedDepartments");
+    console.log(selectedSuffix,"selectedSuffix");
+    const updatedDepartments = selectedDepartments.includes(department.department)
+      ? selectedDepartments.filter((d) => d !== department.department)
+      : [...selectedDepartments, department.department];
+      const updatedSuffixes = selectedSuffix.includes(department.suffix)
+      ? selectedSuffix.filter((d) => d !== department.suffix)
+      : [...selectedSuffix, department.suffix];
+    console.log(updatedDepartments,'updatedDeartments',updatedSuffixes);
+    setSelectedSuffix(updatedSuffixes)
     setSelectedDepartments(updatedDepartments);
   };
 
@@ -140,7 +148,7 @@ const addDepartments = async () => {
         {departmentsData.map((department) => (
           <Col span={8} key={department.department} style={{ display: 'flex', alignItems: 'center' }}>
         <Checkbox
-          onChange={() => handleCheckboxChange(department.department)}
+          onChange={() => handleCheckboxChange(department)}
           checked={selectedDepartments.includes(department.department)}
           style={{ marginRight: 10 }}
         />

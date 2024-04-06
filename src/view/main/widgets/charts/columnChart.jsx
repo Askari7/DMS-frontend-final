@@ -5,10 +5,13 @@ import Chart from "react-apexcharts";
 import moment from "moment";
 export default function ColumnChart({ inputData, documents,completed,remaining}) {
   console.log(documents,completed,remaining,"getting ");
+  console.log(inputData,documents,"getting ");
+
   const [informtion, setInformation] = useState([]);
   const [document, setDocuments] = useState([]);
   const [remain, setRemaining] = useState([]);
   const [complete, setCompleted] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   
 
@@ -59,10 +62,20 @@ useEffect(() => {
 console.log(inputData, "inputData");
 console.log(informtion, "information");
 
-
+// Function to filter data based on year
+const filterDataByYear = (dateString) => {
+  const year = moment(dateString).format("YYYY");
+  const filtered = inputData.filter(
+    (item) => moment(item.startedDate).format("YYYY") === year
+  );
+  console.log(filtered,'filtered');
+  setFilteredData(filtered);
+};
 
   function onChange(date, dateString) {
     console.log(date, dateString);
+    filterDataByYear(dateString);
+
   }
 
   console.log(complete,remain);
@@ -166,7 +179,6 @@ console.log(informtion, "information");
       },
     },
   });
-  console.log(informtion)
 
   return (
     <Card className="hp-border-color-black-40">

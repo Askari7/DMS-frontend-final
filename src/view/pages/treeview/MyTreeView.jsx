@@ -122,22 +122,20 @@ const MyTreeView = () => {
       information.forEach(info => {
         if (!newData[info.projectCode]) {
           newData[info.projectCode] = {};
-          console.log(newData[info.projectCode]);
         }
-        if (!newData[info.projectCode][info.mdrCode]) {
+        if (info.mdrCode && !newData[info.projectCode][info.mdrCode]) {
           newData[info.projectCode][info.mdrCode] = {};
-          console.log(newData[info.projectCode][info.mdrCode]);
-
         }
-        const departmentIds = info.departmentId.split(',');
-        departmentIds.forEach(departmentId => {
-          if (!newData[info.projectCode][info.mdrCode][departmentId]) {
-            newData[info.projectCode][info.mdrCode][departmentId] = [];
-          }
-          newData[info.projectCode][info.mdrCode][departmentId].push(info.title);
-        });
+        const departmentIds = info.departmentId?.split(',') ?? null;        
+        if (departmentIds && departmentIds.length > 0) {
+          departmentIds.forEach((departmentId) => {
+            if (!newData[info.projectCode][info.mdrCode][departmentId]) {
+              newData[info.projectCode][info.mdrCode][departmentId] = [];
+            }
+            newData[info.projectCode][info.mdrCode][departmentId].push(info.title);
+          });
+        }
       });
-
       setData(newData);
     };
 
