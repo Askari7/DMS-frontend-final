@@ -207,14 +207,6 @@ const columns = [
   {
     title: (
       "Status"
-      // <div>
-      //   Status
-      //   <Dropdown overlay={menu}>
-      //     <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-      //       <DownOutlined />
-      //     </a>
-      //   </Dropdown>
-      // </div>
     ),
     key: "status",
     dataIndex: "status",

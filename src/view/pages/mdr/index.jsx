@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from 'react-router-dom'; 
 import { DownOutlined } from '@ant-design/icons';
-
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 import {
   Row,
   Col,
@@ -56,7 +57,9 @@ const uploadProps = {
 };
 
 export default function MDR() {
-  
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
 
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
@@ -97,9 +100,75 @@ export default function MDR() {
   const { matchingRecord } = location.state || {}
   // console.log(matchingRecord,"recordinggggg");
   // console.log(location,"location");
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+
   const handleAll=()=>{
     setData(dataArray)
   }
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button onClick={() => clearFilters && handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+            Reset
+          </Button>
+
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
   const handleCompleted=()=>{
     const completedData = dataArray.filter(item => item.status === 'completed');
     setData(completedData)
@@ -974,16 +1043,21 @@ useEffect(() => {
             title: "Document Title",
             dataIndex: "title",
             key: "title",
+            ...getColumnSearchProps('title'),
+
           },
           {
             title: "Project Code",
             dataIndex: "projectCode",
             key: "projectCode",
+            ...getColumnSearchProps('projectCode'),
+
           },
           {
             title: "Dept Name",
             dataIndex: "departmentName",
             key: "departmentName",
+
           },
 
           {
@@ -1000,18 +1074,29 @@ useEffect(() => {
           },
           {
             title: (
-              <div>
-                Status
-                <Dropdown overlay={menu}>
-                  <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                    <DownOutlined />
-                  </a>
-                </Dropdown>
-              </div>
+              "Status"
             ),
             key: "status",
             dataIndex: "status",
+        
+        filters: [
+        
+              {
+                text: 'Initialized',
+                value: 'Initialized',
+              },
+              {
+                text: 'Ongoing',
+                value: 'Ongoing',
+              },
+              {
+                text: 'Completed',
+                value: 'Completed',
+              },
+            ],
+            onFilter:  (value, record) =>record.status === value,
           },
+          
           {
             title: "Action",
             key: "action",
