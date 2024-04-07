@@ -255,7 +255,7 @@ export default function Document() {
   const [showTreeView, setShowTreeView] = useState(false);
   const [userOption, setUserDatalist] = useState([]);
   const [assignedEmployees, setAssignedEmployees] = useState([]);
-const [myrecord,setMyRecord]=useState({});
+  const [myrecord,setMyRecord]=useState({});
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
