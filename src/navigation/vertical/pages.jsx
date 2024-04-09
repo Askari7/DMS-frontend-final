@@ -207,12 +207,12 @@ const pages = [
   //         },
   //     ],
   // },
-  //   {
-  // id: "landing",
-  // title: <IntlMessages id="sidebar-pages-landing" />,
-  // icon: <Award size={30} />,
-  // navLink: "/pages/landing",
-  //   },
+    {
+  id: "landing",
+  title: <IntlMessages id="sidebar-pages-landing" />,
+  icon: <Award size={30} />,
+  navLink: "/pages/landing",
+    },
   {
   id: "home-workspace",
   title: <IntlMessages id="sidebar-pages-home" />,

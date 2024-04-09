@@ -1057,6 +1057,7 @@ useEffect(() => {
             title: "Dept Name",
             dataIndex: "departmentName",
             key: "departmentName",
+            ...getColumnSearchProps('departmentName'),
 
           },
 
@@ -1064,6 +1065,8 @@ useEffect(() => {
             title: "Author Name",
             dataIndex: "authorName",
             key: "authorName",
+            ...getColumnSearchProps('authorName'),
+
           },
           {
             title: "No of Documents",

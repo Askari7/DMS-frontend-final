@@ -166,7 +166,7 @@ export default function Charts() {
   </Col>
 )}
 
-      {/* <Col span={24}>
+      <Col span={24}>
         <LineChart />
       </Col>
 
@@ -174,17 +174,17 @@ export default function Charts() {
         <AreaChart />
       </Col>
 
-      <Col span={24}>
+      {/* <Col span={24}>
         <ScatterChart />
       </Col> */}
 
-      {/* <Col xl={12} lg={24}>
+      <Col xl={12} lg={24}>
         <HeatmapChart />
-      </Col> */}
+      </Col>
       
-      {/* <Col xl={12} lg={24}>
+      <Col xl={12} lg={24}>
         <RadarChart />
-      </Col> */}
+      </Col>
       
       {/* <Col xl={12} lg={24}>
         <CandlestickChart />

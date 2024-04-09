@@ -6,7 +6,12 @@ const user=JSON.parse(localStorage?.getItem("user"));
 
 const PagesRoutes = [
   //Workspace
-
+  {
+    path: "/pages/landing",
+    component: lazy(() => import("../../view/pages/landing")),
+    layout: "VerticalLayout",
+    isProtected: false,
+  },
   {
     path: "/pages/workspace",
     component: lazy(() => import("../../view/main/widgets/charts")),

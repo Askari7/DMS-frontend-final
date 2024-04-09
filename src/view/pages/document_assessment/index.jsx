@@ -613,7 +613,7 @@ export default function DocumentPermissions() {
     } else if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Reject'){
       statusForApp[approveId.indexOf(user.user.id)] = 1;
       statusForRev[reviewId.indexOf(user.user.id)] = 1;
-      
+
       const appIndex = approveId.indexOf(user.user.id)
       const revIndex = approveId.indexOf(user.user.id)
 
@@ -679,7 +679,8 @@ export default function DocumentPermissions() {
           }
         );
       }
-      
+      setSelectedStatus('')
+      await fetchData()
     } catch (error) {
       console.error(error)
     }

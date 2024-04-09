@@ -4,13 +4,14 @@ import { Card, Row, Col, DatePicker } from "antd";
 import Chart from "react-apexcharts";
 import moment from "moment";
 export default function ColumnChart({ inputData, documents,completed,remaining}) {
-  console.log(documents,completed,remaining,"getting ");
-  console.log(inputData,documents,"getting ");
+  // console.log(documents,completed,remaining,"getting ");
+  console.log(inputData,"getting ");
 
   const [informtion, setInformation] = useState([]);
-  const [document, setDocuments] = useState([]);
+  const [documentss, setDocuments] = useState([documents]);
   const [remain, setRemaining] = useState([]);
   const [complete, setCompleted] = useState([]);
+
   const [filteredData, setFilteredData] = useState([]);
 
   
@@ -22,18 +23,18 @@ useEffect(() => {
     const titlesArray = inputData.map(obj => obj.title);
   
     // Update state with titlesArray
+    console.log(titlesArray,'titlesArray');
     setInformation(titlesArray);    
-
   }
 }, [inputData]);
 
 
 useEffect(() => {
+
   if (documents && documents.length > 0) {
 
       const completedCounts = [];
       const remainingCounts = [];
-
     for (const document of documents) {
       let completedCount = 0;
       let remainingCount = 0;
@@ -57,25 +58,76 @@ useEffect(() => {
     setCompleted(completedCounts);
     setRemaining(remainingCounts);
   }
+  setDocuments(documents)
 }, [documents]);
 
-console.log(inputData, "inputData");
-console.log(informtion, "information");
+// console.log(inputData, "inputData");
+// console.log(informtion, "information");
 
 // Function to filter data based on year
 const filterDataByYear = (dateString) => {
-  const year = moment(dateString).format("YYYY");
-  const filtered = inputData.filter(
-    (item) => moment(item.startedDate).format("YYYY") === year
-  );
-  console.log(filtered,'filtered');
+
+  if (dateString === '') {
+    setDocuments(documents)
+    update(documents)
+    return;
+  }
+
+  console.log(documentss,'documentss');
+  console.log(dateString, 'dateString');
+  const filtered = documentss.map(subArray => {
+    return subArray.filter(item => {
+      console.log(item,'item',item.id);
+      const startingYear = item.startedDate.substring(0, 4); // Extracting the year from the date string
+      return startingYear === dateString;
+    });
+  });
+  console.log(complete,remain);
   setFilteredData(filtered);
+  update(filtered)
 };
+  function update(filtered){
+    const filteredArray = []
+    if (filtered && filtered.length > 0) {
+      console.log(filtered,'filtered');
+      const completedCounts = [];
+      const remainingCounts = [];
+    for (const document of filtered) {
+      console.log(document,'document');
+      let completedCount = 0;
+      let remainingCount = 0;
+
+      for (const statusArray of document.map(doc => doc.status)) {
+        console.log(statusArray,"array");
+          if (statusArray === "Completed") {
+            completedCount++;
+          } else {
+            remainingCount++;
+          }
+        }
+
+      completedCounts.push(completedCount);
+      remainingCounts.push(remainingCount);
+    }
+
+    console.log("Completed Counts:", completedCounts);
+    console.log("Remaining Counts:", remainingCounts);
+
+    setCompleted(completedCounts);
+    setRemaining(remainingCounts);
+  }
+    // updateInfo(filteredArray)
+  }
+
+  // const updateInfo=(filteredArray)=>{
+  //   console.log(filteredArray,'array');
+  //   const info = inputData.filter(item => filteredArray.includes(item.id));
+  //   console.log(info,'info');
+  // }
 
   function onChange(date, dateString) {
-    console.log(date, dateString);
+    console.log(date, dateString,'isko peecha bhej');
     filterDataByYear(dateString);
-
   }
 
   console.log(complete,remain);
@@ -193,7 +245,7 @@ const filterDataByYear = (dateString) => {
               <DatePicker
                 onChange={onChange}
                 picker="year"
-                defaultValue={moment("2019", "YYYY")}
+                defaultValue={moment("2020", "YYYY")}
               />
             </Col>
           </Row>

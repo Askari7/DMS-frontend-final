@@ -10,13 +10,14 @@ import { useHistory } from 'react-router-dom';
 import ProtectedAppPage from "../Protected";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import ProgressComp from "./Progress";
 export default function Projects() {
 
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
-
+  const [progresses,setProgresses] = useState()
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [departmentName,setDepartmentName] = useState('')
   const [projectModalVisible, setProjectModalVisible] = useState(false);
@@ -152,26 +153,28 @@ const columns = [
     title: "Department ",
     dataIndex: "departmentTitle",
     key: "departmentTitle",
-    filters: [
+    ...getColumnSearchProps('departmentTitle'),
 
-      {
-        text: 'Project Management',
-        value: 'Project Management',
-      },
-      {
-        text: 'Mechanical',
-        value: 'Mechanical',
-      },
-      {
-        text: 'Electrical',
-        value: 'Electrical',
-      },
-      {
-        text: 'Process',
-        value: 'Process',
-      },
-    ],
-    onFilter:  (value, record) =>record.departmentTitle === value,
+    // filters: [
+
+    //   {
+    //     text: 'Project Management',
+    //     value: 'Project Management',
+    //   },
+    //   {
+    //     text: 'Mechanical',
+    //     value: 'Mechanical',
+    //   },
+    //   {
+    //     text: 'Electrical',
+    //     value: 'Electrical',
+    //   },
+    //   {
+    //     text: 'Process',
+    //     value: 'Process',
+    //   },
+    // ],
+    // onFilter:  (value, record) =>record.departmentTitle === value,
 
     
   },
@@ -179,6 +182,8 @@ const columns = [
     title: "Client",
     dataIndex: "clientId",
     key: "clientId",
+    ...getColumnSearchProps('clientId'),
+
   },
   // {
   //   title: "No of Users",
@@ -234,6 +239,15 @@ filters: [
     render: (_, record) => (
       <Space size="middle">
         <a onClick={() => handleDelete(record)}>Delete</a>
+      </Space>
+    )
+  },
+  {
+    title: "Progress",
+    key: "percentage",
+    render:(_,record)=>(
+      <Space>
+        <ProgressComp percentage={record.percentage.toFixed(1)}/>
       </Space>
     )
   },
@@ -353,6 +367,26 @@ filters: [
   //   setClientEmail("");
   //   setDepartmentId([]);
   // },[projectModalVisible])
+  const fetchProgress = async()=>{
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/projects/progress?companyId=${user?.user.companyId}`,
+        
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      // Handle the response as needed
+      console.log(response.data,'projectIds');
+      setProgresses(response.data.documentProgressResults)
+      console.log(progresses,"progresses");
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -433,6 +467,7 @@ filters: [
     fetchClients();
     fetchDepartments();
     fetchData();
+    // fetchProgress()
   }, []);
   var usedNumbers = [];
 

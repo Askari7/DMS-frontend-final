@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { useLocation } from 'react-router-dom';
 
 import {
@@ -28,68 +28,16 @@ import OrganizationChart from "../organizationChart";
 import EmployeeTree from "../employee_tree";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
 import Column from "antd/lib/table/Column";
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "firstName",
-    key: "firstName",
-  },
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 
-  {
-    title: "Department",
-    dataIndex: "department",
-    key: "department",
-  },
-  {
-    title: "Role",
-    dataIndex: "roleTitle",
-    key: "roleTitle",
-    filters: [
 
-      {
-        text: 'Lead',
-        value: 'Head',
-      },
-      {
-        text: 'Senior Engineer',
-        value: 'Senior',
-      },
-      {
-        text: 'Junior Engineer',
-        value: 'Junior',
-      },
-      {
-        text: 'Designer',
-        value: 'Designer',
-      },
-    ],
-    onFilter:  (value, record) =>record.roleTitle === value,
 
-  },
-
-  {
-    title: "Reporting To",
-    dataIndex: "reported_to",
-    key: "reported_to",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
 
 export default function Users() {
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
   const location = useLocation();
 
   const [loading, setLoading] = useState(true);
@@ -157,6 +105,138 @@ export default function Users() {
   const departmentWiseCancel = () => {
     setDepartmentWise(false);
   };
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button onClick={() => clearFilters && handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+            Reset
+          </Button>
+
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "firstName",
+      key: "firstName",
+      ...getColumnSearchProps('firstName'),
+  
+    },
+  
+    {
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      ...getColumnSearchProps('department'),
+  
+    },
+    {
+      title: "Role",
+      dataIndex: "roleTitle",
+      key: "roleTitle",
+  
+      filters: [
+  
+        {
+          text: 'Lead',
+          value: 'Head',
+        },
+        {
+          text: 'Senior Engineer',
+          value: 'Senior',
+        },
+        {
+          text: 'Junior Engineer',
+          value: 'Junior',
+        },
+        {
+          text: 'Designer',
+          value: 'Designer',
+        },
+      ],
+      onFilter:  (value, record) =>record.roleTitle === value,
+  
+    },
+  
+    {
+      title: "Reporting To",
+      dataIndex: "reported_to",
+      key: "reported_to",
+      ...getColumnSearchProps('reported_to'),
+  
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      ...getColumnSearchProps('email'),
+  
+    },
+  
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <a>Delete</a>
+        </Space>
+      ),
+    },
+  ];
 
   const addUser = async () => {
     try {
@@ -490,9 +570,9 @@ export default function Users() {
 
       </div> :
       <div style={{ overflowX: "auto" }}>
-    <Table dataSource={data} title={() => 'All Users'} footer={() => 'You may filter users based on department and roles'}>
+    {/* <Table dataSource={data} title={() => 'All Users'} footer={() => 'You may filter users based on department and roles'}>
       <ColumnGroup title="Name">
-        <Column title="First Name" dataIndex="firstName" key="firstName" />
+        <Column title="First Name" dataIndex="firstName" key="firstName"/>
         <Column title="Last Name" dataIndex="lastName" key="lastName" />
       </ColumnGroup>
       <Column title="Department" dataIndex="department" key="department" 
@@ -525,7 +605,14 @@ export default function Users() {
     title={() => 'All Users'}
     footer={() => 'You may filter users based on department and roles'}
 
-    </Table>
+    </Table> */}
+
+<Table
+      dataSource={data}
+      columns={columns}
+      title={() => 'All Users'}
+      footer={() => 'You may filter users based on department and roles'}
+    />
       </div>
     }
     <ProtectedAppPage />
