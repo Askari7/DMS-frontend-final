@@ -35,6 +35,7 @@ import "react-quill/dist/quill.snow.css";
 import ProtectedAppPage from "../Protected";
 import { useLocation } from 'react-router-dom';
 import { string } from "prop-types";
+import ProgressComp from "./Progress";
 
 
 
@@ -1139,6 +1140,15 @@ useEffect(() => {
                 </Space>
               </>
             ),
+          },
+          {
+            title: "Progress",
+            key: "percentage",
+            render:(_,record)=>(
+              <Space>
+                <ProgressComp/>
+              </Space>
+            )
           },
         ]}
         size="middle"
