@@ -629,6 +629,7 @@ useEffect(() => {
         }
       );
 
+      console.log(response.data,"response aya");
       // console.log('mdr data',response.data);
       setProjectCode(response.data.projectCode)
       if (user?.user?.roleId===3 || user?.user?.roleId ===4) {
@@ -659,6 +660,7 @@ useEffect(() => {
       console.error("Error fetching documents:", error?.message);
     }
   };
+  
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -1144,12 +1146,15 @@ useEffect(() => {
           {
             title: "Progress",
             key: "percentage",
-            render:(_,record)=>(
+            render: (_, record) => (
               <Space>
-                <ProgressComp/>
+                {record.percentage !== null ? (
+                  <ProgressComp percentage={record.percentage.toFixed(1)} />
+                ) : null}
               </Space>
             )
           },
+             
         ]}
         size="middle"
         bordered
