@@ -245,12 +245,14 @@ filters: [
   {
     title: "Progress",
     key: "percentage",
-    render:(_,record)=>(
+    render: (_, record) => (
       <Space>
-        <ProgressComp percentage={record.percentage.toFixed(1)}/>
+        {record.percentage !== null ? (
+          <ProgressComp percentage={record.percentage.toFixed(1)} />
+        ) : null}
       </Space>
     )
-  },
+  }
 ];
 
   const handleStartDateChange = (date) => {
