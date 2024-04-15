@@ -2,12 +2,34 @@
 import React, { useEffect, useState } from 'react';
 import { Tree, TreeNode } from 'react-organizational-chart';
 import { FaLeaf } from 'react-icons/fa';
+import axios from 'axios'
+
 
 const OrganizationChart = ({ employees }) => {
   const [user,setUser]  = useState(JSON.parse(localStorage?.getItem("user")))
+  const[name,setName] = useState()
   useEffect(()=>{
+    fetchName()
     // setUser();
   })
+
+  const fetchName = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/users/company/?companyId=${user?.user?.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+  console.log(response.data,"company name");
+  setName(response.data)
+    } catch (error) {
+      console.error("Error fetching documents:", error?.message);
+    }
+  };
   console.log(employees,"employees");
   const buildTree = (employees) => {
     const employeeMap = new Map();
@@ -123,7 +145,7 @@ console.log(employeeMap,"employeeMap");
 
   return (
     <div style={{ overflowX: 'auto' }}>
-      <Tree label={<div style={{ fontSize: '18px', fontWeight: 'bold', color: '#333' }}>{user.user.roleId == 2 ? user.user.department : 'PCEC'}</div>}>
+      <Tree label={<div style={{ fontSize: '18px', fontWeight: 'bold', color: '#333' }}>{user.user.roleId == 2 ? user.user.department : name}</div>}>
         {buildTree(employees).map((employee) => renderChartNode(employee))}
       </Tree>
     </div>

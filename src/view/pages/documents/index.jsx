@@ -138,6 +138,13 @@ export default function Document() {
 
   const columns = [
     {
+      title: "Mdr Code",
+      dataIndex: "masterDocumentId",
+      key: "masterDocumentId",
+      ...getColumnSearchProps('masterDocumentId'),
+
+    },
+    {
       title: "Document Name",
       dataIndex: "title",
       key: "title",

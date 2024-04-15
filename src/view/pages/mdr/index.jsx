@@ -1144,7 +1144,7 @@ useEffect(() => {
             ),
           },
           {
-            title: "Progress",
+            title: "Progress Per Document",
             key: "percentage",
             render: (_, record) => (
               <Space>

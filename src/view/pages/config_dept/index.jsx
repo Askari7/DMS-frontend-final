@@ -6,7 +6,7 @@ import axios from "axios";
 const departmentsData = [
   { department: 'Project Management', suffix: 'PM' },
   { department: 'Process', suffix: 'PRO' },
-  { department: 'Mechanical', suffix: 'ME' },
+  { department: 'Mechanical', suffix: 'TK' },
   { department: 'Electrical', suffix: 'ELE' },
   { department: 'Instrumentation', suffix: 'INS' },
   { department: 'Civil / Structure', suffix: 'CIV' },
