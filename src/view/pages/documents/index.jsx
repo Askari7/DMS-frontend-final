@@ -827,7 +827,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
 
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button block onClick={()=>assignDoc(assignedEmployees,myrecord)} type="primary"htmlType="submit">Assigned</Button>
+                  <Button block onClick={()=>assignDoc(assignedEmployees,myrecord)} type="primary"htmlType="submit">Assign</Button>
                 </Col>
               
               </Row>

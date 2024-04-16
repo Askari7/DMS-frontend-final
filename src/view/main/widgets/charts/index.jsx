@@ -128,11 +128,11 @@ export default function Charts() {
     <Row gutter={[32, 32]} className="hp-mb-32">
       <Col span={24}>
       <Card title={`Hello! ${user.user.firstName} ${user.user.lastName}`} style={{fontSize:"32px" ,fontWeight:"bolder", width: '100%', margin: '0 auto',alignItems:"center",textAlign:"center" }}>
-  <Breadcrumb>
+  {/* <Breadcrumb>
     <Breadcrumb.Item>Main</Breadcrumb.Item>
     <Breadcrumb.Item>Widgets</Breadcrumb.Item>
     <Breadcrumb.Item>Charts</Breadcrumb.Item>
-  </Breadcrumb>
+  </Breadcrumb> */}
   {/* Add additional content here if needed */}
 </Card>
       </Col>

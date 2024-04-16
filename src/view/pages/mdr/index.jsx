@@ -269,7 +269,7 @@ const menu = (
   };
 let count=0;
   const createModalShow = (record) => {
-    // console.log("record",record)
+     console.log("record",record)
     setRecord(record)
     setDocumentModalVisible(true);
   };
@@ -644,7 +644,7 @@ useEffect(() => {
         const data = response.data.filter(item => 
           item.departmentId.split(",").includes((user?.user?.departmentId))      
           );       
-
+console.log('dataaaaaa',data);
         const d =  data.map((d)=>d.projectId)
 
         setPro(d)
@@ -1117,7 +1117,7 @@ useEffect(() => {
                   >
                     Export
                   </Button>
-                  {user.user.roleId!==1 &&       
+                  {user.user.roleId!==1 && record.authorId==user?.user.id &&   
                   <>
                   <Button
                     key={record?.id}

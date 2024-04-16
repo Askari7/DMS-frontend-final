@@ -280,12 +280,26 @@ export default function DocumentPermissions() {
 
   
   const sendEmail = async()=>{
+      const responseData=await fetchAppRev(record.docName);
+      console.log('helllooo',responseData);
+       // Replace 'John' with the actual doc's name
+       const docName = record.docName;
+       const url= `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf` 
+       console.log(user.user.roleId,user.user.firstName,user);
+       let allowed='false';
+   if(responseData){
+   allowed='true';
+   }
+       // Redirect to the external URL
+       const myUrl = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+     
     try {
       const response = await axios.post(
         `http://127.0.0.1:8083/api/clients/send-email-client`,
         {
           roleId:user.user.roleId,
           companyId:user?.user?.companyId,
+          url:myUrl,
 
           clientName:selectedEmail
         },
