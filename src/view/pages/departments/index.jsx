@@ -357,14 +357,14 @@ setDepartmentId(record['id']);
           </Col>
         </Row>
       </Modal>
-      <div style={{ textAlign: "right", marginBottom: "16px"}}>
-        <Button type="primary" onClick={departmentModalShow}           disabled={user?.user?.roleId != 1}
->
-          Add Department
-        </Button>
-      
-   
-      </div>
+      {user && user.id === 1 && (
+  <div style={{ textAlign: "right", marginBottom: "16px"}}>
+    <Button type="primary" onClick={departmentModalShow}>    
+      Add Department
+    </Button>
+  </div>
+)}
+
 
       <div style={{ overflowX: "auto" }}>
       <Table columns={columns} dataSource={data}  bordered size="middle"

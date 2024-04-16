@@ -17,12 +17,21 @@ import axios from "axios";
 
 export default function Charts() {
   const [user,setUser] = useState(JSON.parse(localStorage.getItem("user")))
-  const [projects,setProjects] = useState([])
   const [data,setData] = useState([])
-  const [mdr,setMdr] = useState([])
-  const [departments,setDepartments] = useState([])
-  const [departmentTitles,setDepartmentTitles] = useState([])
+  const [remaining,setRemaining] = useState([])
+  const [completed,setCompleted] = useState([])
+  const [departments,setDepartments]= useState([])
+  const [departmentsMembers,setDepartmentsMembers] = useState([])
+  const [documents,setDocuments] = useState([])
+  const [projectsTitles,setProjectTitles] = useState([])
   const [departmentUsers,setDepartmentUsers] = useState([])
+  
+  const [reviewCount_00,setReviewCount_0]= useState()
+  const [reviewCount_01,setReviewCount_1]= useState()
+  const [approverCount_00,setApproverCount_0] = useState()
+  const [approverCount_01,setApproverCount_1] = useState()
+  const [reviewApproveCount,setReviewApproveCount] = useState([])
+
   const fetchData= async(req,res)=>{
     try {
       const response = await axios.get(
@@ -35,7 +44,74 @@ export default function Charts() {
         }
       );
       console.log("Response:", response.data); 
-      setData(response.data)  
+      setData(response.data)
+      const titlesArray = response.data.projects.map(obj => obj.title);
+      const departments = response.data.departments.map(obj => obj.title);
+      const departmentMember = response.data.departments.map(obj => obj.noOfUsers);
+
+      const establishment_reviewer = response.data.establishments.map(obj => obj.reviewerId);
+      const establishment_approver = response.data.establishments.map(obj => obj.approverId);
+      const establishment_reviewer_status = response.data.establishments.map(obj => obj.reviewerStatus);
+      const establishment_approver_status = response.data.establishments.map(obj => obj.approverStatus);
+      const userReviewStatus = establishment_reviewer.map((reviewers, index) => {
+        const userIndex = reviewers.indexOf(user?.user?.id.toString());
+        return userIndex !== -1 ? establishment_reviewer_status[index][userIndex] : null;
+      });
+      
+      const userApproverStatus = establishment_approver.map((approvers, index) => {
+        const userIndex = approvers.indexOf(user?.user?.id.toString());
+        return userIndex !== -1 ? establishment_approver_status[index][userIndex] : null;
+      });
+      // Count the number of 1s in userReviewStatus
+      const reviewCount_1 = userReviewStatus.reduce((count, status) => count + (status === '1' ? 1 : 0), 0);
+      const reviewCount_0 = userReviewStatus.reduce((count, status) => count + (status === '0' ? 1 : 0), 0);
+
+      // Count the number of 1s in userApproverStatus
+      const approverCount_1 = userApproverStatus.reduce((count, status) => count + (status === '1' ? 1 : 0), 0);
+      const approverCount_0 = userApproverStatus.reduce((count, status) => count + (status === '0' ? 1 : 0), 0);
+
+      console.log("Review Count:", reviewCount_0,reviewCount_1);
+      console.log("Approver Count:", approverCount_0,approverCount_1);
+
+      setReviewApproveCount([reviewCount_0,approverCount_0,reviewCount_1,approverCount_1])
+
+      setReviewCount_0(reviewCount_0)
+      setReviewCount_1(reviewCount_1)
+      setApproverCount_0(approverCount_0)
+      setApproverCount_1(approverCount_1)
+
+
+      // console.log(establishment_approver,establishment_reviewer,"id");
+      // console.log(establishment_approver_status,establishment_reviewer_status,"status");
+      setDepartments(departments)
+      setDepartmentsMembers(departmentMember)
+      const completedCounts = [];
+      const remainingCounts = [];
+
+    for (const documents of response.data.documents) {
+      let completedCount = 0;
+      let remainingCount = 0;
+
+      for (const statusArray of documents.map(doc => doc.status)) {
+        console.log(statusArray,"array");
+          if (statusArray === "Completed") {
+            completedCount++;
+          } else {
+            remainingCount++;
+          }
+        }
+
+      completedCounts.push(completedCount);
+      remainingCounts.push(remainingCount);
+    }
+
+    console.log("Completed Counts:", completedCounts);
+    console.log("Remaining Counts:", remainingCounts);
+      setCompleted(completedCounts)
+      setRemaining(remainingCounts)
+
+      setProjectTitles(titlesArray)
+
      } catch (error) {
       console.error(error)
     }
@@ -45,6 +121,8 @@ export default function Charts() {
     fetchData()
   },[])
 
+
+  
 
   return (
     <Row gutter={[32, 32]} className="hp-mb-32">
@@ -57,52 +135,56 @@ export default function Charts() {
   </Breadcrumb>
   {/* Add additional content here if needed */}
 </Card>
-
       </Col>
+      {user && user?.user.roleId === 1 &&(
+  <Col xl={12} lg={24}>
+    <DonutChart projects={data.projects} projectCount={data.projectCount} projectsStatusCounts={data.projectsStatusCounts}/>
+  </Col>
+)}
 
-      <Col xl={12} lg={24}>
-        <DonutChart projects={data.projects} projectCount={data.projectCount} projectsStatusCounts={data.projectsStatusCounts}/>
-      </Col>
+{user && user?.user.roleId === 1 && (
+  <Col xl={12} lg={24}>
+    <DonutChart projects={data.mdrs} projectCount={data.mdrCount} projectsStatusCounts={data.mdrsStatusCounts}/>
+  </Col>
+)}
 
-      <Col xl={12} lg={24}>
-        <DonutChart projects={data.mdrs} projectCount={data.mdrCount} projectsStatusCounts={data.mdrsStatusCounts}/>
-      </Col>
+{user && user?.user.roleId === 1 &&(
+  <Col span={24}>
+    <ColumnChart inputData={data.projects} documents={data.documents} completed={completed} remaining={remaining}/>
+  </Col>
+)}
 
-      <Col xl={12} lg={24}>
-        <RadialbarChart />
-      </Col>
+{(user && user?.user.roleId === 1)|(user && user?.user.roleId === 2) &&(
+  <Col xl={12} lg={24}>
+    <RadialbarChart inputData={reviewApproveCount}/>
+  </Col>
+)}
+
+{(user && user?.user.roleId === 1 )&& (
+  <Col xl={12} lg={24}>
+    <BarChart departments={departments} departmentsMembers={departmentsMembers}/>
+  </Col>
+)}
+
       <Col span={24}>
         <LineChart />
       </Col>
 
       <Col span={24}>
-        <ColumnChart titles={departmentTitles}/>
-      </Col>
-
-      <Col span={24}>
-        <ColumnChart titles={departmentTitles} count={departmentUsers}/>
-      </Col>
-
-
-      <Col span={24}>
         <AreaChart />
       </Col>
 
-      <Col span={24}>
+      {/* <Col span={24}>
         <ScatterChart />
-      </Col>
-      
-      <Col xl={12} lg={24}>
-        <BarChart projects={projects}/>
-      </Col>
+      </Col> */}
 
       <Col xl={12} lg={24}>
         <HeatmapChart />
       </Col>
       
-      {/* <Col xl={12} lg={24}>
+      <Col xl={12} lg={24}>
         <RadarChart />
-      </Col> */}
+      </Col>
       
       {/* <Col xl={12} lg={24}>
         <CandlestickChart />

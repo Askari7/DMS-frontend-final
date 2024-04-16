@@ -4,11 +4,7 @@ import { Card, Row, Col, DatePicker } from "antd";
 import Chart from "react-apexcharts";
 import moment from "moment";
 
-export default function BarChart({projects}) {
-  const projectTitles = projects.map(project => project.title);
-  const projectMembers = projects.map(project => project.noOfUsers);
-
-  console.log("counts",projectTitles,projectMembers);
+export default function BarChart({departments,departmentsMembers}) {
   function onChange(date, dateString) {
     console.log(date, dateString);
   }
@@ -16,8 +12,8 @@ export default function BarChart({projects}) {
   const [data] = useState({
     series: [
       {
-        name: "Team Size",
-        data: projectMembers,
+        name: "Department Size",
+        data: departmentsMembers,
       },
     ],
     options: {
@@ -34,7 +30,7 @@ export default function BarChart({projects}) {
       },
       plotOptions: {
         bar: {
-          borderRadius: 4,
+          borderRadius: 8,
           horizontal: true,
         },
       },
@@ -45,7 +41,7 @@ export default function BarChart({projects}) {
       },
 
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
 
       grid: {
@@ -65,18 +61,17 @@ export default function BarChart({projects}) {
         colors: ["transparent"],
       },
       xaxis: {
-        axisTicks: {
-          show: false,
+       axisTicks: {
+           show: false,
         },
-        tickAmount: 5,
 
         labels: {
           style: {
             colors: ["636E72"],
-            fontSize: "14px",
+            fontSize: "12px",
           },
         },
-        categories:projectTitles
+        categories:departments
       },
       legend: {
         horizontalAlign: "right",
@@ -105,16 +100,16 @@ export default function BarChart({projects}) {
         <Col span={24}>
           <Row justify="space-between" align="top">
             <Col className="hp-pb-16">
-              <h4 className="hp-mr-8">Team Size</h4>
+              <h4 className="hp-mr-8">Department Strengths</h4>
             </Col>
             
-            <Col>
+            {/* <Col>
               <DatePicker
                 onChange={onChange}
                 picker="week"
                 defaultValue={moment("2019-06-03", "YYYY-MM-DD")}
               />
-            </Col>
+            </Col> */}
           </Row>
         </Col>
 
@@ -122,7 +117,16 @@ export default function BarChart({projects}) {
           <div id="chart">
             <Chart
               options={data.options}
-              series={data.series}
+              series={[
+                {  data: departmentsMembers }
+              ]} 
+              options={{
+              ...data.options,
+              xaxis: {
+                ...data.options.xaxis,
+                categories: departments,
+              },
+            }}
               type="bar"
               height={350}
               legend="legend"

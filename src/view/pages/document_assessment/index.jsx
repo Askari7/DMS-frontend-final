@@ -1,23 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import {
-  Button,
-  Form,
-  Row,
-  Col,
-  Space,
-  Table,
-  Select,
-  Input,
-  DatePicker,
-  TimePicker,
-  Modal,
-  message,
-  Upload,
-} from "antd";
+  Button,Form, Row,Col,Space,Table,Select,Input,DatePicker,TimePicker,Modal,message,Upload,} from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
 import { Checkbox } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 // import InfoProfile from "./personel-information";
 // import MenuProfile from "./menu";
 // import PasswordProfile from "./password-change";
@@ -25,6 +14,74 @@ import { Checkbox } from "antd";
 
 
 export default function DocumentPermissions() {
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button onClick={() => clearFilters && handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+            Reset
+          </Button>
+
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
   const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
 
   const columns = [
@@ -37,23 +94,31 @@ export default function DocumentPermissions() {
         title: "Document Name",
         dataIndex: "docName",
         key: "docName",
+        ...getColumnSearchProps('docName'),
+
       },
     
       {
         title: "MDR Code",
         dataIndex: "masterDocumentCode",
         key: "masterDocumentCode",
+        ...getColumnSearchProps('masterDocumentCode'),
+
       },
       {
         title: "Approver",
         dataIndex: "approver",
         key: "approver",
+        ...getColumnSearchProps('approver'),
+
       },
     
       {
         title: "Reviewer",
         dataIndex: "reviewer",
         key: "reviewer",
+        ...getColumnSearchProps('reviewer'),
+
       },
       
       {
@@ -119,8 +184,7 @@ export default function DocumentPermissions() {
     const [selectedEmail, setSelectedEmail] = useState([]);
     const [record, setRecord] = useState();
 
-  const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =
-    useState(false);
+  const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] = useState(false);
   const [mdrOptions, setMdrData] = useState([]);
   const [userOptions, setUserData] = useState([]);
   const [permissionUser, setpermissionUser] = useState("");
@@ -138,6 +202,10 @@ export default function DocumentPermissions() {
   const [updatedData, setUpdatedData] = useState([]);
   const [appStatusArr, setAppStatusArr] = useState([]);
   const [revStatusArr, setRevStatusArr] = useState([]);
+
+  const [appStatusArrOne, setAppStatusArrOne] = useState();
+  const [revStatusArrOne, setRevStatusArrOne] = useState();
+
   const [appCommentArr, setAppCommentArr] = useState([]);
   const [revCommentArr, setRevCommentArr] = useState([]);
   const [appIdArr, setAppIdArr] = useState([]);
@@ -180,28 +248,23 @@ export default function DocumentPermissions() {
     setClientModalVisible(false);
   };
 
-  const handleStatusChange = async () => {
+  const handleStatusChange = async (selectedStatus) => {
     console.log("rejection",rejectionMarks);
+    console.log(selectedStatus,"status bhi aya");
     // Check if the selected document is available
     if (selectedDocument) {
+      console.log(selectedDocument,'document');
+      console.log(selectedStatus,"status");
+      console.log(revIdArr,appIdArr,revStatusArr,appStatusArr,"ye bhi dekh");
+
       // Perform your logic to update the status here
       // You can use the selectedStatus along with the record data
       // to update the status in the data array or make an API call
-  
-      const updatedRecord = { ...selectedDocument, status: selectedStatus, remarks:rejectionMarks};
-
-      console.log("updated",updatedRecord);
-  
-      // Update the data array with the modified record
-      const updatedDataArray = data.map((item) =>
-        item.id === selectedDocument.id ? updatedRecord : item
-      );
-
-      console.log(updatedDataArray,"updatedData");
       // Load data from the specific key
    
       // Trigger a re-render with the updated data
-      setUpdatedData(updatedDataArray);
+      // setUpdatedData(updatedDataArray);
+
      await updateDocStatus(selectedDocument);
   
       // Close the status modal
@@ -422,31 +485,42 @@ export default function DocumentPermissions() {
         {
           headers: {
             Authorization: user?.accessToken,
-            // Add other headers if needed
           },
         }
       );
       console.log('response',response.data);
-      
+      const approverStatusArrays = []
+      const reviewerStatusArrays =[]
+      const reviewerIdArrays = []
+      const approverIdArrays = []
       for(let i of response.data){
+        console.log(i,"response.data",i.id);
         const approverStatusArray = i.approverStatus.split(',').map(num => parseInt(num.trim(), 10));
         const reviewerStatusArray = i.reviewerStatus.split(',').map(num => parseInt(num.trim(), 10));
         const reviewerIdArray = i.reviewerId.split(',').map(num => parseInt(num.trim(), 10));
         const approverIdArray = i.approverId.split(',').map(num => parseInt(num.trim(), 10));
-        setRevIdArr(i.reviewerId.split(',').map(num => parseInt(num.trim(), 10)));
-        setAppIdArr(i.approverId.split(',').map(num => parseInt(num.trim(), 10)));
-        setRevStatusArr(i.reviewerStatus.split(',').map(num => parseInt(num.trim(), 10)));
-        setAppStatusArr(i.approverStatus.split(',').map(num => parseInt(num.trim(), 10)));
-        console.log(revStatusArr,appStatusArr,'hii');
+
+        // console.log( i.approverComment.split(','),"yeh chekc kro ");
+        const approverCommentArray = i.approverComment.split(',');
+        const reviewerCommentArray = i.reviewerComment.split(',');
+        
+        // console.log(approverStatusArray,reviewerStatusArray,reviewerIdArray,approverIdArray,'checkkr');
+        
+        approverStatusArrays.push({"id":i.id,"status":approverStatusArray,"comment":approverCommentArray})
+        reviewerStatusArrays.push({"id":i.id,"status":reviewerStatusArray,"comment":reviewerCommentArray})
+        reviewerIdArrays.push({"id":i.id,"status":reviewerIdArray})
+        approverIdArrays.push({"id":i.id,"status":approverIdArray})
+
+        setRevIdArr(reviewerIdArrays);
+        setAppIdArr(approverIdArrays);
+        setRevStatusArr(reviewerStatusArrays);
+        setAppStatusArr(approverStatusArrays);
 
         if(i.approverId.includes(user.user.id) && i.reviewerId.includes(user.user.id)){
-          console.log('YESSSSSSSSSSS');
           i['yourRole']='Approver and Reviewer';
-          console.log(approverIdArray.indexOf(user.user.id),'jjjjj');
-          console.log(approverIdArray,user.user.id,approverStatusArray[approverIdArray.indexOf(user.user.id)],'ssss'+typeof(approverStatusArray));
-         if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==1){
+         console.log(approverStatusArray[approverIdArray.indexOf(user.user.id)],"App Rev dono ha")
+          if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==1){
            i['yourStatus']='Rejected';
-
          }
          else if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==2){
            i['yourStatus']='Accepted';
@@ -457,9 +531,11 @@ export default function DocumentPermissions() {
        
         }
         else if(approverIdArray.includes(user.user.id) ){
-          console.log('YESSSSSSSSSSS');
+          console.log(approverIdArray.includes(user.user.id),"approver ha")
           i['yourRole']='Approver';
+
           setIndex(approverIdArray.indexOf(user.user.id));
+
           console.log(approverIdArray.indexOf(user.user.id),'jjjjj');
           console.log(approverIdArray,user.user.id,approverStatusArray[approverIdArray.indexOf(user.user.id)],'ssss'+typeof(approverStatusArray));
          if(approverStatusArray[approverIdArray.indexOf(user.user.id)]==1){
@@ -475,9 +551,11 @@ export default function DocumentPermissions() {
 
         }
         else if(reviewerIdArray.includes(user.user.id)){
-          console.log('YESSSSSSSSSSS');
+          console.log(reviewerIdArray.includes(user.user.id),"reviewer ha")
           i['yourRole']='Reviewer';
+
            setIndex(reviewerIdArray.indexOf(user.user.id));
+
            console.log(reviewerIdArray.indexOf(user.user.id),'jjjjj');
            console.log(reviewerIdArray,user.user.id,reviewerStatusArray[reviewerIdArray.indexOf(user.user.id)],'ssss'+typeof(reviewerStatusArray));
           if(reviewerStatusArray[reviewerIdArray.indexOf(user.user.id)]==1){
@@ -500,6 +578,10 @@ export default function DocumentPermissions() {
         } else if (approverStatusArray.every(num => num === 2)) {
           i['approverStatuss']='Sent to Client';
         }
+        else{
+          i['approverStatuss']='Pending';
+
+        }
 
 
         if (reviewerStatusArray.every(num => num === 0)) {
@@ -515,99 +597,218 @@ export default function DocumentPermissions() {
         }
 
       }
-      setData(response.data); // Assuming the response.data is an array of departments
+      console.log(approverStatusArrays,reviewerStatusArrays,reviewerIdArrays,approverIdArrays,"arrays hain ye ");
+      setData(response.data);
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
   };
+
+
   const updateDocStatus = async (myrecord) => {
-    try {
-      var role = 2;
-      console.log(revStatusArr,appStatusArr,'hohohoho');
-      let revStat = [...revStatusArr];
- 
-      let appStat = [...appStatusArr];
+    console.log(myrecord,"record dekhS");
+    const myrecordId = myrecord.id;
+    const revID = revIdArr.find(item => item.id === myrecordId);
+    const appID = appIdArr.find(item => item.id === myrecordId);
+    
+    const reviewId = revID.status
+    const approveId = appID.status
 
-      let revComment = [...revCommentArr];
- 
-      let appComment = [...appCommentArr];
-      if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Accept') {
-        role = 1;
-        
-        appStat[appIdArr.indexOf(user.user.id)] = 2;
-        appComment[appIdArr.indexOf(user.user.id)] = "";
-        setAppStatusArr(appStat); 
-        setAppCommentArr(appComment); 
-        revStat[revIdArr.indexOf(user.user.id)] = 2;
-        revComment[revIdArr.indexOf(user.user.id)] = "";
-        setRevCommentArr(revComment);
-      } else if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Reject') {
-        role = 1;
-        appStat[appIdArr.indexOf(user.user.id)] = 1;
-        appComment[appIdArr.indexOf(user.user.id)] = myrecord.remarks;
-        setAppCommentArr(appStat);
-        role = 0;
-        revComment[revIdArr.indexOf(user.user.id)] = myrecord.remarks;
-        setRevCommentArr(revComment);
-              }
-      else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Accept') {
-        role = 1;
-        appStat[appIdArr.indexOf(user.user.id)] = 2;
-        setAppStatusArr(appStat);
-        
-        appComment[appIdArr.indexOf(user.user.id)] = "";
-        setAppCommentArr(appComment); 
-      
-      } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Accept') {
-        role = 0;
-        revStat[revIdArr.indexOf(user.user.id)] = 2;
-        setRevStatusArr(revStat);
-        revComment[revIdArr.indexOf(user.user.id)] = "";
-        setRevCommentArr(revComment);
-              }
-         else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Reject') {
-        role = 1;
-        appStat[appIdArr.indexOf(user.user.id)] = 1;
-        setAppStatusArr(appStat);  
-        
-        appComment[appIdArr.indexOf(user.user.id)] = myrecord.remarks;
-        setAppCommentArr(appComment); 
-      
-      } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Reject') {
-        role = 0;
-        revStat[revIdArr.indexOf(user.user.id)] = 1;
-        setRevStatusArr(revStat);
+    console.log(reviewId,approveId,'ids');
+    const updatedRevStatusObj = revStatusArr.find(item => item.id === myrecordId);
+    const updatedAppStatusObj = appStatusArr.find(item => item.id === myrecordId);
+    const statusForRev = updatedRevStatusObj.status
+    const statusForApp = updatedAppStatusObj.status
 
-        revComment[revIdArr.indexOf(user.user.id)] = myrecord.remarks;
-        setRevCommentArr(revComment);
-              }
-      
-              console.log(myrecord.yourRole,selectedStatus,revStat.join(','),appStat.join(','));
+    const commentForRev = updatedRevStatusObj.comment
+    const commentForApp = updatedAppStatusObj.comment
 
-      const response = await axios.put(
-        `http://127.0.0.1:8083/api/documents/establishment`,
-        {
-          status: selectedStatus,
-          revStatusArr: revStat.join(','), // Convert array to string
-          appStatusArr: appStat.join(','), // Convert array to string
-          reviewerComment:revComment.join(","),
-          approverComment:appComment.join(","),
-          docName: myrecord.docName,
-        },
-        {
-          headers: {
-            Authorization: user?.accessToken,
-            // Add other headers if needed
-          },
-        }
-      );
-  
-      console.log(response.data);
-      await fetchData();
-    } catch (error) {
-      console.error("Error assigning documents:", error);
+    console.log(statusForApp,statusForRev,"obj");
+
+    if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Accept') {
+        statusForApp[approveId.indexOf(user.user.id)] = 2;
+        statusForRev[reviewId.indexOf(user.user.id)] = 2;
+    } else if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Reject'){
+      statusForApp[approveId.indexOf(user.user.id)] = 1;
+      statusForRev[reviewId.indexOf(user.user.id)] = 1;
+
+      const appIndex = approveId.indexOf(user.user.id)
+      const revIndex = approveId.indexOf(user.user.id)
+
+      commentForApp[appIndex] = rejectionMarks
+      commentForRev[revIndex] = rejectionMarks
+
+
+    } else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Accept') {
+      statusForApp[approveId.indexOf(user.user.id)] = 2;
+    } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Accept') {
+      statusForRev[reviewId.indexOf(user.user.id)] = 2;
+    } else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Reject') {
+      statusForApp[approveId.indexOf(user.user.id)] = 1;
+      const appIndex = approveId.indexOf(user.user.id)
+
+      commentForApp[appIndex] = rejectionMarks
+    } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Reject') {
+      statusForRev[reviewId.indexOf(user.user.id)] = 1;
+      const revIndex = approveId.indexOf(user.user.id)
+
+      commentForRev[revIndex] = rejectionMarks
     }
-  };
+
+    console.log(statusForRev,"changed Rev");
+    console.log(statusForApp,"changed App");
+
+    // // Set the modified arrays
+    setRevStatusArrOne(statusForRev);
+    setAppStatusArrOne(statusForApp);
+
+    try {
+      if(rejectionMarks){
+        const response = await axios.put(
+          `http://127.0.0.1:8083/api/documents/establishment`,
+          {
+            // status: selectedStatus,
+            revStatusArr: statusForRev.join(','), // Convert array to string
+            appStatusArr: statusForApp.join(','), // Convert array to string
+            reviewerComment:commentForRev.join(","),
+            approverComment:commentForApp.join(","),
+            docName: myrecord.docName,
+          },
+          {
+            headers: {
+              Authorization: user?.accessToken,
+              // Add other headers if needed
+            },
+          }
+        );
+      }else{
+        const response = await axios.put(
+          `http://127.0.0.1:8083/api/documents/establishment`,
+          {
+            revStatusArr: statusForRev.join(','), // Convert array to string
+            appStatusArr: statusForApp.join(','), // Convert array to string
+            docName: myrecord.docName,
+          },
+          {
+            headers: {
+              Authorization: user?.accessToken,
+              // Add other headers if needed
+            },
+          }
+        );
+      }
+      setSelectedStatus('')
+      await fetchData()
+    } catch (error) {
+      console.error(error)
+    }
+};
+
+
+
+  // const updateDocStatus = async (myrecord) => {
+  //   console.log(myrecord,myrecord.id,"record");
+  //   const myrecordId = myrecord.id
+
+  //   console.log(myrecord,'record aya ');
+  //   console.log(revIdArr,appIdArr,revStatusArr,appStatusArr,'arrays ');
+    
+  //   try {
+  //     var role = 2;
+
+  //     let revStat = revStatusArr[myrecordId];
+ 
+  //     let appStat = appStatusArr[myrecordId]
+
+  //     let appId = appIdArr[myrecordId]
+
+  //     let revId = revIdArr[myrecordId]
+
+  //     console.log(revStat,appStat,appId,revId,'/');
+
+  //   //   // let revComment = [...revCommentArr];
+ 
+  //   //   // let appComment = [...appCommentArr];
+      
+  //     if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Accept') {
+  //       role = 1;
+        
+  //       appStat[appIdArr.indexOf(user.user.id)] = 2;
+  //   //     // appComment[appIdArr.indexOf(user.user.id)] = "";
+  //       // setAppStatusArr(appStat); 
+  //   //     setAppCommentArr(appComment); 
+  //       revStat[revIdArr.indexOf(user.user.id)] = 2;
+  //   //     revComment[revIdArr.indexOf(user.user.id)] = "";
+  //   //     setRevCommentArr(revComment);
+  //     } else if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Reject') {
+  //   //     role = 1;
+  //       appStat[appIdArr.indexOf(user.user.id)] = 1;
+  //       revStat[revIdArr.indexOf(user.user.id)] = 1;
+
+  //   //     appComment[appIdArr.indexOf(user.user.id)] = myrecord.remarks;
+  //   //     setAppCommentArr(appStat);
+  //   //     role = 0;
+  //   //     revComment[revIdArr.indexOf(user.user.id)] = myrecord.remarks;
+  //   //     setRevCommentArr(revComment);
+  //             }
+  //     else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Accept') {
+  //   //     role = 1;
+  //       appStat[appIdArr.indexOf(user.user.id)] = 2;
+  //   //     setAppStatusArr(appStat);
+        
+  //   //     appComment[appIdArr.indexOf(user.user.id)] = "";
+  //   //     setAppCommentArr(appComment); 
+      
+  //     } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Accept') {
+  //   //     role = 0;
+  //       revStat[revIdArr.indexOf(user.user.id)] = 2;
+  //   //     setRevStatusArr(revStat);
+  //   //     revComment[revIdArr.indexOf(user.user.id)] = "";
+  //   //     setRevCommentArr(revComment);
+  //             }
+  //        else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Reject') {
+  //   //     role = 1;
+  //       appStat[appIdArr.indexOf(user.user.id)] = 1;
+  //   //     setAppStatusArr(appStat);  
+        
+  //   //     appComment[appIdArr.indexOf(user.user.id)] = myrecord.remarks;
+  //   //     setAppCommentArr(appComment); 
+      
+  //     } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Reject') {
+  //   //     role = 0;
+  //       revStat[revIdArr.indexOf(user.user.id)] = 1;
+  //   //     setRevStatusArr(revStat);
+
+  //   //     revComment[revIdArr.indexOf(user.user.id)] = myrecord.remarks;
+  //   //     setRevCommentArr(revComment);
+  //             }
+  //     console.log(revStat,appStat,"ab final ha ");
+  //   //           console.log(myrecord.yourRole,selectedStatus,revStat.join(','),appStat.join(','));
+
+      // const response = await axios.put(
+      //   `http://127.0.0.1:8083/api/documents/establishment`,
+      //   {
+      //     status: selectedStatus,
+      //     revStatusArr: revStat.join(','), // Convert array to string
+      //     appStatusArr: appStat.join(','), // Convert array to string
+      //     reviewerComment:revComment.join(","),
+      //     approverComment:appComment.join(","),
+      //     docName: myrecord.docName,
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: user?.accessToken,
+      //       // Add other headers if needed
+      //     },
+      //   }
+      // );
+  
+  //   //   console.log(response.data);
+  //   //   await fetchData();
+  //   } catch (error) {
+  //     console.error("Error assigning documents:", error);
+  //   }
+  // };
   
   useEffect(async () => {
     setUser(JSON.parse(localStorage?.getItem("user")));

@@ -4,17 +4,20 @@ import { Card, Row, Col, Dropdown, Menu } from "antd";
 import { RiMoreFill } from "react-icons/ri";
 import Chart from "react-apexcharts";
 
-export default function RadialbarChart() {
+export default function RadialbarChart({inputData}) {
+  console.log(inputData,"inputData");
+  let total = inputData.reduce((acc, val) => acc + val, 0);
+
   const menu = (
     <Menu>
-      <Menu.Item>Last 28 Days</Menu.Item>
+      <Menu.Item>Last 7 Days</Menu.Item>
       <Menu.Item>Last Month</Menu.Item>
       <Menu.Item>Last Year</Menu.Item>
     </Menu>
   );
 
   const [data] = useState({
-    series: [75,57, 50, 46],
+    series: inputData,
     options: {
       chart: {
         fontFamily: "Manrope, sans-serif",
@@ -26,12 +29,12 @@ export default function RadialbarChart() {
           enabled: false,
         },
       },
-      colors: ["#00F7BF", "#0010F7", "#FFC700","#EFC6A2"],
+      colors: ["#00F7BF", "#0010F7", "#CC6CE7","#7DDA58"],
 
       labels: ["Reviewed Pending", "Approved Pending", "Reviewed","Approved"],
 
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
       stroke: {
         lineCap: "round",
@@ -39,9 +42,9 @@ export default function RadialbarChart() {
 
       plotOptions: {
         radialBar: {
-          size: 100,
+          size: 50,
           hollow: {
-            size: "30%",
+            size: "20%",
           },
 
           track: {
@@ -59,9 +62,7 @@ export default function RadialbarChart() {
               show: true,
               fontSize: "16px",
               label: "Total",
-              formatter: function (w) {
-                return 100;
-              },
+              value : total
             },
           },
         },
@@ -105,9 +106,9 @@ export default function RadialbarChart() {
           <div id="chart" className="hp-donut-chart">
             <Chart
               options={data.options}
-              series={data.series}
+              series={inputData}
               type="radialBar"
-              height={398}
+              height={400}
               legend="legend"
             />
           </div>

@@ -6,62 +6,72 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderSpecialIcon from '@mui/icons-material/FolderSpecial';
 import FolderOpenIcon from '@mui/icons-material/Folder';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+
 const useStyles = makeStyles({
   root: {
-    flexGrow: 5,
-    maxWidth: 1000,
+    flexGrow: 7,
+    maxWidth: 1300,
   },
   projectNode: {
     backgroundColor: '#ffffff',
-    fontSize: '24px',
-    padding: '12px',
-    borderRadius: '4px',
-    marginBottom: '12px',
-    transition: 'background-color 0.3s ease',
+    fontSize: '30px',
+    padding: '15px',
+    borderRadius: '9px',
+    marginBottom: '15px',
+    transition: 'background-color 0.2s ease',
+    fontWeight: 'bold',
+
     '&:hover': {
       backgroundColor: '#ffffff',
     },
   },
   mdrNode: {
     backgroundColor: '#ffffff',
-    fontSize: '18px',
-    padding: '12px',
-    borderRadius: '4px',
+    fontSize: '24px',
+    padding: '15px',
+    borderRadius: '9px',
     marginLeft: '16px',
     marginBottom: '12px',
     transition: 'background-color 0.3s ease',
+    fontWeight: 'bold',
+
     '&:hover': {
       backgroundColor: '#ffffff',
     },
   },
   departmentIdNode: {
     backgroundColor: '#ffffff',
-    fontSize: '16px',
-    padding: '12px',
-    borderRadius: '4px',
+    fontSize: '20px',
+    padding: '15px',
+    borderRadius: '9px',
     marginLeft: '16px',
     marginBottom: '12px',
     transition: 'background-color 0.3s ease',
+    fontWeight: 'bold',
+
     '&:hover': {
       backgroundColor: '#ffffff',
     },
   },
   titleNode: {
     backgroundColor: '#ffffff',
-    fontSize: '12px',
+    fontSize: '20px',
     padding: '8px',
     borderRadius: '4px',
     marginLeft: '16px',
     transition: 'background-color 0.3s ease',
+    fontWeight: 'bold',
+
     '&:hover': {
       backgroundColor: '#ffffff',
     },
   },
   icon: {
     marginRight: '8px',
+    fontWeight: 'bold',
+
   },
   buttonContainer: {
     display: 'flex',
@@ -111,35 +121,47 @@ const MyTreeView = () => {
   }, [user?.user?.companyId]);
 
   useEffect(() => {
-    const processData = () => {
-      if (!information || information.length === 0) {
-        // Handle the case where information is undefined or an empty array
-        return;
+    // Modify the processData function
+// Modify the processData function
+const processData = () => {
+  if (!information || information.length === 0) {
+    // Handle the case where information is undefined or an empty array
+    return;
+  }
+
+  const newData = {};
+  console.log(information, "information");
+  information.forEach((info) => {
+    console.log(info,"info")
+    if (!newData[info.projectCode]) {
+      newData[info.projectCode] = {};
+    }
+    console.log(newData,'newData 1');
+    if (info.mdrCode && !newData[info.projectCode][info.mdrCode]) {
+      newData[info.projectCode][info.mdrCode] = {};
+    }
+    console.log(newData,'newData 2');
+
+    const departmentNames = info.departmentName?.split(",") ?? [];
+    const documents = info.documents ?? [];
+    departmentNames.forEach((departmentName) => {
+      const departmentSuffix = info.departmentSuffix;
+      if (!newData[info.projectCode][info.mdrCode][departmentName]) {
+        newData[info.projectCode][info.mdrCode][departmentName] = [];
       }
-
-      const newData = {};
-      console.log(information,"informtion");
-      information.forEach(info => {
-        if (!newData[info.projectCode]) {
-          newData[info.projectCode] = {};
-          console.log(newData[info.projectCode]);
+      documents.forEach((document) => {
+        if (document.title.includes(departmentSuffix)) {
+          newData[info.projectCode][info.mdrCode][departmentName].push({
+            title:document.docTitle,
+            docTitle: document.title,
+            status: document.status
+          });
         }
-        if (!newData[info.projectCode][info.mdrCode]) {
-          newData[info.projectCode][info.mdrCode] = {};
-          console.log(newData[info.projectCode][info.mdrCode]);
-
-        }
-        const departmentIds = info.departmentId.split(',');
-        departmentIds.forEach(departmentId => {
-          if (!newData[info.projectCode][info.mdrCode][departmentId]) {
-            newData[info.projectCode][info.mdrCode][departmentId] = [];
-          }
-          newData[info.projectCode][info.mdrCode][departmentId].push(info.title);
-        });
       });
-
-      setData(newData);
-    };
+    });
+  });
+  setData(newData);
+};
 
     processData();
   }, [information]);
@@ -147,7 +169,7 @@ const MyTreeView = () => {
 
   const handleOpenDocument = (title) => {
     // Handle open document logic here
-    console.log(`Opening document: ${title}`);
+    alert(`Opening document: ${title}`);
   };
 
   return (
@@ -164,7 +186,7 @@ const MyTreeView = () => {
             label={`Project ID: ${projectId}`}
             className={classes.projectNode}
             icon={<FolderIcon className={classes.icon} />}
-            sx={{ display: 'inline-flex' }} // Display child nodes inline
+            sx={{ display: "inline-flex" }} // Display child nodes inline
           >
             {Object.entries(mdrs).map(([mdr, departments]) => (
               <TreeItem
@@ -173,29 +195,35 @@ const MyTreeView = () => {
                 label={`MDR: ${mdr}`}
                 className={classes.mdrNode}
                 icon={<FolderSpecialIcon className={classes.icon} />}
-                sx={{ display: 'inline-flex' }} // Display child nodes inline
+                sx={{ display: "inline-flex" }} // Display child nodes inline
               >
-                {Object.entries(departments).map(([departmentId, titles]) => (
+                {Object.entries(departments).map(([department, documents]) => (
                   <TreeItem
-                    key={`${projectId}-${mdr}-${departmentId}`}
-                    nodeId={`${projectId}-${mdr}-${departmentId}`}
-                    label={`Department ID: ${departmentId}`}
+                    key={`${projectId}-${mdr}-${department}`}
+                    nodeId={`${projectId}-${mdr}-${department}`}
+                    label={`Department Name: ${department}`}
                     className={classes.departmentIdNode}
                     icon={<FolderIcon className={classes.icon} />}
-                    sx={{ display: 'inline-flex' }} // Display child nodes inline
+                    sx={{ display: "inline-flex" }} // Display child nodes inline
                   >
-                    {titles.map((title, titleIndex) => (
+                    {documents.map((document, index) => (
                       <TreeItem
-                        key={`${projectId}-${mdr}-${departmentId}-${titleIndex}`}
-                        nodeId={`${projectId}-${mdr}-${departmentId}-${titleIndex}`}
-                        label={`Title: ${title}`}
+                        key={`${projectId}-${mdr}-${department}-${index}`}
+                        nodeId={`${projectId}-${mdr}-${department}-${index}`}
+                        label={`Title: ${document.docTitle} (${document.title})`}
                         className={classes.titleNode}
                         icon={<DescriptionIcon className={classes.icon} />}
-                        sx={{ display: 'inline-flex' }} 
+                        sx={{ display: "inline-flex" }}
                       >
                         <div className={classes.buttonContainer}>
-                          <span className={classes.status}>Status: Ongoing</span>
-                          <Button onClick={() => handleOpenDocument(title)} variant="outlined" color="primary">Open Document</Button>
+                          <span className={classes.status}>Status: {document.status}</span>
+                          <Button
+                            onClick={() => handleOpenDocument(document.docTitle)}
+                            variant="outlined"
+                            color="primary"
+                          >
+                            Open Document
+                          </Button>
                         </div>
                       </TreeItem>
                     ))}

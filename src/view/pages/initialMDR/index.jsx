@@ -41,7 +41,6 @@ console.log(jsondata);
     const [selectedRows, setSelectedRows] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
     const [code,setCode] = useState()
-    // const [count,setCount] = useState(1)
 
 
     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
@@ -158,7 +157,7 @@ console.log(jsondata);
         const updatedCounts = { ...prevCounts };
         const currentCount = updatedCounts[record.document] || 1;
         updatedCounts[record.document] = currentCount + 1;
-        console.log("documents", updatedCounts);
+        // console.log("documents", updatedCounts);
         return updatedCounts;
       });
     };
@@ -166,14 +165,14 @@ console.log(jsondata);
     const templateModalShow = () => {
       setTemplateModalVisible(true);  
       const updatedData = [...data];
-      console.log(updatedData,"updatedData");
+      // console.log(updatedData,"updatedData");
       let allInfos = [];
       selectedRows.forEach((index, sequenceNumber) => {
         const count = documentCounts[data[index].document] || 1;
-        console.log(count, "counting");        
+        // console.log(count, "counting");        
         for (let i = 0; i < count; i++) {
           let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-          console.log("document",newDocument);
+          // console.log("document",newDocument);
           // Save the document name in allInfos array
           if (!allInfos[index]) {
             allInfos[index] = {};
@@ -184,15 +183,15 @@ console.log(jsondata);
             ...data[index],
             count: documentCounts[data[index].document]
           };
-        console.log(updatedData[index],"updating count");
+        // console.log(updatedData[index],"updating count");
           
         }
       
       });
       console.log(documentCounts,"counts");
       setInformation(allInfos)
-      console.log(allInfos,"allInfos");
-      console.log("Updated", updatedData);
+      // console.log(allInfos,"allInfos");
+      // console.log("Updated", updatedData);
       setData(updatedData);
       
     };
@@ -205,7 +204,7 @@ console.log(jsondata);
         ...newDocumentInfo[index][i],
         title,
       };
-      console.log(newDocumentInfo,"newDataInfo");
+      // console.log(newDocumentInfo,"newDataInfo");
 
       return newDocumentInfo;
     });
@@ -239,11 +238,11 @@ console.log(jsondata);
   };
   
   const change=(selectedRows,selectedRowKeys)=>{
-    console.log(selectedRows,'row',selectedRowKeys);
+    // console.log(selectedRows,'row',selectedRowKeys);
     const updatedSelectedRowKeys = selectedRowKeys.map(row => ({ ...row, checked: true }));
     console.log(updatedSelectedRowKeys);
     const indexes = updatedSelectedRowKeys.map(row => row.index);
-    console.log(indexes,"indexes");
+    // console.log(indexes,"indexes");
     setSelectedRows(indexes)
   }
   
@@ -288,19 +287,18 @@ console.log(jsondata);
       const departmentOptions = await JSON.parse(departmentOptionsString);
       try {
         var title=getMdrTitle;
-        console.log(title,"title for adding document");
+        // console.log(title,"title for adding document");
         var mdrCode=getMdrCode;
-        console.log(mdrCode,"mdrcode for adding document");
+        // console.log(mdrCode,"mdrcode for adding document");
         mdrCode=mdrCode.replace(/\s/g, '');
-        console.log(mdrCode,"mdrcode for adding document");
+        // console.log(mdrCode,"mdrcode for adding document");
         var count = selectedRows.length
-        console.log(count,"selectedCount of docs");
+        // console.log(count,"selectedCount of docs");
         selectedRows.forEach(async (index) => {
 
           let documentValue = data[index].document;
           let count = data[index].count||1
-          console.log(documentValue,count||1,"doc related Infomation");
-          // documentValue = documentValue.replace("xxxx", ProjectCode)
+          // console.log(documentValue,count||1,"doc related Infomation");
           const masterDocumentName=title;
           const assignedBy=user.user.roleId;
           const assignedFrom=user.user.id;
@@ -374,6 +372,7 @@ console.log(jsondata);
             }
           );     
         }else{
+          console.log(departmentId,projectId,"ye jarha ha")
           const response = await axios.post(
             "http://127.0.0.1:8083/api/documents/mdr",
             {

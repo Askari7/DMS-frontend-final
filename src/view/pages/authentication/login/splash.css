@@ -1,0 +1,10 @@
+/* In your CSS file */
+@keyframes scaleAnimation {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.2);
+    }
+  }
+  

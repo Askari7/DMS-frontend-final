@@ -33,8 +33,8 @@ export default function LeftContent() {
       <img
   src={Logo}
   alt="logo"
-  height="70%"
-  width="70%"
+  height="50%"
+  width="50%"
   style={{
     position: 'relative',
     animation: 'floatUpDown 2s ease-in-out infinite',
