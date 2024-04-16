@@ -276,13 +276,13 @@ const menu = (
   };
 let count=0;
   const createModalShow = (record) => {
-    // console.log("record",record)
+     console.log("record",record)
     setRecord(record)
     setDocumentModalVisible(true);
   };
 
   const showModalShow = (record) => {
-    // console.log(record)
+     console.log('record',record)
     setRecord(record)
     showDocs(record)
     setShowModalVisible(true);
@@ -668,7 +668,7 @@ useEffect(() => {
         
         console.log(user?.user?.departmentId,'departmentId')
         const data = response.data.filter(item => 
-          item.departmentId.split(",").includes((user?.user?.departmentId))      
+          item.departmentId.split(",").includes((user?.user?.departmentId))  || item.authorId === user?.user?.id    
           );       
 
         const d =  data.map((d)=>d.projectId)
