@@ -302,8 +302,8 @@ console.log(jsondata);
           console.log(documentValue,count||1,"doc related Infomation");
           // documentValue = documentValue.replace("xxxx", ProjectCode)
           const masterDocumentName=title;
-          const assignedBy=user.user.id;
-          const assignedFrom=user.user.roleId;
+          const assignedBy=user.user.roleId;
+          const assignedFrom=user.user.id;
           console.log(count,'count for loop');
           for (let i = 0; i < count; i++) {
             try {
