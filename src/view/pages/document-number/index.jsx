@@ -201,10 +201,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: first, label: first.toUpperCase() },
-                { value: second, label: second.toUpperCase() },
-                { value: third, label: third.toUpperCase() },
-                { value: fourth, label: fourth.toUpperCase() },
+                { value: first, label: first},
+                { value: second, label: second },
+                { value: third, label: third},
+                { value: fourth, label: fourth }
               ]}
               value={firstField}
               onChange={(e) => setFirstField(e)}
@@ -223,10 +223,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: first, label: first.toUpperCase() },
-                { value: second, label: second.toUpperCase() },
-                { value: third, label: third.toUpperCase() },
-                { value: fourth, label: fourth.toUpperCase() },
+                { value: first, label: first },
+                { value: second, label: second },
+                { value: third, label: third },
+                { value: fourth, label: fourth },
               ]}
               value={firstField}
               onChange={(e) => setSecondField(e)}
@@ -246,10 +246,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: first, label: first.toUpperCase() },
-                { value: second, label: second.toUpperCase() },
-                { value: third, label: third.toUpperCase() },
-                { value: fourth, label: fourth.toUpperCase() },
+                { value: first, label: first },
+                { value: second, label: second },
+                { value: third, label: third },
+                { value: fourth, label: fourth },
               ]}
               value={firstField}
               onChange={(e) => setThirdField(e)}
@@ -269,10 +269,10 @@ export default function DocumentNumbering() {
             <Select
               style={{ width: "420px" }}
               options={[
-                { value: first, label: first.toUpperCase() },
-                { value: second, label: second.toUpperCase() },
-                { value: third, label: third.toUpperCase() },
-                { value: fourth, label: fourth.toUpperCase() },
+                { value: first, label: first },
+                { value: second, label: second },
+                { value: third, label: third },
+                { value: fourth, label: fourth },
               ]}
               value={firstField}
               onChange={(e) => setFourthField(e)}

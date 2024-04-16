@@ -281,6 +281,24 @@ export default function DocumentPermissions() {
   
   const sendEmail = async()=>{
     try {
+      const response = await axios.post(
+        `http://127.0.0.1:8083/api/clients/send-email-client`,
+        {
+          roleId:user.user.roleId,
+          companyId:user?.user?.companyId,
+
+          clientName:selectedEmail
+        },
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      // Handle the response as needed
+      console.log(response);
+      message.success(response?.data?.message);
       
     } catch (error) {
       console.error("Error Sending Email:", error?.message);
@@ -349,7 +367,7 @@ export default function DocumentPermissions() {
     console.log('helllooo',responseData);
      // Replace 'John' with the actual doc's name
      const docName = record.docName;
-     const url= `${BACKEND_URL}/documents/${docName}-${record.version}.pdf` 
+     const url= `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf` 
      console.log(user.user.roleId,user.user.firstName,user);
      let allowed='false';
  if(responseData){

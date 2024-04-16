@@ -300,9 +300,9 @@ console.log(jsondata);
           let count = data[index].count||1
           // console.log(documentValue,count||1,"doc related Infomation");
           const masterDocumentName=title;
-          const assignedBy=user.user.id;
-          const assignedFrom=user.user.roleId;
-          // console.log(count,'count for loop');
+          const assignedBy=user.user.roleId;
+          const assignedFrom=user.user.id;
+          console.log(count,'count for loop');
           for (let i = 0; i < count; i++) {
             try {
               var docTitle = documentInfo[index][i].title;

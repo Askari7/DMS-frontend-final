@@ -555,7 +555,7 @@ if(user.user.roleId==2 ){
     
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.roleId}&department=${user.user.departmentId}`,
+        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
