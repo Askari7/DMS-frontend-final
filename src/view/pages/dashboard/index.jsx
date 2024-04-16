@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Row, Col,Image } from "antd";
+import { Row, Col,Image, message } from "antd";
 import { WalletMinus, Login, Add, Logout, Task, UserMinus, TaskSquare, User } from "iconsax-react";
 import FeatureCard from "../../main/dashboard/analytics/featureCard";
 import ListCard from "../../main/dashboard/analytics/listCard";
@@ -32,6 +32,8 @@ export default function Analytics() {
   const history = useHistory();
 
   const handleUser = () => {
+    message.success("All Employees Information")
+
     // Navigate to the user page
     history.push('./users'); // Replace '/user' with the actual URL of your user page
   };
@@ -45,18 +47,25 @@ export default function Analytics() {
   };
 
   const handleDepartment = () => {
+    message.success("All Departments Information")
     // Navigate to the user page
     history.push('./departments'); // Replace '/user' with the actual URL of your user page
   };
   const handleProject = () => {
     // Navigate to the user page
+    message.success("All Projects Information")
+
     history.push('./projects'); // Replace '/user' with the actual URL of your user page
   };
   const handleClient = () => {
     // Navigate to the user page
+    message.success("All Clinets Information")
+
     history.push('./clients'); // Replace '/user' with the actual URL of your user page
   };
   const handleMDR = () => {
+    message.success("All MDRs Information")
+
     // Navigate to the user page
     history.push('./mdr'); // Replace '/user' with the actual URL of your user page
   };

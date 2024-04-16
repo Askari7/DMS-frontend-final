@@ -1,20 +1,10 @@
+import React from "react";
 import { Link } from "react-router-dom";
-
 import { useSelector } from "react-redux";
-
-import logoSmall from "../../../../assets/images/logo/logo-small.svg";
-import logoSmallDark from "../../../../assets/images/logo/logo-small-dark.svg";
-import logo from "../../../../assets/images/logo/logo.svg";
-import logoDark from "../../../../assets/images/logo/logo-dark.svg";
-import logoRTL from "../../../../assets/images/logo/logo-rtl.svg";
-import logoRTLDark from "../../../../assets/images/logo/logo-rtl-dark.svg";
 import DMSLogo from "../../../../assets/images/logo/Logo-01.png";
-import JobConnectLogo from "../../../../assets/images/logo/logo2.jpeg";
-
-import themeConfig from "../../../../configs/themeConfig.jsx";
 
 export default function MenuLogo(props) {
-  const customise = useSelector((state) => state.customise);
+
 
   return (
     <div className="hp-header-logo hp-d-flex hp-align-items-center">
@@ -22,35 +12,40 @@ export default function MenuLogo(props) {
         to="/"
         onClick={props.onClose}
         className="hp-position-relative hp-d-flex"
+        style={{
+          animation: `moveUpDown 4s ease-in-out infinite`, // Apply animation for moving up and down
+        }}
       >
-        {/* {
-          props.small ? (
-            customise.theme == "light" ? (
-              <img className="hp-logo" src={logoSmall} alt="logo" />
-            ) : (
-              <img className="hp-logo" src={logoSmallDark} alt="logo" />
-            )
-          ) : (
-            customise.direction == "rtl" ? (
-              customise.theme == "light" ? (
-                <img className="hp-logo" src={logoRTL} alt="logo" />
-              ) : (
-                <img className="hp-logo" src={logoRTLDark} alt="logo" />
-              )
-            ) : (
-              customise.theme == "light" ? (
-                <img className="hp-logo" src={logoDark} alt="logo" />
-              ) : (
-                <img className="hp-logo" src={logoDark} alt="logo" />
-              )
-            )
-          )
-        } */}
-
-        <img className="hp-logo" src={DMSLogo}   style={{ width: '240px', height: '120px', background: 'transparent' }}
- alt="logo" />
-        {/* <h3>Job Connect</h3> */}
+        <img
+          className="hp-logo"
+          src={DMSLogo}
+          style={{
+            width: "160px",
+            height: "120px",
+            background: "transparent",
+          }}
+          alt="logo"
+        />
       </Link>
     </div>
   );
 }
+
+const styles = `
+  @keyframes moveUpDown {
+    0% {
+      transform: translateY(15px); /* Move to original position */
+    }
+    50% {
+      transform: translateY(-15px); /* Move up */
+    }
+    100% {
+      transform: translateY(15px); /* Move down to original position */
+    }
+  }
+`;
+
+// Injecting the styles into the document head
+const styleElement = document.createElement('style');
+styleElement.innerHTML = styles;
+document.head.appendChild(styleElement);

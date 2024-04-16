@@ -357,7 +357,7 @@ setDepartmentId(record['id']);
           </Col>
         </Row>
       </Modal>
-      {user && user.id === 1 && (
+      {user && user?.user.roleId == "1" && (
   <div style={{ textAlign: "right", marginBottom: "16px"}}>
     <Button type="primary" onClick={departmentModalShow}>    
       Add Department

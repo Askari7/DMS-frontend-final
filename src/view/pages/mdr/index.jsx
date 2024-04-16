@@ -22,8 +22,11 @@ import {
   Modal,
   message,
   Upload,
-  Checkbox
+  Checkbox,
+  Typography
 } from "antd";
+const { Title, Text } = Typography;
+
 import { Radio } from "antd";
 import axios from "axios";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
@@ -66,6 +69,8 @@ export default function MDR() {
   const [assignModalVisible, setAssignModalVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [showModalVisible, setShowModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
   const [params,setParams] = useState()
 
 
@@ -96,6 +101,8 @@ export default function MDR() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
+  const [recordMdr,setRecordMdr] = useState()
+
   const [projectCode,setProjectCode] = useState()
   const location = useLocation();
   const { matchingRecord } = location.state || {}
@@ -281,6 +288,18 @@ let count=0;
     setShowModalVisible(true);
   };
 
+  const editModalShow = (record) => {
+    console.log(recordMdr,"record1");
+    setRecordMdr(record)
+    setEditModalVisible(true);
+    console.log(recordMdr,"record2");
+
+  };
+
+  const editModalCancel = () => {
+
+    setEditModalVisible(false);
+  };
   const showModalCancel = () => {
     setShowModalVisible(false);
   };
@@ -532,6 +551,13 @@ useEffect(() => {
       fetchData()
     } catch (error) {
       console.error("Error assigning documents:", error);
+    }
+  }
+  const handleEdit = async()=>{
+    try {
+      console.log(recordMdr,"recordMdr");
+    } catch (error) {
+      
     }
   }
   const addDocument = async () => {
@@ -968,6 +994,47 @@ useEffect(() => {
           </Col>
         </Row>
       </Modal>
+      
+      <Modal
+  title="MDR Information"
+  width={400}
+  centered
+  visible={editModalVisible}
+  onCancel={editModalCancel}
+  footer={null}
+  closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+>
+
+  {recordMdr ? (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "left" }}>
+    <Title level={3}>Title: {recordMdr.title || null}</Title><br />
+      <Text strong>Author Name: </Text>
+      <Text>{recordMdr.authorName || null}</Text><br />
+      <Text strong>Department ID: </Text>
+      <Text>{recordMdr.departmentId || null}</Text><br />
+      <Text strong>Project Code: </Text>
+      <Text>{recordMdr.projectCode || null}</Text><br />
+      <Text strong>MDR Code: </Text>
+      <Text>{recordMdr.mdrCode || null}</Text><br />
+      <Text strong>No of Documents: </Text>
+      <Text>{recordMdr.noOfDocuments || null}</Text><br />
+      <Text strong>Percentage: </Text>
+      <Text>{recordMdr.percentage || null}</Text><br />
+
+      <Text strong>Status: </Text>
+      <Text>{recordMdr.status}</Text><br />
+      <Text strong>Created At: </Text>
+      <Text>{recordMdr.createdAt}</Text>
+      <br /><br />
+      </div>
+      <Button type="primary" style={{ marginTop: "16px" }} onClick={handleEdit}>Add More Documents</Button>
+    </div>
+  ) : null}
+</Modal>
+
+
+
 
       <Modal
         title="Show MDR Documents "
@@ -1117,17 +1184,15 @@ useEffect(() => {
                   >
                     Export
                   </Button>
-                  {user.user.roleId!==1 &&       
-                  <>
-                  <Button
-                    key={record?.id}
-                    onClick={() => {createModalShow(record)                      
-                    }}
-                  >
-                    Create
-                  </Button>
-                  </>
-                  }      
+                  {user.user.roleId !== 1 && record.authorId === user?.user.id  && record.status =="Assigned" &&(
+                    <Button
+                      key={record?.id}
+                      onClick={() => createModalShow(record)}
+                    >
+                      Create
+                    </Button>
+                  )}
+    
                   {user.user.roleId==1 &&       
                   <>
                   <Button
@@ -1137,7 +1202,15 @@ useEffect(() => {
                   >
                     Open
                   </Button>
+                  <Button
+                    key={record?.id}
+                    onClick={() => {editModalShow(record)                      
+                    }}
+                  >
+                    Edit
+                  </Button>
                   </>
+                  
                   }       
                 </Space>
               </>

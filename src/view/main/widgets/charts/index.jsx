@@ -12,6 +12,7 @@ import DonutChart from "./donutChart";
 import RadarChart from "./radarChart";
 import RadialbarChart from "./radialbarChart";
 import axios from "axios";
+import Carousal from "./Carousal";
 
 
 
@@ -135,6 +136,11 @@ export default function Charts() {
   </Breadcrumb>
   {/* Add additional content here if needed */}
 </Card>
+<Card>
+
+{/* <Carousal/> */}
+
+</Card>
       </Col>
       {user && user?.user.roleId === 1 &&(
   <Col xl={12} lg={24}>
@@ -166,25 +172,25 @@ export default function Charts() {
   </Col>
 )}
 
-      <Col span={24}>
+      {/* <Col span={24}>
         <LineChart />
       </Col>
 
       <Col span={24}>
         <AreaChart />
-      </Col>
+      </Col> */}
 
       {/* <Col span={24}>
         <ScatterChart />
       </Col> */}
 
-      <Col xl={12} lg={24}>
+      {/* <Col xl={12} lg={24}>
         <HeatmapChart />
       </Col>
       
       <Col xl={12} lg={24}>
         <RadarChart />
-      </Col>
+      </Col> */}
       
       {/* <Col xl={12} lg={24}>
         <CandlestickChart />
