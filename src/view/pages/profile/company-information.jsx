@@ -75,7 +75,7 @@ export default function CompanyInfo() {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       const {name,details,companyEmail,owner,ownerEmail,address,contact,industry} = response.data
       setCompanyName(name)
       setCompanyEmail(companyEmail)
@@ -88,7 +88,7 @@ export default function CompanyInfo() {
 
       
 
-      console.log(name,details);
+      // console.log(name,details);
       setData(response.data)    
     } catch (error) {
       console.error(error)

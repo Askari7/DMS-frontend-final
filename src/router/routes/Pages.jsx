@@ -185,6 +185,12 @@ const PagesRoutes = [
     isProtected: true,
   },
   {
+    path: "/pages/profile/change-personal-profile",
+    component: lazy(() => import("../../view/pages/profile")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
     path: "/pages/profile/company-information",
     component: lazy(() => import("../../view/pages/profile")),
     layout: "VerticalLayout",

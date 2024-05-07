@@ -5,6 +5,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import {
+  notification,
   Row,
   Col,
   Divider,
@@ -206,6 +207,18 @@ const menu = (
 
   const history = useHistory();
   const navigateToMdrTemplate = () => {
+    if (!title || !projectId ||!selectedReviewer ||!selectedApprover ) {
+      // If any required field is missing, display a validation error notification
+      notification.error({
+        message: 'Validation Error',
+        description: 'Please fill in all required fields.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+      return; // Exit early if validation fails
+    }
     const project = projectOptions.find((item) => item?.value == projectId);
     // console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
@@ -220,6 +233,18 @@ const menu = (
     &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
     
     const navigateToMdrTemplateForUpdate = () => {
+      if (!title || !projectId ||!selectedReviewer ||!selectedApprover ) {
+        // If any required field is missing, display a validation error notification
+        notification.error({
+          message: 'Validation Error',
+          description: 'Please fill in all required fields.',
+          style: {
+            backgroundColor: '#f5222d', // Red color background
+            color: '#fff', // White text color
+          },
+        });
+        return; // Exit early if validation fails
+      }
       const project = projectOptions.find((item) => item?.value == projectId);
       // console.log('departmentOptions',departmentOptions);
       const serializedDepartmentOptions = JSON.stringify(departmentOptions);
@@ -364,11 +389,12 @@ const showDocs = async(record)=>{
 // };
 
 
-const convertToCSV = (data, imageUrl) => {
+const convertToCSV = (data) => {
   const csvRows = [];
 
   // Add image URL as the first row
-  csvRows.push(`Image,${imageUrl}`);
+  
+  csvRows.push(`Novacon`);
 
   data.forEach((obj) => {
     const key = Object.keys(obj)[0];
@@ -393,92 +419,92 @@ const convertToCSV = (data, imageUrl) => {
   return csvRows.join('\n');
 };
 
-// const handleExport = async (record, imageUrl) => {
-//   await fetchDepartmentDocs(record);
-
-//   if (docData.length > 0) {
-//     const csvData = convertToCSV(docData, imageUrl);
-
-//     const blob = new Blob([csvData], { type: 'text/csv' });
-//     const url = window.URL.createObjectURL(blob);
-//     const link = document.createElement('a');
-//     link.href = url;
-//     link.setAttribute('download', `MDR ${docData[0].masterDocumentId}.csv`);
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//   }
-// };
-
-const generateHTML = (data, logoBase64) => {
-  const csvContent = convertToCSV(data,logoBase64);
-
-  // Construct HTML content
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>CSV Export</title>
-    </head>
-    <body>
-      <img src="${logoBase64}" alt="Logo">
-      <h1>CSV Data</h1>
-      <pre>${csvContent}</pre>
-    </body>
-    </html>
-  `;
-
-  return htmlContent;
-};
-const getImageBase64FromUrl = async (url) => {
-  try {
-    // Fetch the image as a Blob
-    const response = await fetch(url);
-    const blob = await response.blob();
-
-    // Convert the Blob to base64
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1];
-        resolve(base64String);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  } catch (error) {
-    console.error('Error fetching or converting image:', error);
-    return null;
-  }
-};
-
 const handleExport = async (record, imageUrl) => {
   await fetchDepartmentDocs(record);
-  const logoBase = await getImageBase64FromUrl(imageUrl); // Added 'await' here
+
   if (docData.length > 0) {
-    const htmlContent = generateHTML(docData, logoBase);
+    const csvData = convertToCSV(docData);
 
-    // Create a Blob from the HTML content
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-
-    // Create a URL for the Blob
+    const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
-
-    // Create a link element and trigger download
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `MDR ${docData[0].masterDocumentId}.html`);
+    link.setAttribute('download', `MDR ${docData[0].masterDocumentId}.csv`);
     document.body.appendChild(link);
     link.click();
-
-    // Cleanup
     document.body.removeChild(link);
   }
 };
+
+// const generateHTML = (data, logoBase64) => {
+//   const csvContent = convertToCSV(data,logoBase64);
+
+//   // Construct HTML content
+//   const htmlContent = `
+//     <!DOCTYPE html>
+//     <html lang="en">
+//     <head>
+//       <meta charset="UTF-8">
+//       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//       <title>CSV Export</title>
+//     </head>
+//     <body>
+//       <img src="${logoBase64}" alt="Logo">
+//       <h1>CSV Data</h1>
+//       <pre>${csvContent}</pre>
+//     </body>
+//     </html>
+//   `;
+
+//   return htmlContent;
+// };
+// const getImageBase64FromUrl = async (url) => {
+//   try {
+//     // Fetch the image as a Blob
+//     const response = await fetch(url);
+//     const blob = await response.blob();
+
+//     // Convert the Blob to base64
+//     return new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.readAsDataURL(blob);
+//       reader.onloadend = () => {
+//         const base64String = reader.result.split(',')[1];
+//         resolve(base64String);
+//       };
+//       reader.onerror = (error) => {
+//         reject(error);
+//       };
+//     });
+//   } catch (error) {
+//     console.error('Error fetching or converting image:', error);
+//     return null;
+//   }
+// };
+
+// const handleExport = async (record, imageUrl) => {
+//   await fetchDepartmentDocs(record);
+//   const logoBase = await getImageBase64FromUrl(imageUrl); // Added 'await' here
+//   if (docData.length > 0) {
+//     const htmlContent = generateHTML(docData, logoBase);
+
+//     // Create a Blob from the HTML content
+//     const blob = new Blob([htmlContent], { type: 'text/html' });
+
+//     // Create a URL for the Blob
+//     const url = window.URL.createObjectURL(blob);
+
+//     // Create a link element and trigger download
+//     const link = document.createElement('a');
+//     link.href = url;
+//     link.setAttribute('download', `MDR ${docData[0].masterDocumentId}.html`);
+//     document.body.appendChild(link);
+//     link.click();
+
+//     // Cleanup
+//     document.body.removeChild(link);
+//   }
+// };
 
 
 const fetchDepartmentDocs = async (record) => {
@@ -549,6 +575,18 @@ const result = Object.keys(modifiedData).map(key => ({ [key]: modifiedData[key] 
 useEffect(() => {
 }, [docData]);
   const assignMDR = async(assignedEmployees,allUsers)=>{
+    if (!projectId || !assignedEmployees ) {
+      // If any required field is missing, display a validation error notification
+      notification.error({
+        message: 'Validation Error',
+        description: 'Please fill in all required fields.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+      return; // Exit early if validation fails
+    }
     try {
       // console.log(allUsers);
       const assignedUser = allUsers.find(user => user.id == assignedEmployees)      
@@ -577,6 +615,14 @@ useEffect(() => {
           },
         }
       );
+      notification.success({
+        message: `${response?.data?.message}`,
+        style: {
+          backgroundColor: '#52c41a', // Red color background
+          color: '#fff', // White text color
+        },
+      }
+      )
       setAssignModalVisible(false)
       fetchData()
     } catch (error) {
@@ -1209,7 +1255,7 @@ console.log('dataaaaaa',data);
 
                   <Button
                     key={record?.id}
-                    onClick={() => handleExport(record,imageUrl)}
+                    onClick={() => handleExport(record)}
                     disabled={user?.user?.roleId != 1}
                   >
                     Export

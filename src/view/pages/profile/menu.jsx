@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import axios from "axios";
 import { useSelector } from "react-redux";
 
 import { Col, Avatar, Badge, Menu } from "antd";
@@ -17,6 +17,21 @@ import menuImg from "../../../assets/images/pages/profile/menu-img.svg";
 import avatar from "../../../assets/images/users/1.jpg";
 
 export default function MenuProfile(props) {
+  const [ profile,setProfile] = useState(null)
+  const getprofile = async ()=>{
+      
+      const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+        headers:{
+          Authorization: user?.accessToken,
+        }
+      }) 
+      console.log(getProfile.data.msg.image,"logo");
+      setProfile(getProfile.data.msg.image)
+    }
+    useEffect(()=>{
+      getprofile() 
+    },[])
+  console.log(props,"props aye hain");
   const menuIconClass = "remix-icon hp-mr-8";
 
   function menuFooterItem() {
@@ -43,19 +58,34 @@ export default function MenuProfile(props) {
   const { pathname } = location;
   const splitLocation = pathname.split("/");
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-  console.log(user, props);
+  // console.log(user, props);
   // Redux
   const customise = useSelector((state) => state.customise);
-
+  // const[profile,setProfile] = useState(null)
+  // const getprofile = async ()=>{
+    
+  //   const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+  //     headers:{
+  //       Authorization: user?.accessToken,
+  //     }
+  //   }) 
+  //   console.log(getProfile.data.msg.image,"logo");
+  //   setProfile(getProfile.data.msg.image)
+  // }
+  // useEffect(()=>{
+  //   getprofile() 
+  // },[])
   return (
     <Col flex="240px" className="hp-profile-menu hp-py-24">
       <div className="hp-w-100">
         <div className="hp-profile-menu-header hp-mt-md-16 hp-text-center">
           {/* {moreBtn()} */}
 
-          <Badge count={12}>
-            <Avatar size={80} src={avatar} />
-          </Badge>
+          <img
+          src={profile?require(`../../../uploadedLogos/${profile}`):null}
+          alt="Profile"
+          style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
+        />
 
           <h3 className="hp-mt-24 hp-mb-4">{`${user?.user?.firstName} ${user?.user?.lastName}`}</h3>
           <a href={`mailto:${user?.user?.email}`} className="hp-p1-body">
@@ -143,8 +173,27 @@ export default function MenuProfile(props) {
             <Link to="/pages/profile/change-profile">
               Change Company Logo
             </Link>
+            
           </Menu.Item>
+          <Menu.Item
+            key="1"
+            icon={<User set="curved" className={menuIconClass} />}
+            className={`
+              hp-mb-16 hp-pl-24 hp-pr-32
+              ${
+                splitLocation[splitLocation.length - 1] ===
+                "change-personal-profile"
+                  ? "ant-menu-item-selected"
+                  : "ant-menu-item-selected-in-active"
+              }
+            `}
+            onClick={props.onCloseDrawer}
+          >
 
+            <Link to="/pages/profile/change-personal-profile">
+              Change Profile Image
+            </Link>
+          </Menu.Item>
 
 
         </Menu>

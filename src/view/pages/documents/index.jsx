@@ -4,7 +4,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
 import MyTreeView from "../treeview/MyTreeView";
 import { DownOutlined } from '@ant-design/icons';
-import {Row,Col,Divider,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
+import {Row,Col,Divider,notification,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
 } from "antd";
 import { Radio } from "antd";
 import axios from "axios";
@@ -507,6 +507,18 @@ if(user.user.roleId==2 ){
 
 
   const addDocument = async () => {
+    if (!docTitle || !mdrObj?.departmentId || !mdrObj?.projectId) {
+      // If any required field is missing, display a validation error notification
+      notification.error({
+        message: 'Validation Error',
+        description: 'Please fill in all required fields.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+      return; // Exit early if validation fails
+    }
     try {
       const formData = new FormData();
       formData.append("file", file);

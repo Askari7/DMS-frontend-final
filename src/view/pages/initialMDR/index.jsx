@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  Row,  Col,  Divider,Checkbox,  Form,  Space,  Table,  Select,  Tag,  Input,  DatePicker,  TimePicker,  Button,  Modal,  message,} from 'antd';
+import { notification, Row,  Col,  Divider,Checkbox,  Form,  Space,  Table,  Select,  Tag,  Input,  DatePicker,  TimePicker,  Button,  Modal,  message,} from 'antd';
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
@@ -349,6 +349,7 @@ console.log(jsondata);
         });
 
         if(record){
+          
           const response = await axios.put(
             "http://54.81.250.98:8083/api/documents/mdr",
             {
@@ -372,6 +373,7 @@ console.log(jsondata);
             }
           );     
         }else{
+
           console.log(departmentId,projectId,"ye jarha ha")
           const response = await axios.post(
             "http://54.81.250.98:8083/api/documents/mdr",
@@ -396,8 +398,15 @@ console.log(jsondata);
             
           );
         }
-        message.success(response?.data?.message);
-        if (selectedRows.length === 0) {
+        notification.success({
+                message: `${response?.data?.message}`,
+                style: {
+                  backgroundColor: '#52c41a', // Red color background
+                  color: '#fff', // White text color
+                },
+              }
+            )
+            if (selectedRows.length === 0) {
           message.error('Please select at least one row.');
           return;
         }
@@ -464,10 +473,17 @@ console.log(jsondata);
     };
     
     const mydocumentSaved = async() => {
+      
       console.log(data,"data",documentCounts,"counts",documentInfo,"documentInfo");
       await addDocument();
-      message.success('Document values saved successfully.');
-      // selectedRows.forEach((index) => {
+      notification.success({
+        message: `Documents Successfully Added`,
+        style: {
+          backgroundColor: '#52c41a', // Red color background
+          color: '#fff', // White text color
+        },
+      }
+    )      // selectedRows.forEach((index) => {
       //   const savedData = loadData(`doc-${index}`);
       //   console.log(`Saved Data for Key ${index}:`, savedData);
       // });

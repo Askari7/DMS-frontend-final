@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import axios from "axios";
 import { Route, Switch } from "react-router-dom";
 
 import { Row, Col, Drawer, Button, Dropdown, Menu } from "antd";
@@ -11,9 +12,14 @@ import PasswordProfile from "./password-change";
 import ProtectedAppPage from "../Protected";
 import CompanyInfo from "./company-information";
 import ChangeProfileImagePage from "./change-profile";
+import ChangePersonalProfileImagePage from "./change-personal-profile";
+
 import ComingSoon from "../errors/coming-soon";
 
 export default function Profile() {
+
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
@@ -29,7 +35,7 @@ export default function Profile() {
       <Menu.Item key="0">Change Avatar</Menu.Item>
     </Menu>
   );
-
+  
   function moreBtn() {
     return (
       <Dropdown overlay={rateMenu} placement="bottomLeft">
@@ -109,6 +115,10 @@ export default function Profile() {
               <Route path="/pages/profile/change-profile">
                 <ChangeProfileImagePage />
                 {/* <ComingSoon/> */}
+              </Route>
+
+              <Route path="/pages/profile/change-personal-profile">
+                <ChangePersonalProfileImagePage />
               </Route>
             </Switch>
           </Col>

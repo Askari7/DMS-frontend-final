@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useRef } from "react";
 import { useLocation } from 'react-router-dom';
+import { UploadOutlined } from '@ant-design/icons';
 
 import {
   Button,
@@ -14,6 +15,8 @@ import {
   message,
   Checkbox,
   Select,
+  Upload,
+  Avatar,
   Tag 
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
@@ -30,6 +33,7 @@ import ColumnGroup from "antd/lib/table/ColumnGroup";
 import Column from "antd/lib/table/Column";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import { Person, Person2 } from "@mui/icons-material";
 
 
 
@@ -39,6 +43,7 @@ export default function Users() {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
   const location = useLocation();
+  const [image,setImage] = useState(null)
 
   const [loading, setLoading] = useState(true);
   const [displayNames, setDisplayNames] = useState([]);
@@ -57,6 +62,16 @@ export default function Users() {
   const [dataArray,setDataArray] = useState([])
   const [showTreeView, setShowTreeView] = useState(false);
   const users = location.state?.users || null; 
+  const [imageUrl, setImageUrl] = useState(null); // State to hold the uploaded image URL
+
+  // Function to handle image upload
+  const handleImageUpload = info => {
+    if (info.file.status === 'done') {
+      // Set the uploaded image URL
+      setImageUrl(info.file.response.url);
+      console.log(imageUrl,"imageUrl");
+    }
+  };
   // const dataArray = location.state?.users ||null
   console.log(users,'users');// Access the users array from location.state
   const fetchDepartments = async () => {
@@ -251,7 +266,7 @@ export default function Users() {
 
       console.log(selectedDepartments.id,selectedDepartments.title,"checking");
       const response = await axios.post(
-        `http://54.81.250.98:8083/api/users`,
+        `http://54.81.250.98:8083/api/users?${image}`,
         {
           roleId:roleOptions[role],
           companyId:user?.user?.companyId,
@@ -328,7 +343,27 @@ export default function Users() {
     setData(dataArray)
   };
 
+  const onChange = (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    setImage(file); // Set the selected image file
+  };
 
+  // const onSubmit = async(e)=>{
+  //   e.preventDefault()
+  //   const formData = new FormData()
+  //   formData.append("image",image)
+  //   formData.append("companyId",user?.user?.companyId)
+
+  //   const logo = await axios.put(`http://54.81.250.98:8083/logo`,formData,{
+  //     headers:{
+  //       "Content-Type":"multipart/form-data",
+  //       Authorization: user?.accessToken,
+  //     }
+  //   })
+
+  //   console.log(logo.data,"result");
+  // }
   const handleUserTreeViewClick = () => {
     setShowTreeView(true);
   };
@@ -372,7 +407,8 @@ export default function Users() {
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
         }
       >
-        <Form layout="vertical" name="basic">
+        <Form layout="vertical" name="basic" encType="multipart/form-data">
+        
           <Form.Item
             label="First Name"
             name="firstName"

@@ -66,7 +66,7 @@ export default function InfoProfile() {
         }
       );
       // Handle the response as needed
-      console.log("response", response);
+      // console.log("response", response);
       if (response?.status == 200) {
         message.success("User Updated Successfully");
         localStorage?.setItem("user", JSON.stringify(response?.data));

@@ -13,7 +13,8 @@ import {
   Modal,
   message,
   Select,Divider,
-  DatePicker
+  DatePicker,notification
+
 } from "antd";
 import { RiMore2Line, RiMenuFill, RiCloseFill } from "react-icons/ri";
 
@@ -125,18 +126,29 @@ const fetchEmployees = async(record)=>{
   }
 }
 const addClient = async () => {
-  try {
+  // Perform form field validation
+  if (!companyName || !companyAddress || !companyContact) {
+    // If any required field is missing, display a validation error notification
+    notification.error({
+      message: 'Validation Error',
+      description: 'Please fill in all required fields.',
+      style: {
+        backgroundColor: '#f5222d', // Red color background
+        color: '#fff', // White text color
+      },
+    });
+    return; // Exit early if validation fails
+  }
 
+  try {
+    // Make API request to add client
     const response = await axios.post(
       `http://54.81.250.98:8083/api/clients`,
       {
         companyName,
-        companyId:user?.user?.companyId,
+        companyId: user?.user?.companyId,
         companyAddress,
         companyContact
-        // departmentId,
-        // inHouseStatus,
-        // clientStatus,
       },
       {
         headers: {
@@ -146,19 +158,41 @@ const addClient = async () => {
       }
     );
 
-    // Handle the response as needed
+    // Handle successful response
     console.log(response);
-    message.success(response?.data?.message);
+    notification.success({
+      message: `${response?.data?.message}`,
+      style: {
+        backgroundColor: '#52c41a', // Red color background
+        color: '#fff', // White text color
+      },
+    }
+  )
+    // Fetch updated data and close modal
     fetchData();
     clientModalCancel();
   } catch (error) {
-    // Handle errors
+    // Handle API request errors
     console.error("Error adding client:", error);
-    // message.error("Error adding user");
+    message.error("Failed to add client. Please try again.");
   }
-}
+};
+
 
 const addClientOfficials = async () => {
+  if (!clientName || !email ) {
+    // If any required field is missing, display a validation error notification
+    notification.error({
+      message: 'Validation Error',
+      description: 'Please fill in all required fields.',
+      style: {
+        backgroundColor: '#f5222d', // Red color background
+        color: '#fff', // White text color
+      },
+    });
+    return; // Exit early if validation fails
+  }
+
   try {
 
     const response = await axios.post(
@@ -178,7 +212,14 @@ const addClientOfficials = async () => {
 
     // Handle the response as needed
     console.log(response);
-    message.success(response?.data?.message);
+    notification.success({
+      message: `${response?.data?.message}`,
+      style: {
+        backgroundColor: '#52c41a', // Red color background
+        color: '#fff', // White text color
+      },
+    }
+  )    
     fetchData();
     showModalCancel();
   } catch (error) {
@@ -317,7 +358,7 @@ const handleStatusChange = (selectedStatus) => {
             rules={[
               {
                 required: true,
-                message: "Please input your firstName!",
+                message: "Please input your Company Name!",
               },
             ]}
           >
@@ -347,58 +388,6 @@ const handleStatusChange = (selectedStatus) => {
               onChange={(e) => setCompanyContact(e.target.value)}
             />
           </Form.Item>
-                      {/* <Form.Item
-                label="Project Name"
-                name="projectName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Project Name",
-                  },
-                ]}
-              >
-              <Select
-                  options={projects}
-                  value={projectId}
-                  onChange={(value) => setProjectId(value)}
-                />              
-                </Form.Item> */}
-
-          {/* <Form.Item label="InHouse Status"  name="inhHouseStatus">
-            <Select
-              defaultValue="Pending"
-              options={options}
-              value={inHouseStatus}
-              onChange={(e) => setInHouseStatus(e)}
-            /></Form.Item>
-                      <Form.Item label="CLient Status"  name="clientStatus">
-            <Select
-              defaultValue="Pending"
-              options={options}
-              value={clientStatus}
-              onChange={(e) => setClientStatus(e)}
-            /></Form.Item> */}
-
-          {/* <Form.Item
-          label="Select Department"
-          rules={[
-           
-            {
-              required: true,
-              message: "Please select one department!",
-            },
-          ]}>
-          <Checkbox.Group options={departmentOptions} value={selectedDepartments} onChange={setSelectedDepartments} />
-        </Form.Item> */}
-
-  {/* <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select start date' }]}>
-        <DatePicker style={{ width: '100%' }} />
-      </Form.Item>
-
-      <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select end date' }]}>
-        <DatePicker style={{ width: '100%' }} />
-      </Form.Item> */}
-
           <Row>
             <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
               <Button
@@ -410,8 +399,6 @@ const handleStatusChange = (selectedStatus) => {
                 Add Company
               </Button>
             </Col>
-            
-
             <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
               <Button block onClick={clientModalCancel}>
                 Cancel

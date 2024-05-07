@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DownOutlined } from '@ant-design/icons';
 
-import {
+import {notification,
   Button,Form,Row,Col,Space,Table,Select,Input,Dropdown,Menu,DatePicker,TimePicker,Modal,message,Checkbox,Upload,
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
@@ -317,7 +317,18 @@ filters: [
     setPermissionModalVisible(false);
   };
   const addProject = async () => {
-
+if (!projName || !clientEmail ) {
+    // If any required field is missing, display a validation error notification
+    notification.error({
+      message: 'Validation Error',
+      description: 'Please fill in all required fields.',
+      style: {
+        backgroundColor: '#f5222d', // Red color background
+        color: '#fff', // White text color
+      },
+    });
+    return; // Exit early if validation fails
+  }
     // console.log(selectedDepartments,'selectedDepartments');
     // console.log(departmentInfo,"info agayi yaha bhi");
     const mappedDepartments = selectedDepartments.map(departmentId => {
@@ -354,7 +365,14 @@ filters: [
       );
       // Handle the response as needed
       console.log(response);
-      message.success(response?.data?.message);
+      notification.success({
+        message: `${response?.data?.message}`,
+        style: {
+          backgroundColor: '#52c41a', // Red color background
+          color: '#fff', // White text color
+        },
+      }
+    )
       setProjectModalVisible(false);      
       fetchData();
     } catch (error) {
@@ -498,13 +516,24 @@ filters: [
         }
       >
         <Form layout="vertical" name="basic">
-        <Form.Item label="Project Code" name="projCode">
+        <Form.Item label="Project Code" name="projCode" rules={[
+                  {
+                    required: true,
+                    message: "Please Add Project Code",
+                  },
+                ]}>
+          
             <Input
               value={projCode}
               onChange={(e) => setCode(e.target.value)}
             />
           </Form.Item>         
-           <Form.Item label="Project Name" name="projName">
+           <Form.Item label="Project Name" name="projName" rules={[
+                  {
+                    required: true,
+                    message: "Please Add Project Name",
+                  },
+                ]}>
             <Input
               value={projName}
               onChange={(e) => setProjName(e.target.value)}

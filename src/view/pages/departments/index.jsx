@@ -11,6 +11,7 @@ import {
   Button,
   Modal,
   message,
+  notification,
   Select
 } from "antd";
 
@@ -172,6 +173,18 @@ setDepartmentId(record['id']);
   };
   const noOfUsers = 0
   const addDepartments = async () => {
+    if (!title || !suffix ) {
+      // If any required field is missing, display a validation error notification
+      notification.error({
+        message: 'Validation Error',
+        description: 'Please fill in all required fields.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+      return; // Exit early if validation fails
+    }
     try {
       console.log(user);
       const response = await axios.post(
@@ -191,7 +204,14 @@ setDepartmentId(record['id']);
         }
       );
       console.log("departments response", response);
-      message.success(response?.data?.message);
+      notification.success({
+        message: `${response?.data?.message}`,
+        style: {
+          backgroundColor: '#52c41a', // Red color background
+          color: '#fff', // White text color
+        },
+      }
+    )
       fetchData();
       departmentModalCancel();
     } catch (error) {
