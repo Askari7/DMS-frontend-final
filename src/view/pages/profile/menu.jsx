@@ -2,8 +2,8 @@ import React, { useState,useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
-import { Col, Avatar, Badge, Menu } from "antd";
+import { UserOutlined } from '@ant-design/icons';
+import { Col, Avatar,Space, Badge, Menu } from "antd";
 import {
   User,
   Notification,
@@ -80,12 +80,18 @@ export default function MenuProfile(props) {
       <div className="hp-w-100">
         <div className="hp-profile-menu-header hp-mt-md-16 hp-text-center">
           {/* {moreBtn()} */}
-
-          <img
-          src={profile?require(`../../../uploadedLogos/${profile}`):null}
+           
+          {profile ?  <img
+          src={`http://54.81.250.98:8083/${profile}`}
           alt="Profile"
           style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
-        />
+          />:
+          <img
+          src={`http://54.81.250.98:8083/R.jpg`}
+          alt="Profile"
+          style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
+          />
+        }
 
           <h3 className="hp-mt-24 hp-mb-4">{`${user?.user?.firstName} ${user?.user?.lastName}`}</h3>
           <a href={`mailto:${user?.user?.email}`} className="hp-p1-body">

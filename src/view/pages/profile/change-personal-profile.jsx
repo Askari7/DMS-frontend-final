@@ -4,8 +4,17 @@ import React, { useEffect, useState } from 'react'
 const ChangePersonalProfileImagePage =  () => {
   const [image,setImage] = useState(null)
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  const [profile,setProfile] = useState(null)
 
-  
+  const getprofile = async ()=>{
+  const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+    headers:{
+      Authorization: user?.accessToken,
+    }
+  }) 
+  console.log(getProfile.data.msg.image,"logo");
+  setProfile(getProfile.data.msg.image)
+}
 
   const onSubmit = async(e)=>{
     e.preventDefault()
@@ -20,13 +29,15 @@ const ChangePersonalProfileImagePage =  () => {
         Authorization: user?.accessToken,
       }
     })
-
+    await getprofile()
     console.log(logo.data,"result");
   }
 
   const onChange = (e)=>{
     console.log(e.target.files[0]);
-      setImage(e.target.files[0])
+    const file = (e.target.files[0]);
+    
+      setImage(file)
   }
   return (
     <>

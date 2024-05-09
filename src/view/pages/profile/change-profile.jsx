@@ -47,12 +47,12 @@ const ChangeProfileImagePage =  () => {
         Authorization: user?.accessToken,
       }
     })
-
+    await getLogo()
     // console.log(logo.data,"result");
   }
 
   const onChange = (e)=>{
-    // console.log(e.target.files[0]);
+    console.log(e.target.files[0],"file");
       setImage(e.target.files[0])
   }
   return (

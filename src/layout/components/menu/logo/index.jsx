@@ -19,7 +19,7 @@ export default function MenuLogo(props) {
   }
   useEffect(()=>{
     getLogo() 
-  },[])
+  },[main])
   return (
     <div className="hp-header-logo hp-d-flex hp-align-items-center">
       <Link
@@ -31,9 +31,10 @@ export default function MenuLogo(props) {
         }}
       >
         {
-          main?        <img
+          main?        
+          <img
           className="hp-logo"
-          src={require(`../../../../uploadedLogos/${main}`)}
+          src={(`http://54.81.250.98:8083/${main}`)}
           style={{
             width: "160px",
             height: "120px",
