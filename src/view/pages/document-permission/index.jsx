@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import {
-  Button,
-  Form,
+  Button,Form,
   Row,
   Col,
   Space,
@@ -98,7 +97,7 @@ export default function DocumentPermissions() {
   const addPermission = async () => {
     try {
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/documents/permissions",
+        "http://127.0.0.1:8083/api/documents/permissions",
         {
           masterDocumentId: mdr,
           userId: permissionUser,
@@ -132,7 +131,7 @@ export default function DocumentPermissions() {
   const fetchMDR = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -162,7 +161,7 @@ export default function DocumentPermissions() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -200,7 +199,7 @@ export default function DocumentPermissions() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/permissions?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents/permissions?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

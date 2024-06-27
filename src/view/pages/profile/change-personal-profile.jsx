@@ -7,7 +7,7 @@ const ChangePersonalProfileImagePage =  () => {
   const [profile,setProfile] = useState(null)
 
   const getprofile = async ()=>{
-  const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+  const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
     headers:{
       Authorization: user?.accessToken,
     }
@@ -23,7 +23,7 @@ const ChangePersonalProfileImagePage =  () => {
     formData.append("companyId",user?.user?.companyId)
     formData.append("userId",user?.user.id)
 
-    const logo = await axios.put(`http://54.81.250.98:8083/profile`,formData,{
+    const logo = await axios.put(`http://127.0.0.1:8083/profile`,formData,{
       headers:{
         "Content-Type":"multipart/form-data",
         Authorization: user?.accessToken,

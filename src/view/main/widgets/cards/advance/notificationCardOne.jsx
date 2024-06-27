@@ -5,13 +5,13 @@ export default function NotificationCardOne({ data, thisOne, user }) {
   const filteredData = thisOne ? { [thisOne]: data[thisOne] } : {};
 
   const handleOpenButtonClick = (versionData,docName) => {
-    const BACKEND_URL = "http://54.81.250.98:8083";
+    const BACKEND_URL = "http://127.0.0.1:8083";
     const { version } = versionData;
     const { roleId, firstName } = user.user;
     const url = `${BACKEND_URL}/uploads/${docName}-${version}.pdf`;
     const allowed = true;
 
-    window.location.href = `http://54.81.250.98:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${roleId} ${firstName}`;
+    window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${roleId} ${firstName}`;
   };
 
   return (

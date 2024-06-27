@@ -45,6 +45,12 @@ const PagesRoutes = [
     isProtected: true,
   },
   {
+    path: "/pages/review-documents",
+    component: lazy(() => import("../../view/pages/review_documents")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
     path: "/pages/users",
     component: lazy(() => import("../../view/pages/users")),
     layout: "VerticalLayout",

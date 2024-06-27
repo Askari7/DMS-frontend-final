@@ -98,7 +98,7 @@ const MyTreeView = () => {
     const fetchInformation = async () => {
       try {
         const response = await axios.get(
-          `http://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+          `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
           {
             headers: {
               Authorization: user?.accessToken,
@@ -107,6 +107,7 @@ const MyTreeView = () => {
         );
 
         if (isMounted) {
+          console.log(response.data,'datA');
           setInformation(response.data);
         }
       } catch (error) {
@@ -134,7 +135,7 @@ const processData = () => {
   console.log(information, "information");
   // information.forEach((info) => {
   //   console.log(info,"info")
-  //   if (!newData[info.projectCode]) {
+  //   if (!newData[info.code]) {
   //     newData[info.projectCode] = {};
   //   }
   //   console.log(newData,'newData 1');
@@ -168,21 +169,21 @@ const processData = () => {
 
   information.forEach((info) => {
     // Initialize project code in newData if not present
-    if (!newData[info.projectCode]) {
-      newData[info.projectCode] = {};
+    if (!newData[info.code]) {
+      newData[info.code] = {};
     }
   
     // Initialize MDR code in newData if present and not already initialized
-    if (info.mdrCode && !newData[info.projectCode][info.mdrCode]) {
-      newData[info.projectCode][info.mdrCode] = {};
+    if (info.mdrCode && !newData[info.code][info.mdrCode]) {
+      newData[info.code][info.mdrCode] = {};
     }
   
     // Split department names and ensure documents exist
-    const departmentNames = info.departmentName?.split(",") ?? [];
+    const departmentNames = info.departmentIds?.split(",") ?? [];
     const documents = info.documents ?? [];
   
     // Split department suffixes
-    const departmentSuffixes = info.departmentSuffix?.split(",") ?? [];
+    const departmentSuffixes = info.departmentIds?.split(",") ?? [];
   
     // Iterate over department names and suffixes
     departmentNames.forEach((departmentName, index) => {
@@ -191,8 +192,8 @@ const processData = () => {
       const trimmedSuffix = departmentSuffixes[index].trim();
   
       // Initialize department array if not present
-      if (!newData[info.projectCode][info.mdrCode][trimmedDepartmentName]) {
-        newData[info.projectCode][info.mdrCode][trimmedDepartmentName] = [];
+      if (!newData[info.code][info.mdrCode][trimmedDepartmentName]) {
+        newData[info.code][info.mdrCode][trimmedDepartmentName] = [];
       }
   
       // Iterate over documents
@@ -201,7 +202,7 @@ const processData = () => {
         const trimmedTitle = document.title.trim();
         if (trimmedTitle.includes(trimmedSuffix)) {
           // Push document data to department array
-          newData[info.projectCode][info.mdrCode][trimmedDepartmentName].push({
+          newData[info.code][info.mdrCode][trimmedDepartmentName].push({
             title: document.docTitle,
             docTitle: trimmedTitle,
             status: document.status,
@@ -220,7 +221,7 @@ const processData = () => {
     processData();
   }, [information]);
   const classes = useStyles();
-  const BACKEND_URL = "http://54.81.250.98:8083"; // Update with your backend URL
+  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
 
   const handleOpenDocument = async (document) => {
     // Handle open document logic here
@@ -237,12 +238,12 @@ const processData = () => {
  allowed='true';
  }
      // Redirect to the external URL
-      window.location.href = `http://54.81.250.98:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+      window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
   };
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
         {
           headers: {
             Authorization: user?.accessToken,

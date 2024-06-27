@@ -55,7 +55,7 @@ export default function SignUp() {
     try {
       // Make the POST request using Axios with async/await
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/auth/signup",
+        "http://127.0.0.1:8083/api/auth/signup",
         {
           firstName,
           lastName,
@@ -114,7 +114,8 @@ export default function SignUp() {
             >
 
               <Form.Item
-                label={<FormattedMessage id="first-name" />}
+                // label={<FormattedMessage id="first-name" />}
+                label={"First Name"}
                 name="firstName"
                 rules={[{ required: true }, { type: "string", min: 4 }]}
               >
@@ -126,7 +127,9 @@ export default function SignUp() {
               </Form.Item>
 
               <Form.Item
-                label={<FormattedMessage id="last-name" />}
+                // label={<FormattedMessage id="last-Name" />}
+                label={"Last Name"}
+
                 name="lastName"
                 rules={[{ required: true }, { type: "string", min: 4 }]}
               >
@@ -138,7 +141,7 @@ export default function SignUp() {
               </Form.Item>
 
               <Form.Item
-                label="E-mail :"
+                label="E-mail"
                 name="email"
                 rules={[
                   {
@@ -158,7 +161,7 @@ export default function SignUp() {
                 />
               </Form.Item>
               <Form.Item
-                label={<FormattedMessage id="company-name" />}
+                label={"Company Name"}
                 name="name"
                 rules={[{ required: true }, { type: "string", min: 3 }]}
               >
@@ -169,7 +172,7 @@ export default function SignUp() {
                 />
               </Form.Item>
               <Form.Item
-                label="Password :"
+                label="Password"
                 name="password"
                 rules={[
                   {
@@ -199,7 +202,7 @@ export default function SignUp() {
               </Form.Item>
 
               <Form.Item
-                label="Confirm Password :"
+                label="Confirm Password"
                 name="confirm-password"
                 rules={[
                   {
