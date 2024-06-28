@@ -1450,7 +1450,7 @@ export default function MDR() {
       });
       return; // Exit early if validation fails
     }
-    addMdr();
+    record? updateMdr() : addMdr();
     const serializedprojectId = JSON.stringify(projectId);
     const serializedAllProjects = JSON.stringify(allProjects);
     const serializedtitle = JSON.stringify(title);
@@ -1479,20 +1479,24 @@ export default function MDR() {
         });
         return; // Exit early if validation fails
       }
-    updateMdr() 
-    const serializedprojectId = JSON.stringify(projectId);
-    const serializedAllProjects = JSON.stringify(allProjects);
-    const serializedtitle = JSON.stringify(title);
-    const serializedDepartmentOptions = JSON.stringify(departmentOptions);
-    const serializedProjectOptions = JSON.stringify(projectOptions);
-    const serializedUsers = JSON.stringify(allUsers);
-    const serializedSelectedApprover = JSON.stringify(selectedApprover);
-    const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+      updateMdr();
 
-    console.log(serializedSelectedApprover,serializedSelectedReviewer, serializedDepartmentOptions,serializedProjectOptions,serializedUsers,serializedprojectId,serializedtitle.serializedmdrCode,'data ha ys sab');
-    history.push(`/pages/initialMDR?mdrCode=${mdrCode}&allProjects=${serializedAllProjects}&departments=${serializedDepartmentOptions}&users=${serializedUsers}&projects=${serializedProjectOptions}
-    &projectId=${projectId}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`
-)};
+      const project = projectOptions.find((item) => item?.value == projectId);
+      // console.log('departmentOptions',departmentOptions);
+      const serializedDepartmentOptions = JSON.stringify(departmentOptions);
+      // const serializedDepartmentOption = JSON.stringify(departmentOption);
+      const serializedRecord = JSON.stringify(record);
+      // console.log(serializedRecord,"serializedRecord");
+      // console.log("serialized",serializedDepartmentOption)
+      const serializedProjectOptions = JSON.stringify(projectOptions);
+      const serializedSelectedApprover = JSON.stringify(selectedApprover);
+      const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+      history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}
+      &departmentOptions=${serializedDepartmentOptions}
+      &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
+      &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}
+      &reviewer=${serializedSelectedReviewer}&record=${serializedRecord}`
+    )};
     
   const documentModalShow = () => {
     setDocumentModalVisible(true);
@@ -1855,22 +1859,22 @@ const result = Object.keys(modifiedData).map(key => ({ [key]: modifiedData[key] 
         }
         return acc;
       }, []);
-      setData(allMDRS)
+      
       console.log(allMDRS,"MDRS",projectsData);
 
-      // const combinedData = allMDRS.map(mdr => {
-      //   const project = projectsData.find(p => p.id == mdr.projectId);
-      //   return { ...mdr,departmentIds: project.departmentIds}
-      // });
+      const combinedData = allMDRS.map(mdr => {
+        const project = projectsData.find(p => p.id == mdr.projectId);
+        return { ...mdr,departmentIds: project.departmentIds}
+      });
 
-      // const departmentMDRs = combinedData.filter(mdr => (mdr.departmentIds.split(',').includes(user?.user.departmentId)));
+      const departmentMDRs = combinedData.filter(mdr => (mdr.departmentIds.split(',').includes(user?.user.departmentId)));
 
 
-      // if (user?.user.roleId == 2 || user?.user.roleId == 3 || user?.user.roleId == 4 || user?.user.roleId == 5) {
-      //   setData(departmentMDRs);
-      // } else {
-      //   setData(allMDRS);
-      // }
+      if (user?.user.roleId == 2 || user?.user.roleId == 3 || user?.user.roleId == 4 || user?.user.roleId == 5) {
+        setData(departmentMDRs);
+      } else {
+        setData(allMDRS);
+      }
       setUserData(userOptions);
       setAllProjects(projectsData)
       setProjects(projects)
@@ -1983,7 +1987,7 @@ const result = Object.keys(modifiedData).map(key => ({ [key]: modifiedData[key] 
               </Form.Item>
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">MDR template</Button>
+                  <Button block onClick={record?navigateToMdrTemplateForUpdate:navigateToMdrTemplate} type="primary"htmlType="submit">MDR template</Button>
                 </Col>
                 {/* <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
                   <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">Create Custom</Button>

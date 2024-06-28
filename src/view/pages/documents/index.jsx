@@ -1651,22 +1651,30 @@ console.log(formData,'formdata');
       for (const item of allMdrs) {
         mdrOption.push({value: item?.id,label: item?.title});
       }
-      console.log(allMdrs,projects,"data arha");
+      // console.log(allMdrs,projects,"data arha");
       // const combinedData1 = allMdrs.map(mdr => {
       //   const project = projects.find(p => p.id == mdr.projectId);
       //   return { ...mdr,departmentIds: project.departmentIds}
       // });
-      // console.log(combinedData1);
-      // const combinedData2 = data.map(mdr => {
-      //   const project = combinedData2.find(p => p.id == mdr.projectId);
-      //   return { ...mdr,departmentIds: project.departmentIds}
-      // });
-      // console.log(combinedData2);
+      // console.log(combinedData1,"1");
+      // // const combinedData2 = data.map(mdr => {
+      // //   const project = combinedData2.find(p => p.id == mdr.projectId);
+      // //   return { ...mdr,departmentIds: project.departmentIds}
+      // // });
+      // // console.log(combinedData2,"2");
       
-      // const departmentDocuments = combinedData2.filter(mdr => (mdr.departmentIds.split(',').includes(user?.user.departmentId)));
-      // console.log(departmentDocuments);
+      // const departmentDocuments = combinedData1.filter(mdr => (mdr.departmentIds.split(',').includes(user?.user.departmentId)));
+      // console.log(departmentDocuments,"deptOpts");
 
+      const combinedData = allMdrs.map(mdr => {
+        const project = projects.find(p => p.id == mdr.projectId);
+        return { ...mdr,departmentIds: project.departmentIds}
+      });
+      console.log(combinedData,'cobone');
+      
+      const departmentMDRs = combinedData.filter(mdr => (mdr.departmentIds.split(',').includes(user?.user.departmentId)));
 
+      console.log(departmentMDRs,'deparrtmnet');
       setMdrOptions(mdrOption)
       setDepartmentOptions(departmentOption)
       setProjectOptions(projectOption)

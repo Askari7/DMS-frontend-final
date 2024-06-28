@@ -1788,7 +1788,7 @@ export default function DocumentPermissions() {
       console.log('response clients officials',allOfficials);
       console.log('response establishments',allEstablishments);
 
-      // setData(allEstablishments)
+      setData(allEstablishments)
 
 
       const approverStatusArrays = []
@@ -1914,7 +1914,8 @@ export default function DocumentPermissions() {
       setUsers(userOptions)
       const filteredEstablishments = allEstablishments.filter(establishment => establishment.clientId==user?.user.companyId);
       user?.user.roleId==6?setData(filteredEstablishments):setData(allEstablishments);
-      setData(allEstablishments);
+      // setData(allEstablishments);
+
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
