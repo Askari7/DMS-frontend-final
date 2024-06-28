@@ -366,22 +366,34 @@ export default function DocumentPermissions() {
     
     const Id = myrecord.clientId;
     const status = selectedStatus
+
     const comment = rejectionMarks?rejectionMarks:''
     const version = myrecord.version
-  
+    
+    const myrecordId = myrecord.id;
+    const revID = revIdArr.find(item => item.id === myrecordId);
+    const appID = appIdArr.find(item => item.id === myrecordId);
+    const reviewId = revID.status
+    const approveId = appID.status
+    console.log(reviewId,approveId,"REVIEWAPPROVE");
+    console.log(reviewId,approveId,'ids');
+    const updatedRevStatusObj = revStatusArr.find(item => item.id === myrecordId);
+    const updatedAppStatusObj = appStatusArr.find(item => item.id === myrecordId);
     try {
       if(rejectionMarks){
         const response = await axios.put(
-          `http://127.0.0.1:8083/api/documents/review?yourRole=${"client"}
+          `http://127.0.0.1:8083/api/documents/review?yourRole=${"client"}&myrecord=${myrecord}
           &version=${myrecord.version}&userName=${myrecord.userName}
-          &companyId=${myrecord.companyId}
-  
+          &companyId=${myrecord.companyId}&rev=${revID}&app=${appID}
           `,
           {
             version,
-            clientStatus:status,
+            clientStatus:"Reject",
             clientComment:comment,
             docName: myrecord.docName,
+            rev:updatedRevStatusObj,
+            app:updatedAppStatusObj,
+            myrecord:myrecord
           },
           {
             headers: {
@@ -395,9 +407,10 @@ export default function DocumentPermissions() {
         message.success(response.data.message)
       }else{
         const response = await axios.put(
-          `http://127.0.0.1:8083/api/documents/review?yourRole=${"client"}&record=${record}`,
+          `http://127.0.0.1:8083/api/documents/review?yourRole=${"client"}&record=${record}&rev=${revID}&app=${appID}`,
           {
-            clientStatus:status,
+            clientStatus:"Accept",
+            myrecord:myrecord,
             docName: myrecord.docName,
           },
           {
@@ -851,10 +864,8 @@ console.log(organizedData,"organizedData");
 
     console.log(myrecord,"record dekhS");
     const myrecordId = myrecord.id;
-
     const revID = revIdArr.find(item => item.id === myrecordId);
     const appID = appIdArr.find(item => item.id === myrecordId);
-    
     console.log(revID,appID,"APPREV");
     const reviewId = revID.status
     const approveId = appID.status

@@ -437,14 +437,14 @@ if (!projName || !clientEmail ) {
 
       console.log(userId,'userId');
 
-      if (userId !== undefined && roleId !==1) {
-        const userProjects = formattedData.filter(project => project.departmentIds.split(',').includes(userId.toString()));
-        console.log("User's Projects:", userProjects);
-        setData(userProjects);
-      } 
-      else{
+      // if (userId !== undefined && roleId !==1) {
+      //   const userProjects = formattedData.filter(project => project.departmentIds.split(',').includes(userId.toString()));
+      //   console.log("User's Projects:", userProjects);
+      //   setData(userProjects);
+      // } 
+      // else{
         setData(formattedData)
-      }
+      // }
       setDataArray(formattedData)
       const options = [];
       for (const item of response?.data) {
