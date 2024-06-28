@@ -313,7 +313,7 @@ console.log(jsondata);
 
               console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
               const responseDoc = await axios.post(
-                "http://54.81.250.98:8083/api/documents/",
+                "http://127.0.0.1:8083/api/documents/",
                 {
                   title,
                   startedDate,
@@ -351,7 +351,7 @@ console.log(jsondata);
         if(record){
           
           const response = await axios.put(
-            "http://54.81.250.98:8083/api/documents/mdr",
+            "http://127.0.0.1:8083/api/documents/mdr",
             {
               record,
               title,
@@ -376,7 +376,7 @@ console.log(jsondata);
 
           console.log(departmentId,projectId,"ye jarha ha")
           const response = await axios.post(
-            "http://54.81.250.98:8083/api/documents/mdr",
+            "http://127.0.0.1:8083/api/documents/mdr",
             {
               title,
               departmentId,
@@ -515,7 +515,7 @@ console.log(jsondata);
 
       try {
         const response = await axios.get(
-          `http://54.81.250.98:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
+          `http://127.0.0.1:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
           {
             headers: {
               Authorization: user?.accessToken,

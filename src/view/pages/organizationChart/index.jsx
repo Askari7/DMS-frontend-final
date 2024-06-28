@@ -16,7 +16,7 @@ const OrganizationChart = ({ employees }) => {
   const fetchName = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/users/company/?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/users/company/?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

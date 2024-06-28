@@ -46,8 +46,9 @@ export default function Login() {
     // await dispatch(loginUser({ email, password }));
     try {
       // Make the POST request using Axios with async/await
+      console.log(email,password);
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/auth/signin",
+        "http://127.0.0.1:8083/api/auth/signin",
         {
           email,
           password,
@@ -60,9 +61,11 @@ export default function Login() {
       if (response?.data) {
         console.log(response?.data);
         localStorage.setItem("user", JSON.stringify(response?.data));
-        
+        const user = response.data
         message.success("Signed In Successfully ");
-        history.push("/pages/workspace");
+        // history.push("/pages/workspace")
+        user.user.roleId== 6 ?history.push("/pages/projects"):history.push("/pages/workspace");
+
       }
       // message.success("Registered");
     } catch (error) {

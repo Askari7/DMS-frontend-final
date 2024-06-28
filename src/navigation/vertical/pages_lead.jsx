@@ -8,37 +8,37 @@ import { RiCustomerServiceLine, RiHomeOfficeLine, RiTaskLine } from "react-icons
 import { Work } from "react-iconly";
 
 const pages_lead = [
-  {
-      header: <IntlMessages id="Dashboards" />,
-  },
-  {
-  id: "home-workspace",
-  title: <IntlMessages id="sidebar-pages-home" />,
-  icon: <HomeHashtag size={30} />,
-  navLink: "/pages/workspace",
-  },
+  // {
+  //     header: <IntlMessages id="Dashboards" />,
+  // },
+  // {
+  // id: "home-workspace",
+  // title: <IntlMessages id="sidebar-pages-home" />,
+  // icon: <HomeHashtag size={30} />,
+  // navLink: "/pages/workspace",
+  // },
 
-  {
-    id: "analytics",
-    title: <IntlMessages id="s" />,
-    icon: <Health size={30} />,
-    navLink: "/pages/analytics",
-  },
+  // {
+  //   id: "analytics",
+  //   title: <IntlMessages id="s" />,
+  //   icon: <Health size={30} />,
+  //   navLink: "/pages/analytics",
+  // },
   // {
   //   id: "timeline",
   //   title: <IntlMessages id="sidebar-pages-timeline" />,
   //   icon: <Health size={30} />,
   //   navLink: "/pages/timeline",
   // },
-  {
-    header: <IntlMessages id="Department" />,
-},
-  {
-    id: "users",
-    title: <IntlMessages id="sidebar-pages-users" />,
-    icon: <Profile size={30} />,
-    navLink: "/pages/users",
-  },
+//   {
+//     header: <IntlMessages id="Department" />,
+// },
+//   {
+//     id: "users",
+//     title: <IntlMessages id="sidebar-pages-users" />,
+//     icon: <Profile size={30} />,
+//     navLink: "/pages/users",
+//   },
 
   {
     header: <IntlMessages id="Project Info"/>,
@@ -51,35 +51,35 @@ const pages_lead = [
     navLink: "/pages/projects",
   },
 
-  {
-    id: "mdr",
-    title: <IntlMessages id="sidebar-pages-mdr" />,
-    icon: <Work size={30} />,
-    navLink: "/pages/mdr",
-  },
+  // {
+  //   id: "mdr",
+  //   title: <IntlMessages id="sidebar-pages-mdr" />,
+  //   icon: <Work size={30} />,
+  //   navLink: "/pages/mdr",
+  // },
   {
     header: <IntlMessages id="Document Information" />,
 },
-  {
-    id: "documents",
-    title: <IntlMessages id="sidebar-pages-documents" />,
-    icon: <FolderCloud size={30} />,
-    navLink: "/pages/documents",
-  },
+  // {
+  //   id: "documents",
+  //   title: <IntlMessages id="sidebar-pages-documents" />,
+  //   icon: <FolderCloud size={30} />,
+  //   navLink: "/pages/documents",
+  // },
 
   {
     id: "document-assessment",
-    title: <IntlMessages id="Assessment" />,
+    title: <IntlMessages id={"Review Docs"}/>,
     icon: <FolderOpen size={30} />,
     navLink: "/pages/document-assessment",
   },
 
-  {
-    id: "documents-permissions",
-    title: <IntlMessages id="sidebar-pages-document-permissions" />,
-    icon: <DocumentFilter size={30} />,
-    navLink: "/pages/document-permissions",
-  },
+  // {
+  //   id: "documents-permissions",
+  //   title: <IntlMessages id="sidebar-pages-document-permissions" />,
+  //   icon: <DocumentFilter size={30} />,
+  //   navLink: "/pages/document-permissions",
+  // },
 ];
 
 export default pages_lead;

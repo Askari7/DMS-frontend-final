@@ -61,7 +61,7 @@ const columns = [
 const fetchUserData = async () => {
   try {
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+      `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -83,7 +83,7 @@ const [department,setDepartment] = useState([])
 const fetchDept = async () => {
   try {
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+      `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -143,7 +143,7 @@ setDepartmentId(record['id']);
     try {
       console.log(userOptions.find(user => user.value === userData),);
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/departments/associate",
+        "http://127.0.0.1:8083/api/departments/associate",
         {
           title,
           companyId: user?.user?.companyId,
@@ -188,7 +188,7 @@ setDepartmentId(record['id']);
     try {
       console.log(user);
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/departments/",
+        "http://127.0.0.1:8083/api/departments/",
         {
           title,
           suffix,
@@ -224,7 +224,7 @@ setDepartmentId(record['id']);
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

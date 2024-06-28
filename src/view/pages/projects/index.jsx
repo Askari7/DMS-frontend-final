@@ -265,7 +265,7 @@ filters: [
   const fetchClients = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -341,7 +341,7 @@ if (!projName || !clientEmail ) {
   // console.log(mappedDepartments,"department bhi agaye");
     try {
       const response = await axios.post(
-        "http://54.81.250.98:8083/api/projects/",
+        "http://127.0.0.1:8083/api/projects/",
         {
           title: projName,
           departmentId:selectedDepartments,
@@ -390,7 +390,7 @@ if (!projName || !clientEmail ) {
   const fetchProgress = async()=>{
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects/progress?companyId=${user?.user.companyId}`,
+        `http://127.0.0.1:8083/api/projects/progress?companyId=${user?.user.companyId}`,
         
         {
           headers: {
@@ -410,7 +410,7 @@ if (!projName || !clientEmail ) {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -460,7 +460,7 @@ if (!projName || !clientEmail ) {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

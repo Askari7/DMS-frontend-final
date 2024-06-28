@@ -98,7 +98,7 @@ const MyTreeView = () => {
     const fetchInformation = async () => {
       try {
         const response = await axios.get(
-          `http://54.81.250.98:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+          `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
           {
             headers: {
               Authorization: user?.accessToken,
@@ -220,7 +220,7 @@ const processData = () => {
     processData();
   }, [information]);
   const classes = useStyles();
-  const BACKEND_URL = "http://54.81.250.98:8083"; // Update with your backend URL
+  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
 
   const handleOpenDocument = async (document) => {
     // Handle open document logic here
@@ -242,7 +242,7 @@ const processData = () => {
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
         {
           headers: {
             Authorization: user?.accessToken,

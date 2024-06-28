@@ -77,7 +77,7 @@ export default function Users() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -266,7 +266,7 @@ export default function Users() {
 
       console.log(selectedDepartments.id,selectedDepartments.title,"checking");
       const response = await axios.post(
-        `http://54.81.250.98:8083/api/users?${image}`,
+        `http://127.0.0.1:8083/api/users?${image}`,
         {
           roleId:roleOptions[role],
           companyId:user?.user?.companyId,
@@ -299,7 +299,7 @@ export default function Users() {
     try {
       if(user.user.roleId==2){
         const response = await axios.get(
-          `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user.user.departmentId}`,
+          `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user.user.departmentId}`,
           {
             headers: {
               Authorization: user?.accessToken,
@@ -313,7 +313,7 @@ export default function Users() {
       }
       else{
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -355,7 +355,7 @@ export default function Users() {
   //   formData.append("image",image)
   //   formData.append("companyId",user?.user?.companyId)
 
-  //   const logo = await axios.put(`http://54.81.250.98:8083/logo`,formData,{
+  //   const logo = await axios.put(`http://127.0.0.1:8083/logo`,formData,{
   //     headers:{
   //       "Content-Type":"multipart/form-data",
   //       Authorization: user?.accessToken,
