@@ -93,6 +93,18 @@ const PagesRoutes = [
     isProtected: true,
   },
   {
+    path: "/pages/notification",
+    component: lazy(() => import("../../view/pages/notification")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
+    path: "/pages/calender",
+    component: lazy(() => import("../../view/pages/calender")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
     path: "/pages/document-number",
     component: lazy(() => import("../../view/pages/document-number")),
     layout: "VerticalLayout",

@@ -20,7 +20,7 @@ export default function MenuProfile(props) {
   const [ profile,setProfile] = useState(null)
   const getprofile = async ()=>{
       
-      const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+      const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
         headers:{
           Authorization: user?.accessToken,
         }
@@ -64,7 +64,7 @@ export default function MenuProfile(props) {
   // const[profile,setProfile] = useState(null)
   // const getprofile = async ()=>{
     
-  //   const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+  //   const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
   //     headers:{
   //       Authorization: user?.accessToken,
   //     }
@@ -82,12 +82,12 @@ export default function MenuProfile(props) {
           {/* {moreBtn()} */}
            
           {profile ?  <img
-          src={`http://54.81.250.98:8083/${profile}`}
+          src={`http://127.0.0.1:8083/${profile}`}
           alt="Profile"
           style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
           />:
           <img
-          src={`http://54.81.250.98:8083/R.jpg`}
+          src={`http://127.0.0.1:8083/R.jpg`}
           alt="Profile"
           style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
           />
@@ -143,7 +143,7 @@ export default function MenuProfile(props) {
             </Link>
           </Menu.Item>
 
-          <Menu.Item
+          {user?.user.roleId==1&& <Menu.Item
             key="1"
             icon={<User set="curved" className={menuIconClass} />}
             className={`
@@ -160,9 +160,9 @@ export default function MenuProfile(props) {
             <Link to="/pages/profile/company-information">
               Company Information
             </Link>
-          </Menu.Item>
+          </Menu.Item>}
 
-          <Menu.Item
+          {user?.user.roleId==1&& <Menu.Item
             key="1"
             icon={<User set="curved" className={menuIconClass} />}
             className={`
@@ -180,7 +180,8 @@ export default function MenuProfile(props) {
               Change Company Logo
             </Link>
             
-          </Menu.Item>
+          </Menu.Item>}
+
           <Menu.Item
             key="1"
             icon={<User set="curved" className={menuIconClass} />}

@@ -43,7 +43,11 @@ export default function Projects() {
       title: "Company Address",
       dataIndex: "companyAddress",
       key: "companyAddress",
-      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Company Contact",
+      dataIndex: "companyContact",
+      key: "companyContact",
     },
     {
       title: "Action",
@@ -86,7 +90,7 @@ const [data, setData] = useState([]);
 const fetchData = async () => {
   try {
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/clients?companyId=${user?.user?.companyId}`,
+      `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -111,7 +115,7 @@ const fetchEmployees = async(record)=>{
   try {
     console.log(record,"id");
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/clients/official?companyId=${record.id}`,
+      `http://127.0.0.1:8083/api/clients/official?companyId=${record.id}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -143,7 +147,7 @@ const addClient = async () => {
   try {
     // Make API request to add client
     const response = await axios.post(
-      `http://54.81.250.98:8083/api/clients`,
+      `http://127.0.0.1:8083/api/clients`,
       {
         companyName,
         companyId: user?.user?.companyId,
@@ -196,7 +200,7 @@ const addClientOfficials = async () => {
   try {
 
     const response = await axios.post(
-      `http://54.81.250.98:8083/api/clients`,
+      `http://127.0.0.1:8083/api/clients`,
       {
         clientName,
         companyId:clientCompany,
@@ -231,7 +235,7 @@ const addClientOfficials = async () => {
 const fetchProjects = async () => {
   try {
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+      `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,

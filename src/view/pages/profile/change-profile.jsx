@@ -10,7 +10,7 @@ const ChangeProfileImagePage =  () => {
   
   const getprofile = async ()=>{
     
-    const getProfile = await axios.post(`http://54.81.250.98:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+    const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
       headers:{
         Authorization: user?.accessToken,
       }
@@ -23,7 +23,7 @@ const ChangeProfileImagePage =  () => {
   },[])
   const getLogo = async ()=>{
     
-    const getLogo = await axios.post(`http://54.81.250.98:8083/getLogo`,{companyId:user?.user.companyId},{
+    const getLogo = await axios.post(`http://127.0.0.1:8083/getLogo`,{companyId:user?.user.companyId},{
       headers:{
         Authorization: user?.accessToken,
       }
@@ -39,14 +39,17 @@ const ChangeProfileImagePage =  () => {
     e.preventDefault()
     const formData = new FormData()
     formData.append("image",image)
-    formData.append("companyId",user?.user?.companyId)
+    formData.append("companyId",user?.user.companyId)
+    console.log(formData,"formData");
 
-    const logo = await axios.put(`http://54.81.250.98:8083/logo`,formData,{
+    const logo = await axios.put(`http://127.0.0.1:8083/logo`,formData,{
       headers:{
         "Content-Type":"multipart/form-data",
         Authorization: user?.accessToken,
       }
     })
+    console.log(logo,"logo response");
+    
     await getLogo()
     // console.log(logo.data,"result");
   }

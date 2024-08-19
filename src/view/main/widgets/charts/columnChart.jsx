@@ -11,6 +11,8 @@ export default function ColumnChart({ inputData, documents,completed,remaining})
   const [documentss, setDocuments] = useState([documents]);
   const [remain, setRemaining] = useState([]);
   const [complete, setCompleted] = useState([]);
+  const [inHouse, setInHouse] = useState([]);
+  const [sendToClient, setSendToClient] = useState([]);
 
   const [filteredData, setFilteredData] = useState([]);
 
@@ -34,28 +36,46 @@ useEffect(() => {
   if (documents && documents.length > 0) {
 
       const completedCounts = [];
+      const inHouseCounts = [];
       const remainingCounts = [];
+      const sendToClinetCounts = [];
+
     for (const document of documents) {
       let completedCount = 0;
       let remainingCount = 0;
+      let inHouseCount = 0;
+      let sendToClinetCount = 0;
 
       for (const statusArray of document.map(doc => doc.status)) {
         console.log(statusArray,"array");
-          if (statusArray === "Completed") {
+        switch (statusArray) {
+          case "Completed":
             completedCount++;
-          } else {
+            break;
+          case "Approved(In-house)":
+            inHouseCount++;
+            break;
+          case "Send To Client":
+              sendToClinetCount++;
+              break;
+          default:
             remainingCount++;
-          }
+            break;
         }
-
+        }
+      inHouseCounts.push(inHouseCount);
       completedCounts.push(completedCount);
       remainingCounts.push(remainingCount);
+      sendToClinetCounts.push(sendToClinetCount);
+
     }
 
     console.log("Completed Counts:", completedCounts);
     console.log("Remaining Counts:", remainingCounts);
 
     setCompleted(completedCounts);
+    setInHouse(inHouseCounts);
+
     setRemaining(remainingCounts);
   }
   setDocuments(documents)
@@ -82,38 +102,62 @@ const filterDataByYear = (dateString) => {
       return startingYear === dateString;
     });
   });
+
+  console.log(filtered,"filtered");
+
   console.log(complete,remain);
   setFilteredData(filtered);
   update(filtered)
 };
+
   function update(filtered){
     const filteredArray = []
     if (filtered && filtered.length > 0) {
       console.log(filtered,'filtered');
       const completedCounts = [];
+      const inHouseCounts = [];
+      const sendToClinetCounts = [];
+
       const remainingCounts = [];
     for (const document of filtered) {
       console.log(document,'document');
       let completedCount = 0;
       let remainingCount = 0;
+      let inHouseCount = 0;
+      let sendToClinetCount = 0;
 
       for (const statusArray of document.map(doc => doc.status)) {
         console.log(statusArray,"array");
-          if (statusArray === "Completed") {
+        switch (statusArray) {
+          case "Completed":
             completedCount++;
-          } else {
+            break;
+          case "Approved(In-house)":
+            inHouseCount++;
+            break;
+            case "Send To Client":
+            sendToClinetCount++;
+            break;
+          default:
             remainingCount++;
-          }
+            break;
         }
+        }
+      inHouseCounts.push(inHouseCount);
 
       completedCounts.push(completedCount);
       remainingCounts.push(remainingCount);
+      sendToClinetCounts.push(sendToClinetCount);
+
     }
 
     console.log("Completed Counts:", completedCounts);
     console.log("Remaining Counts:", remainingCounts);
 
     setCompleted(completedCounts);
+    setInHouse(inHouseCounts);
+    setSendToClient(sendToClinetCounts);
+
     setRemaining(remainingCounts);
   }
     // updateInfo(filteredArray)
@@ -134,9 +178,20 @@ const filterDataByYear = (dateString) => {
   const [data] = useState({
     series: [
       {
-        name: "Approved Documents",
+        name: "Complete Documents",
         data: complete,
       },
+
+      {
+        name: "Approved(In-house) Documents",
+        data: inHouse,
+      },
+
+      {
+        name: "Documents send For Client's approval",
+        data: sendToClient,
+      },
+      
       {
         name: "Remaining Documents",
         data: remain,
@@ -178,13 +233,13 @@ const filterDataByYear = (dateString) => {
           endingShape: "rounded",
         },
         colors: {
-          backgroundBarColors: ["#0063F7", "#00F7BF"],
+          backgroundBarColors: ["#0063F7","#00F7BF" ,"#00F7BF","#00F7BF"],
         },
       },
 
       stroke: {
         show: true,
-        width: 4,
+        width: 3,
         colors: ["transparent"],
       },
       xaxis: {
@@ -262,7 +317,10 @@ const filterDataByYear = (dateString) => {
               },
             }}
             series={[
-              { name: "Approved Documents", data: complete },
+              { name: "Complete Documents", data: complete },
+              { name: "Approved(In-house) Documents", data: inHouse },
+              { name: "Documents send for Client's approval", data: sendToClient},
+
               { name: "Remaining Documents", data: remain },
             ]}            
             type="bar"

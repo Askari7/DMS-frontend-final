@@ -114,7 +114,6 @@ export default function Profile() {
               </Route>
               <Route path="/pages/profile/change-profile">
                 <ChangeProfileImagePage />
-                {/* <ComingSoon/> */}
               </Route>
 
               <Route path="/pages/profile/change-personal-profile">

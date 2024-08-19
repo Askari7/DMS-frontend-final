@@ -21,6 +21,8 @@ export default function Charts() {
   const [data,setData] = useState([])
   const [remaining,setRemaining] = useState([])
   const [completed,setCompleted] = useState([])
+  const [inHouse,setInHouse] = useState([])
+
   const [departments,setDepartments]= useState([])
   const [departmentsMembers,setDepartmentsMembers] = useState([])
   const [documents,setDocuments] = useState([])
@@ -36,7 +38,7 @@ export default function Charts() {
   const fetchData= async(req,res)=>{
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects/info?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects/info?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -48,9 +50,13 @@ export default function Charts() {
       setData(response.data)
       const titlesArray = response.data.projects.map(obj => obj.title);
       const departments = response.data.departments.map(obj => obj.title);
+      console.log(departments,'departments');
+      
       const departmentMember = response.data.departments.map(obj => obj.noOfUsers);
+      console.log(departmentMember,'departmentMember');
 
       const establishment_reviewer = response.data.establishments.map(obj => obj.reviewerId);
+      
       const establishment_approver = response.data.establishments.map(obj => obj.approverId);
       const establishment_reviewer_status = response.data.establishments.map(obj => obj.reviewerStatus);
       const establishment_approver_status = response.data.establishments.map(obj => obj.approverStatus);
@@ -87,28 +93,48 @@ export default function Charts() {
       setDepartments(departments)
       setDepartmentsMembers(departmentMember)
       const completedCounts = [];
+      const inHouseCounts = [];
+
       const remainingCounts = [];
 
     for (const documents of response.data.documents) {
       let completedCount = 0;
+      let inHouseCount = 0;
+
       let remainingCount = 0;
 
       for (const statusArray of documents.map(doc => doc.status)) {
         console.log(statusArray,"array");
-          if (statusArray === "Completed") {
-            completedCount++;
-          } else {
-            remainingCount++;
+          // if (statusArray === "Completed") {
+          //   completedCount++;
+          // } 
+          
+          // else {
+          //   remainingCount++;
+          // }
+          switch (statusArray) {
+            case "Completed":
+              completedCount++;
+              break;
+            case "Approved(In-house)":
+              inHouseCount++;
+              break;
+            default:
+              remainingCount++;
+              break;
           }
         }
 
       completedCounts.push(completedCount);
+      inHouseCounts.push(inHouseCount);
+
       remainingCounts.push(remainingCount);
     }
 
     console.log("Completed Counts:", completedCounts);
     console.log("Remaining Counts:", remainingCounts);
       setCompleted(completedCounts)
+      setInHouse(inHouseCounts)
       setRemaining(remainingCounts)
 
       setProjectTitles(titlesArray)
@@ -128,14 +154,14 @@ export default function Charts() {
   return (
     <Row gutter={[32, 32]} className="hp-mb-32">
       <Col span={24}>
-      <Card title={`Hello! ${user.user.firstName} ${user.user.lastName}`} style={{fontSize:"32px" ,fontWeight:"bolder", width: '100%', margin: '0 auto',alignItems:"center",textAlign:"center" }}>
-  {/* <Breadcrumb>
+      {/* <Card title={`Hello! ${user.user.firstName} ${user.user.lastName}`} style={{fontSize:"32px" ,fontWeight:"bolder", width: '100%', margin: '0 auto',alignItems:"center",textAlign:"center" }}>
+  <Breadcrumb>
     <Breadcrumb.Item>Main</Breadcrumb.Item>
     <Breadcrumb.Item>Widgets</Breadcrumb.Item>
     <Breadcrumb.Item>Charts</Breadcrumb.Item>
-  </Breadcrumb> */}
-  {/* Add additional content here if needed */}
-</Card>
+  </Breadcrumb> 
+   Add additional content here if needed
+</Card> */}
 
       </Col>
       {user && user?.user.roleId === 1 &&(
@@ -152,7 +178,7 @@ export default function Charts() {
 
 {user && user?.user.roleId === 1 &&(
   <Col span={24}>
-    <ColumnChart inputData={data.projects} documents={data.documents} completed={completed} remaining={remaining}/>
+    <ColumnChart inputData={data.projects} documents={data.documents} completed={completed} remaining={remaining} />
   </Col>
 )}
 
@@ -168,31 +194,29 @@ export default function Charts() {
   </Col>
 )}
 
-      {/* <Col span={24}>
+      <Col span={24}>
         <LineChart />
       </Col>
 
       <Col span={24}>
         <AreaChart />
-      </Col> */}
+      </Col> 
 
       {/* <Col span={24}>
         <ScatterChart />
-      </Col> */}
+      </Col>  */}
 
       {/* <Col xl={12} lg={24}>
         <HeatmapChart />
-      </Col>
-      
-      <Col xl={12} lg={24}>
-        <RadarChart />
       </Col> */}
       
       {/* <Col xl={12} lg={24}>
+        <RadarChart />
+      </Col>
+      
+      <Col xl={12} lg={24}>
         <CandlestickChart />
       </Col> */}
-
-   
     </Row>
   );
 }

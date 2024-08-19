@@ -1,27 +1,67 @@
 import { Col } from "antd";
-
 import image from "../../../assets/images/memoji/newspaper.svg";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function HeaderText() {
+  const [user, setUser] = useState(null);
+  const [companyName, setCompanyName] = useState(null);
+  const [companyEmail, setCompanyEmail] = useState(null);
+  const [ownerEmail, setOwnerEmail] = useState(null);
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage?.getItem("user")));
+    // fetchDetails()
+  }, []);
+
+  const roleMapping = {
+    1: "CEO",
+    2: "Lead",
+    3: "Senior Engineer",
+    4: "Junior Engineer",
+    5: "Designer",
+    6: "Client",
+
+  };
+
+  const fetchDetails = async()=>{
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/clients/company?companyId=${user?.user.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      const {name,companyEmail,owner,ownerEmail} = response.data
+      setCompanyName(name)
+      setCompanyEmail(companyEmail)
+      setOwner(owner)
+      setOwnerEmail(ownerEmail)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Col
       xl={16}
       lg={14}
       className="hp-header-left-text hp-d-flex-center"
     >
-      <div className="hp-border-radius-xl hp-overflow-hidden hp-bg-black-0 hp-bg-dark-100 hp-d-flex" style={{ minWidth: 45, width: 45, height: 45 }}>
-        <img src={image} alt="Newspaper" height="80%" style={{ marginTop: 'auto', marginLeft: 'auto' }} />
-      </div>
+      <div className="hp-header-left-text-item hp-p1-body hp-text-color-white-100 hp-text-color-dark-0 hp-ml-12 hp-mb-0" style={{ paddingTop: '32px', paddingBottom: '1px' }}>
+  <p style={{ textAlign: 'left', color: 'blue', display: 'inline-block', padding: '1px 8px', borderRadius: '4px', backgroundColor: '#e0f7fa', margin: '0' }}>
+    {roleMapping[user?.user.roleId]}
+  </p>
+  <p style={{ textAlign: 'left', display: 'inline-block', margin: '0 0 0 4px', fontWeight: 'bold' }}>
+    {user?.user.firstName} {user?.user.lastName} {companyName}
+  </p>
+</div>
 
-      <p className="hp-header-left-text-item hp-p1-body hp-text-color-black-100 hp-text-color-dark-0 hp-ml-12 hp-mb-0">
-        Do you know the latest update of 2022? &nbsp;
-        <a
-          href="https://trello.com/b/8ZRmDN5y/yoda-roadmap"
-          target="_blank"
-        >
-          Our roadmap is alive for future updates.
-        </a>
-      </p>
+
+
     </Col>
   );
-};
+}

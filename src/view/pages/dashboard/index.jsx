@@ -12,7 +12,7 @@ import scurve from "../../.././assets/images/components/s_curve.png";
 import axios from 'axios'
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { RiHomeOfficeLine } from "react-icons/ri";
-import { TaskAlt } from "@mui/icons-material";
+import { DocumentScanner, DocumentScannerTwoTone, TaskAlt } from "@mui/icons-material";
 export default function Analytics() {
   // Redux
   const customise = useSelector((state) => state.customise);
@@ -38,6 +38,12 @@ export default function Analytics() {
     history.push('./users'); // Replace '/user' with the actual URL of your user page
   };
 
+  const handleAppRev = () => {
+    message.success("Document Assessment")
+
+    // Navigate to the user page
+    history.push('./document-assessment'); // Replace '/user' with the actual URL of your user page
+  };
   const handleLeadTeam = () => {
     // Navigate to the user page and pass the users array as state data
     history.push({
@@ -72,7 +78,7 @@ export default function Analytics() {
 const fetchDepartments = async () => {
   try {
     const response = await axios.get(
-      `http://54.81.250.98:8083/api/departments/count?departmentId=${user?.user.departmentId}&userId=${user?.user.id}`,
+      `http://127.0.0.1:8083/api/departments/count?departmentId=${user?.user.departmentId}&userId=${user?.user.id}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -91,7 +97,7 @@ const fetchDepartments = async () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/dashboard/stats?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/dashboard/stats?companyId=${user?.user?.companyId}&id=${user?.user.id}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -112,9 +118,13 @@ const fetchDepartments = async () => {
       setData(response.data); 
       const companyName = data.companyName; // Accessing the value associated with the key 'companyName'
       const array = companyName.value; // Accessing the array stored within the 'value' property of the 'companyName' object
+      // console.log(array,'array pe ');
       
       // Now, you can access the 'name' property of the dictionaries within the array
-      const names = array.map(item => item.name);      
+ 
+      // const names = array.map(item => item.name);      
+      // console.log(names,'array pe map ');
+ 
       console.log("data",data);// Assuming the response.data is an array of departments
       console.log("data",response?.data);
     } catch (error) {
@@ -126,7 +136,7 @@ const fetchDepartments = async () => {
     console.log(user,user.user.departmentId,"console");
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user?.user?.departmentId}`
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user?.user?.departmentId}`
         ,{
           headers: {
             Authorization: user?.accessToken,
@@ -145,7 +155,7 @@ const fetchDepartments = async () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -183,7 +193,7 @@ setDepartmentCounts(userDepartmentCount)
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -201,7 +211,7 @@ setDepartmentCounts(userDepartmentCount)
   const fetchMdr = async () => {
     try {
       const response = await axios.get(
-        `http://54.81.250.98:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -243,52 +253,79 @@ setDepartmentCounts(userDepartmentCount)
             <Row gutter={[32, 32]}>
               <Col span={24}>
                 <Row gutter={[32, 32]}>
-                <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {/* <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <h1 className="hp-mb-0">{data.companyName} CEO {user.user.firstName} {user.user.lastName}</h1>
-                </Col>
-                <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                </Col> */}
+                {/* <Col span={24} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <h1 className="hp-mb-0">Analytics Of Company</h1>
-                </Col>
+                </Col> */}
                   <Col span={6} onClick={handleDepartment}>
-                    <FeatureCard
-                    
-                      icon={<RiHomeOfficeLine  size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Departments"
-                      count={data?.departmentCount || "0"}
-                    />
+                  <FeatureCard
+  icon={<RiHomeOfficeLine size="32" variant="Bold"  />}
+  title="Departments"
+  count={data?.departmentCount || "0"}
+  style={{ backgroundColor: '#F5F5F5' }} // Adding background color
+/>
                   </Col>
                   <Col span={6} onClick={handleProject}>
                     <FeatureCard
-                      icon={<Task size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<Task size="32" variant="Bold"  />}
                       title="Projects"
                       count={data?.projectCount || "0"}
+
                     />
                   </Col>
                   <Col span={6} onClick={handleClient}>
                     <FeatureCard
-                      icon={<UserMinus size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<UserMinus size="32" variant="Bold" />}
                       title="Clients"
                       count={data?.clientCount || "0"}
+
                     />
                   </Col>
                   <Col span={6} onClick={handleMDR}>
                     <FeatureCard
-                      icon={<TaskSquare size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<TaskSquare size="32" variant="Bold"  />}
                       title="MDR"
                       count={data?.mdrCount || "0"}
+
                     />
                   </Col>
                 </Row>
               </Col>
-              <Col span={24} onClick={handleUser} // Add onClick event handler
+
+              <Col span={6} onClick={handleUser} // Add onClick event handler
 >
               <FeatureCard
-                icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                icon={<User size="32" variant="Bold"/>}
                 title="Employees"
                 count={data?.employeeCount || "0"}
                 style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+
       />
               </Col>
+              
+              <Col span={6} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScannerTwoTone size="32" variant="Bold"  />}
+                title="Pending Approvals"
+                count={data?.approverCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+                
+      />
+              </Col>
+
+              <Col span={6} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScanner size="32" variant="Bold" />}
+                title="Pending Reviews"
+                count={data?.reviewerCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+      />
+              </Col>
+
             </Row>
           </Col>
           <Col span={24}>
@@ -297,28 +334,28 @@ setDepartmentCounts(userDepartmentCount)
                 <>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold"  />}
                       title="Lead"
                       count={data.roleCounts['2'] || "0"}
                     />
                   </Col>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold"  />}
                       title="Senior Engineer"
                       count={data.roleCounts['3'] || "0"}
                     />
                   </Col>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold" />}
                       title="Junior Engineer"
                       count={data.roleCounts['4'] || "0"}
                     />
                   </Col>
                   <Col span={6}>
                     <FeatureCard
-                      icon={<User size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                      icon={<User size="32" variant="Bold"  />}
                       title="Designer"
                       count={data.roleCounts['5'] || "0"}
                     />
@@ -344,11 +381,11 @@ setDepartmentCounts(userDepartmentCount)
             <Row gutter={[48, 48]}>
               <Col span={24}>
                 <Row gutter={[48, 48]}>
-                <Col span={24}>
+                {/* <Col span={24}>
                   <h1 className="hp-mb-0">{user.user.department} Lead {user.user.firstName} {user.user.lastName}</h1>
-                </Col>
+                </Col> */}
                 <Col span={24}>
-                  <h1 className="hp-mb-0">Analytics Of Department</h1>
+                  <h3 className="hp-mb-0">Analytics Of Department</h3>
                 </Col>
                   <Col span={12} onClick={handleLeadTeam}>
                     <FeatureCard
@@ -373,13 +410,24 @@ setDepartmentCounts(userDepartmentCount)
                       count={assignedMDRS || "0"}
                     />
                   </Col>
-                  {/* <Col span={6}>
-                    <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="MDR"
-                      count={data?.mdrCount || "0"}
-                    />
-                  </Col> */}
+                  <Col span={6} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScannerTwoTone size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                title="Pending Approvals"
+                count={data?.approverCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+      />
+              </Col>
+              <Col span={6} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScanner size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
+                title="Pending Reviews"
+                count={data?.reviewerCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+      />
+              </Col>
                 </Row>
               </Col>
               {/* <Col span={24}>
@@ -391,42 +439,15 @@ setDepartmentCounts(userDepartmentCount)
               </Col> */}
             </Row>
           </Col>
-          {/* <Col span={24}>
+          <Col span={24}>
             <Row gutter={[32, 32]}>
               {data?.roleCounts && (
                 <>
-                  <Col span={6}>
-                    <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Lead"
-                      count={data.roleCounts['2'] || "0"}
-                    />
-                  </Col>
-                  <Col span={6}>
-                    <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Senior Engineer"
-                      count={data.roleCounts['3'] || "0"}
-                    />
-                  </Col>
-                  <Col span={6}>
-                    <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Junior Engineer"
-                      count={data.roleCounts['4'] || "0"}
-                    />
-                  </Col>
-                  <Col span={6}>
-                    <FeatureCard
-                      icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                      title="Designer or "
-                      count={data.roleCounts['5'] || "0"}
-                    />
-                  </Col>
+                  
                 </>
               )}
             </Row>
-          </Col> */}
+          </Col>
           <Col span={24}>
             {user?.user?.roleId === 1 && (
               <ListCard title="System Logs" list={data?.logs} />
