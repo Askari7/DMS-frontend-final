@@ -339,7 +339,7 @@ export default function Users() {
   const fetchData = async () => {
     console.log(user.user.roleId,"roleId");
     try {
-      if(user?.user.roleId==2){
+      if(user?.user.roleId==2||user?.user.roleId==3||user?.user.roleId==4||user?.user.roleId==5){
         const response = await axios.get(
           `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user.user.departmentId}`,
           {
@@ -350,11 +350,11 @@ export default function Users() {
           }
         );
         const roleOptions = {
-          2:"Head",
-          3:"Senior",
-          4:"Junior",
-          5:"Designer",
-          6:"Client"
+          "2":"Head",
+          "3":"Senior Engineer",
+          "4":"Junior Engineer",
+          "5":"Designer",
+          "6":"Client"
         }
 const data = response.data.map(item => {
   return {
@@ -364,7 +364,7 @@ const data = response.data.map(item => {
 });        
         const filter = data.filter(item=>item.removed== 0)
 
-        const roleOrder = ['Head', 'Senior', 'Junior', 'Designer','Client'];
+        const roleOrder = ['Head', 'Senior Engineer', 'Junior Engineer', 'Designer','Client'];
       // Sort the filtered data based on the order of roles
       filter.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
         console.log(filter,'filter');
@@ -820,7 +820,7 @@ const data = response.data.map(item => {
       {
   showTreeView ?
   <div style={{ overflowX: 'auto', width: '1300px' }}>
-        {user?.user?.roleId === 2 && users ? (
+        {(user?.user.roleId == 2||user?.user.roleId == 3 ||user?.user.roleId == 4||user?.user.roleId == 5) && users ? (
           <OrganizationChart employees={users} />
         ) : (
           <OrganizationChart employees={dataArray} />

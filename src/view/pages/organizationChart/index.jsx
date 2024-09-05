@@ -246,7 +246,7 @@ const OrganizationChart = ({ employees }) => {
     employeeMap.forEach((employee) => {
       const roleId = employee.roleId;
       const department = employee.department;
-      if (user.user.roleId === 2) {
+      if (user.user.roleId === 2||user.user.roleId === 3||user.user.roleId === 4||user.user.roleId === 5) {
         if (department && roleId === 2) {
           tree.push(employee);
         } else {
@@ -368,11 +368,8 @@ const OrganizationChart = ({ employees }) => {
       borderRadius: '8px',
       boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
     }}>
-      <Tree label={<div style={{ fontSize: '30px', fontWeight: 'bold', color: '#000', 
-
-lineWidth:'2px',
-lineColor:'green',
-lineBorderRadius:'10px',
+      <Tree label={<div style={{ fontSize: '30px', fontWeight: 'bold', color: '#000', lineWidth:'2px',
+lineColor:'green', lineBorderRadius:'10px',
       }}>{user.user.roleId === 2 ? user.user.department : name}</div>}>
         {buildTree(employees).map((employee) => renderChartNode(employee))}
       </Tree>

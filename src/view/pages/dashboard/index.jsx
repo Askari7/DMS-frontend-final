@@ -149,8 +149,18 @@ const fetchDepartments = async () => {
           },
         }
       );
+      const roleOptions = {
+        "2":"Head",
+        "3":"Senior Engineer",
+        "4":"Junior Engineer",
+        "5":"Designer"
+      }
       console.log(user.user.departmentId,"userId");
 
+      response.data.map(user=>{
+        user["roleTitle"] = roleOptions[user.roleId]
+      })
+      
       console.log("users",response.data);
       setUsers(response.data)
     } catch (error) {
@@ -377,20 +387,141 @@ setDepartmentCounts(userDepartmentCount)
             )}
           </Col>
         </Row>
+      )
+      }      
+      {user?.user?.roleId === 2 && ( // Check if roleId is 1
+        <Row gutter={[32, 32]} className="hp-mb-32">
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <Row gutter={[32, 32]}>
+                  <Col span={8} onClick={handleLeadTeam}>
+                  <FeatureCard
+  icon={<RiHomeOfficeLine size="32" variant="Bold"  />}
+  title="Department Strength"
+  count={departments|| "0"}
+  style={{ backgroundColor: '#F5F5F5' }} // Adding background color
+/>
+                  </Col>
+                  <Col span={8} onClick={handleProject}>
+                    <FeatureCard
+                      icon={<Task size="32" variant="Bold"  />}
+                      title="Department Projects"
+                      count={departmentProjects|| "0"}
 
+                    />
+                  </Col>
 
+                
+                  <Col span={8} onClick={handleMDR}>
+                    <FeatureCard
+                      icon={<TaskSquare size="32" variant="Bold"  />}
+                      title="Assigned MDRs"
+                      count={assignedMDRS || "0"}
+
+                    />
+                  </Col>
+                </Row>
+              </Col>
+
+              
+              <Col span={8} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScannerTwoTone size="32" variant="Bold"  />}
+                title="Pending Approvals"
+                count={data?.approverCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+                
+      />
+              </Col>
+
+              <Col span={8} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScanner size="32" variant="Bold" />}
+                title="Pending Reviews"
+                count={data?.approverCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+      />
+              </Col>
+
+            </Row>
+          </Col>
+        </Row>
       )
       }      
 
-      {user?.user?.roleId === 2 && ( // Check if roleId is 1
+{user?.user?.roleId === 3 && ( // Check if roleId is 1
+        <Row gutter={[32, 32]} className="hp-mb-32">
+          <Col span={24}>
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <Row gutter={[32, 32]}>
+                  <Col span={8} onClick={handleLeadTeam}>
+                  <FeatureCard
+  icon={<RiHomeOfficeLine size="32" variant="Bold"  />}
+  title="Department Strength"
+  count={departments|| "0"}
+  style={{ backgroundColor: '#F5F5F5' }} // Adding background color
+/>
+                  </Col>
+                  <Col span={8} onClick={handleProject}>
+                    <FeatureCard
+                      icon={<Task size="32" variant="Bold"  />}
+                      title="Department Projects"
+                      count={departmentProjects|| "0"}
+
+                    />
+                  </Col>
+
+                
+                  <Col span={8} onClick={handleMDR}>
+                    <FeatureCard
+                      icon={<TaskSquare size="32" variant="Bold"  />}
+                      title="Assigned MDRs"
+                      count={assignedMDRS || "0"}
+
+                    />
+                  </Col>
+                </Row>
+              </Col>
+
+              
+              <Col span={8} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScannerTwoTone size="32" variant="Bold"  />}
+                title="Pending Approvals"
+                count={data?.approverCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+                
+      />
+              </Col>
+
+              <Col span={8} onClick={handleAppRev} // Add onClick event handler
+>
+              <FeatureCard
+                icon={<DocumentScanner size="32" variant="Bold" />}
+                title="Pending Reviews"
+                count={data?.approverCount || "0"}
+                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+      />
+              </Col>
+
+            </Row>
+          </Col>
+        </Row>
+      )
+      }      
+
+      {/* {user?.user?.roleId === 2 && ( 
         <Row gutter={[48, 48]} className="hp-mb-32">
           <Col span={48}>
             <Row gutter={[48, 48]}>
               <Col span={24}>
                 <Row gutter={[48, 48]}>
-                {/* <Col span={24}>
-                  <h1 className="hp-mb-0">{user.user.department} Lead {user.user.firstName} {user.user.lastName}</h1>
-                </Col> */}
+               
                 <Col span={24}>
                   <h3 className="hp-mb-0">Analytics Of Department</h3>
                 </Col>
@@ -432,18 +563,12 @@ setDepartmentCounts(userDepartmentCount)
                 icon={<DocumentScanner size="32" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
                 title="Pending Reviews"
                 count={data?.reviewerCount || "0"}
-                style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
+                style={{ cursor: 'pointer' }} 
       />
               </Col>
                 </Row>
               </Col>
-              {/* <Col span={24}>
-                <FeatureCard
-                  icon={<WalletMinus size="24" variant="Bold" className="hp-text-color-black-bg hp-text-color-dark-0" />}
-                  title="Employees"
-                  count={data?.employeeCount || "0"}
-                />
-              </Col> */}
+          
             </Row>
           </Col>
           <Col span={24}>
@@ -648,7 +773,7 @@ setDepartmentCounts(userDepartmentCount)
           </Col>
         </Row>
         
-        )}
+        )} */}
 
       <ProtectedAppPage />
     </>
