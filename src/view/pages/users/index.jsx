@@ -1,42 +1,13 @@
 import React, { useState, useEffect,useRef } from "react";
 import { useLocation } from 'react-router-dom';
-import { UploadOutlined } from '@ant-design/icons';
-
-import {
-  Button,
-  Form,
-  Row,
-  Col,
-  Space,
-  Skeleton ,
-  Table,
-  Input,
-  Modal,
-  message,
-  Checkbox,
-  Select,
-  Upload,
-  Avatar,
-  Tag 
-} from "antd";
-import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {Button,Form,Row,Col,Space ,Table,Input,Modal,message,Checkbox,Select, Tooltip,} from "antd";
+import { RiCloseFill } from "react-icons/ri";
 import axios from "axios";
-// import InfoProfile from "./personel-information";
-// import MenuProfile from "./menu";
-// import PasswordProfile from "./password-change";
-// import ProtectedAppPage from "../Protected";
 import ProtectedAppPage from "../Protected";
-import UserTreeView from "../treeview/UserTreeView";
 import OrganizationChart from "../organizationChart";
-import EmployeeTree from "../employee_tree";
-import ColumnGroup from "antd/lib/table/ColumnGroup";
-import Column from "antd/lib/table/Column";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import { Person, Person2 } from "@mui/icons-material";
-
-
-
 
 export default function Users() {
   const [searchText, setSearchText] = useState('');
@@ -44,14 +15,13 @@ export default function Users() {
   const searchInput = useRef(null);
   const location = useLocation();
   const [image,setImage] = useState(null)
-
   const [loading, setLoading] = useState(true);
   const [displayNames, setDisplayNames] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [userToUpdate, setUserToUpdate] = useState(null);
   const [ departmentOptions,setDepartmentOptions]= useState([])
   const [userModalVisible, setUserModalVisible] = useState(false);
-  const [departmentWise, setDepartmentWise] = useState(false);
+  const [userUpdate, setUserUpdate] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -61,20 +31,14 @@ export default function Users() {
   const [data, setData] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [ record,setRecord] = useState(null)
+  const [ recordMDR,setRecordMDR] = useState(null)
+
   const [dataArray,setDataArray] = useState([])
   const [showTreeView, setShowTreeView] = useState(false);
   const users = location.state?.users || null; 
   const [imageUrl, setImageUrl] = useState(null); // State to hold the uploaded image URL
+  // const [form] = Form.useForm();
 
-  // Function to handle image upload
-  const handleImageUpload = info => {
-    if (info.file.status === 'done') {
-      // Set the uploaded image URL
-      setImageUrl(info.file.response.url);
-      console.log(imageUrl,"imageUrl");
-    }
-  };
-  // const dataArray = location.state?.users ||null
   console.log(users,'users');// Access the users array from location.state
   const fetchDepartments = async () => {
     try {
@@ -99,14 +63,14 @@ export default function Users() {
     }
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDisplayNames(departmentOptions.map(option => option.label));
-      setLoading(false);
-    }, 1000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setDisplayNames(departmentOptions.map(option => option.label));
+  //     setLoading(false);
+  //   }, 1000);
 
-    return () => clearTimeout(timeout);
-  }, [departmentOptions]);
+  //   return () => clearTimeout(timeout);
+  // }, [departmentOptions]);
   const UserModalShow = () => {
     setUserModalVisible(true);
   };
@@ -115,13 +79,63 @@ export default function Users() {
     setUserModalVisible(false);
   };
 
-  const departmentWiseShow = () => {
-    setDepartmentWise(true);
+  const userUpdateModalShow = (record) => {
+    setUserToUpdate(record)
+
+    console.log(record.id,'record id');
+    console.log(typeof(record.id));
+    setFirstName(record.firstName)
+    setLastName(record.lastName)
+    setEmail(record.email)
+    
+    // Populate the form fields with the userToUpdate object when the modal is opened
+    // form.setFieldsValue({
+    //   id:userToUpdate.id||"",
+    //   firstName: userToUpdate.firstName || "",
+    //   lastName: userToUpdate.lastName || "",
+    //   role: userToUpdate.roleTitle || "",
+    //   email: userToUpdate.email || "",
+    // });
+    
+    setUserUpdate(true);
   };
 
-  const departmentWiseCancel = () => {
-    setDepartmentWise(false);
+  const userUpdateModalCancel = () => {
+    setUserUpdate(false);
   };
+
+
+  
+  const handleUpdate=async()=>{
+    try {
+      const response  = await axios.post
+      (`http://127.0.0.1:8083/api/users/user_update?companyId=${user?.user.companyId}&id=${userToUpdate.id}`,
+      // {
+      //   firstName:form.getFieldValue("firstName"),
+      //   lastName:form.getFieldValue("lastName"),
+      //   role:form.getFieldValue("role"),
+      //   email:form.getFieldValue("email"),
+      // },
+      {
+        firstName,
+        lastName,
+        email,
+      },
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    )
+      message.success(response.data.message)
+      userUpdateModalCancel()
+      fetchData()
+    } catch (error) {
+            console.error("Error updating departments:", error?.message);
+    }
+  }
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -188,10 +202,9 @@ export default function Users() {
   const columns = [
     {
       title: "Name",
-      dataIndex: "firstName",
-      key: "firstName",
-      ...getColumnSearchProps('firstName'),
-  
+      key: "name",
+      ...getColumnSearchProps('firstName'), // You can apply search functionality here
+      render: (_, record) => `${record.firstName} ${record.lastName}`,
     },
   
     {
@@ -248,15 +261,38 @@ export default function Users() {
   
     },
   
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (_, record) => (
+    //     <>
+    //   <Button size="middle" onClick={() => deleteModalShow(record)} style={{textAlign: "right"}}>Delete</Button>
+    //   <br />
+    //     <Button size="middle" onClick={() => userUpdateModalShow(record)}>Update</Button>
+    //     </>
+    //   ),
+    // },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          { <a onClick={() => deleteModalShow(record)}>Delete</a>}
+          <Tooltip title="Delete">
+  <Button
+    size="middle"
+    icon={<DeleteOutlined />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+          {/* <Button
+            size="middle"
+            icon={<EditOutlined />}
+            onClick={() => userUpdateModalShow(record)}
+          /> */}
         </Space>
       ),
-    },
+    }
   ];
 
   const addUser = async () => {
@@ -326,7 +362,7 @@ const data = response.data.map(item => {
     roleTitle: roleOptions[item.roleId] // Map roleId to roleTitle using roleOptions
   };
 });        
-        const filter = data.filter(item=>item.delete == 0)
+        const filter = data.filter(item=>item.removed== 0)
 
         const roleOrder = ['Head', 'Senior', 'Junior', 'Designer','Client'];
       // Sort the filtered data based on the order of roles
@@ -349,7 +385,7 @@ const data = response.data.map(item => {
       console.log(response.data,'response data');
       const data = response.data
 
-      const filter = data.filter(item=>item.delete == false )
+      const filter = data.filter(item=>item.removed== false )
       console.log(filter,'response data filter');
 
       const roleOrder = ['Head', 'Senior', 'Junior', 'Designer','Client'];
@@ -364,16 +400,17 @@ const data = response.data.map(item => {
       console.error("Error fetching documents:", error?.message);
     }
   };
-  const handleDepartmentClick = (name) => {
-    setSelectedDepartment(name);
-    departmentWiseCancel();
-    filterData(name);
-  };
 
-  const handleClick = () => {
-    departmentWiseCancel();
-    setData(dataArray)
-  };
+  // const handleUpdateUser = (name) => {
+  //   setUserToUpdate(name);
+  //   userUpdateModalShow()
+  // };
+
+
+  // const handleClick = () => {
+  //   departmentWiseCancel();
+  //   setData(dataArray)
+  // };
 
 
   const deleteOrNot = async (record) => {
@@ -392,7 +429,7 @@ const data = response.data.map(item => {
   };
   const handleDelete = async (record) => {
 
-    // Your delete logic here
+    // Your removelogic here
     const id = record.id
     const roleId = record.roleId
     
@@ -483,11 +520,7 @@ const data = response.data.map(item => {
     <RiCloseFill className="remix-icon text-color-black-100" size={24} />
   }
 > {
-//   user?.user.roleId == "1" && <div>
-//   <p>Can't Delete CEO of Company</p>
-// </div>
-// }
-  // {user?.user.roleId != "1" &&
+
     <div>
     <p>Are you sure you want to delete this?</p>
   </div>
@@ -638,12 +671,12 @@ const data = response.data.map(item => {
         </Form>
       </Modal>
 
-      <Modal
-      title="Departments"
+      {/* <Modal
+      title="User To Update"
       width={416}
       centered
-      visible={departmentWise}
-      onCancel={departmentWiseCancel}
+      visible={userUpdate}
+      onCancel={userUpdateModalCancel}
       footer={null}
       closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
     >
@@ -654,9 +687,10 @@ const data = response.data.map(item => {
 
             style={{ margin: '8px' }}
           >
-            All Departments
+            Update
           </Button>
-      {loading ? (
+
+      {/* {loading ? (
         
         departmentOptions.map(option => (
           <Button
@@ -680,8 +714,86 @@ const data = response.data.map(item => {
             {name}
           </Button>
         ))
-      )}
+      )}  
+     </Modal> */}
+           {/* <Modal
+      title="User To Update"
+      width={416}
+      centered
+      visible={userUpdate}
+      onCancel={userUpdateModalCancel}
+      footer={null}
+      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+    >
+
+     </Modal> */}
+
+<Modal
+      title="Update User"
+      width={416}
+      centered
+      visible={userUpdate}
+      onCancel={userUpdateModalCancel}
+      footer={null}
+      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+    >
+      <Form
+        layout="vertical"
+        name="basic" encType="multipart/form-data"
+        // onFinish={handleUpdate} // Function to handle form submission
+      >
+        <Form.Item
+          label="First Name"
+          name="firstName"
+          rules={[{ required: true, message: 'Please enter the first name' }]}
+        >
+          <Input
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
+          {/* <Input placeholder="Enter user first name" onChange={(e) => form.setFieldsValue({ firstName: e.target.value })} /> */}
+        </Form.Item>
+        <Form.Item
+          label="Last Name"
+          name="lastName"
+          rules={[{ required: true, message: 'Please enter the last name' }]}
+        >
+          <Input
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          {/* <Input placeholder="Enter user last name" onChange={(e) => form.setFieldsValue({ lastName: e.target.value })} /> */}
+        </Form.Item>
+
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please enter the email' }]}
+        >
+          <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          {/* <Input placeholder="Enter user email" onChange={(e) => form.setFieldsValue({ email: e.target.value })} /> */}
+        </Form.Item>
+
+        {/* <Form.Item
+          label="Role"
+          name="role"
+          rules={[{ required: true, message: 'Please enter the role' }]}
+        >
+          <Input placeholder="Enter user role" onChange={(e) => form.setFieldsValue({ role: e.target.value })} />
+        </Form.Item> */}
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block onClick={()=>handleUpdate()}>
+            Update
+          </Button>
+        </Form.Item>
+      </Form>
     </Modal>
+  
+
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
       {user?.user?.roleId == 1 && (
 
@@ -692,14 +804,6 @@ const data = response.data.map(item => {
           Add User
         </Button>
       )}
-
-        {/* <Button
-          type="primary"
-          onClick={departmentWiseShow}
-          style={{margin:"4px"}}
-        >
-          Department Wise
-        </Button> */}
 
         <Button
           type="primary"
@@ -724,44 +828,8 @@ const data = response.data.map(item => {
 
       </div> :
       <div style={{ overflowX: "auto" }}>
-    {/* <Table dataSource={data} title={() => 'All Users'} footer={() => 'You may filter users based on department and roles'}>
-      <ColumnGroup title="Name">
-        <Column title="First Name" dataIndex="firstName" key="firstName"/>
-        <Column title="Last Name" dataIndex="lastName" key="lastName" />
-      </ColumnGroup>
-      <Column title="Department" dataIndex="department" key="department" 
-      filters={[
-        { text: 'Project Management', value: 'Project Management' },
-        { text: 'Mechanical', value: 'Mechanical' },
-        { text: 'Electrical', value: 'Electrical' },
-        { text: 'Process', value: 'Process' },
-        { text: 'Piping', value: 'Piping' },
-        { text: 'Instrumentation', value: 'Instrumentation' },
-        { text: 'Civil/Structure', value: 'Civil/Structure' },
-      ]}
-      onFilter={(value, record) => record.department === value}
-      />
-      <Column
-        title="Role"
-        dataIndex="roleTitle"
-        key="roleTitle"
-        filters={[
-          { text: 'Lead', value: 'Head' },
-          { text: 'Senior Engineer', value: 'Senior' },
-          { text: 'Junior Engineer', value: 'Junior' },
-          { text: 'Designer', value: 'Designer' },
-        ]}
-        onFilter={(value, record) => record.roleTitle === value}
-      />
-      <Column title="Reporting To" key="reported_to" dataIndex="reported_to"></Column>
-      <Column title="Email" key="email" dataIndex="email"></Column>
-
-    title={() => 'All Users'}
-    footer={() => 'You may filter users based on department and roles'}
-
-    </Table> */}
-
 <Table
+      bordered
       dataSource={data}
       columns={columns}
       title={() => 'All Users'}
@@ -1102,7 +1170,7 @@ const data = response.data.map(item => {
 //           }
 //         );
 //         const data = response.data
-        // data.filter(item=>item.delete == 0)
+        // data.filter(item=>item.remove== 0)
         
 //         setData(data)
 //         setDataArray(data)
@@ -1123,7 +1191,7 @@ const data = response.data.map(item => {
 //       const data = response.data
 
 //       data.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
-//       const filter = data.filter(item=>item.delete == 0)
+//       const filter = data.filter(item=>item.remove== 0)
 
 //       setData(filter); // Assuming the response.data is an array of projects
 //       setDataArray(filter)
@@ -1181,7 +1249,7 @@ const data = response.data.map(item => {
 //     filteredData.sort((a, b) => roleOrder.indexOf(a.roleTitle) - roleOrder.indexOf(b.roleTitle));
 
 //     console.log("filter",filteredData);
-//     filteredData.filter(item=>item.delete == 0)
+//     filteredData.filter(item=>item.remove== 0)
 //     setData(filteredData);
 //   };
 //   useEffect(() => {
@@ -1339,7 +1407,7 @@ const data = response.data.map(item => {
 // // }
 //   // {user?.user.roleId != "1" &&
 //     <div>
-//     <p>Are you sure you want to delete this?</p>
+//     <p>Are you sure you want to removethis?</p>
 //   </div>
   
 //   }

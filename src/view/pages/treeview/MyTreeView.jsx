@@ -787,6 +787,10 @@ const processData = () => {
       const trimmedDepartmentName = departmentName.trim();
       const trimmedSuffix = departmentSuffixes[index].trim();
   
+      console.log(trimmedDepartmentName,'trimmedDepartmentName',trimmedSuffix,'trimmedSuffix');
+      console.log(newData,'newData');
+      
+      
       // Initialize department array if not present
       if (!newData[info.projectCode][info.title][trimmedDepartmentName]) {
         newData[info.projectCode][info.title][trimmedDepartmentName] = [];

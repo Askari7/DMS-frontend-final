@@ -19,23 +19,17 @@ import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
 import { Checkbox } from "antd";
 
-// import InfoProfile from "./personel-information";
-// import MenuProfile from "./menu";
-// import PasswordProfile from "./password-change";
-// import ProtectedAppPage from "../Protected";
-
 const columns = [
   {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
+    title: "Project",
+    dataIndex: "project",
+    key: "project",
   },
   {
     title: "MDR ID",
     dataIndex: "masterDocumentId",
     key: "masterDocumentId",
   },
-
   {
     title: "User ID",
     dataIndex: "userId",
@@ -54,7 +48,7 @@ const columns = [
   },
 
   {
-    title: "Creator",
+    title: "Uploader/Creator",
     dataIndex: "allowCreate",
     key: "allowCreate",
   },
@@ -78,10 +72,14 @@ export default function DocumentPermissions() {
   const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =
     useState(false);
   const [mdrOptions, setMdrData] = useState([]);
+  const [projectOptions, setProjectData] = useState([]);
+
   const [userOptions, setUserData] = useState([]);
   const [permissionUser, setpermissionUser] = useState("");
 
   const [mdr, setMDR] = useState("");
+
+  const [project, setProject] = useState("");
 
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
 
@@ -100,6 +98,7 @@ export default function DocumentPermissions() {
       const response = await axios.post(
         "http://127.0.0.1:8083/api/documents/permissions",
         {
+          project:project,
           masterDocumentId: mdr,
           userId: permissionUser,
           companyId: user?.user?.companyId,
@@ -118,6 +117,8 @@ export default function DocumentPermissions() {
       console.log(response);
       message.success(response?.data?.message);
       setMDR("");
+      setProject("");
+
       setpermissionUser("");
       setChecked([]);
       fetchData();
@@ -145,12 +146,38 @@ export default function DocumentPermissions() {
         options.push({
           value: item?.id,
           label: item?.title,
-          DocumentPermissionId: item?.DocumentPermissionId,
-          departmentId: item?.departmentId,
+          // DocumentPermissionId: item?.DocumentPermissionId,
+          // departmentId: item?.departmentId,
         });
       }
 
       setMdrData(options); // Assuming the response.data is an array of DocumentPermissions
+    } catch (error) {
+      console.error("Error fetching departments:", error?.message);
+    }
+  };
+  const fetchProjects= async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      const options = [];
+      for (const item of response?.data) {
+        options.push({
+          value: item?.title,
+          label: item?.title,
+          // DocumentPermissionId: item?.DocumentPermissionId,
+          // departmentId: item?.departmentId,
+        });
+      }
+
+      setProjectData(options); // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
@@ -186,6 +213,7 @@ export default function DocumentPermissions() {
   };
   const DocumentPermissionModalCancel = () => {
     setMDR("");
+    setProject("")
     setDocumentPermissionModalVisible(false);
   };
 
@@ -208,6 +236,8 @@ export default function DocumentPermissions() {
           },
         }
       );
+      console.log(response.data);
+      
       setData(response.data); // Assuming the response.data is an array of departments
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -219,6 +249,8 @@ export default function DocumentPermissions() {
     fetchData();
     fetchUsers();
     fetchMDR();
+    fetchProjects();
+
   }, []);
   return (
     <>
@@ -233,7 +265,25 @@ export default function DocumentPermissions() {
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
         }
       >
+          
+
         <Form layout="vertical" name="basic">
+        <Form.Item
+            label="Project"
+            name="Project"
+            rules={[
+              {
+                required: true,
+                message: "Please select Project",
+              },
+            ]}
+          >
+            <Select
+              options={projectOptions}
+              value={project}
+              onChange={(value) => setProject(value)}
+            />
+          </Form.Item>
           <Form.Item
             label="MDR"
             name="mdr"

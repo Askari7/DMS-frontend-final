@@ -28,9 +28,9 @@ export default function MenuProfile(props) {
       console.log(getProfile.data.msg.image,"logo");
       setProfile(getProfile.data.msg.image)
     }
-    useEffect(()=>{
-      getprofile() 
-    },[])
+    // useEffect(()=>{
+    //   getprofile() 
+    // },[])
   console.log(props,"props aye hain");
   const menuIconClass = "remix-icon hp-mr-8";
 
@@ -58,8 +58,6 @@ export default function MenuProfile(props) {
   const { pathname } = location;
   const splitLocation = pathname.split("/");
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-  // console.log(user, props);
-  // Redux
   const customise = useSelector((state) => state.customise);
   // const[profile,setProfile] = useState(null)
   // const getprofile = async ()=>{
@@ -72,9 +70,9 @@ export default function MenuProfile(props) {
   //   console.log(getProfile.data.msg.image,"logo");
   //   setProfile(getProfile.data.msg.image)
   // }
-  // useEffect(()=>{
-  //   getprofile() 
-  // },[])
+  useEffect(()=>{
+    getprofile() 
+  },[])
   return (
     <Col flex="240px" className="hp-profile-menu hp-py-24">
       <div className="hp-w-100">

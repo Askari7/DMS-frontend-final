@@ -412,13 +412,16 @@ import {
   Modal,
   message,
   notification,
-  Select
+  Select,
+  Tooltip
 } from "antd";
 
 import axios from "axios";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import ProtectedAppPage from "../Protected";
 import "react-quill/dist/quill.snow.css";
+import { AdUnits, DeleteOutlined, EditOutlined } from "@mui/icons-material";
+import { UserAdd } from "iconsax-react";
 export default function Depatments() {
 const columns = [
   {
@@ -450,9 +453,33 @@ const columns = [
     render: (_, record) => (
       
       <Space size="middle">
-          <a onClick={() => deleteModalShow(record)}>Delete</a>
-          <a onClick={() => addUser(record)}           disabled={user?.user?.roleId != 1}
->Add User</a>
+       <Tooltip title="Delete">
+  <Button
+    size="middle"
+    icon={<DeleteOutlined />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+        {/* <Button
+            size="middle"
+            icon={<EditOutlined />}
+            onClick={() => userUpdateModalShow(record)}
+          /> */}
+        {/* <Button
+          size="middle"
+          icon={<UserAdd />}
+          disabled={user?.user?.roleId != 1}
+          onClick={() => addUser(record)}
+        /> */}
+        <Tooltip title="Add User">
+  <Button
+    size="middle"
+    icon={<UserAdd />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => addUser(record)}
+  />
+</Tooltip>
       </Space>
       
     ),
@@ -491,7 +518,7 @@ const fetchUserData = async () => {
     );
     const options = [];
     for (const item of response?.data) {
-      options.push({ value: item?.id, label: item?.firstName });
+      options.push({ value: item?.id, label: `${item?.firstName} ${item?.lastName}` });
     }
     setUserOptions(options); // Assuming the response.data is an array of projects
   } catch (error) {
@@ -522,6 +549,51 @@ const fetchDept = async () => {
   }
 };
 
+const userUpdateModalShow = (record) => {
+  setUserToUpdate(record)
+  console.log(record,'record');
+  
+  // Populate the form fields with the userToUpdate object when the modal is opened
+  form.setFieldsValue({
+    id:userToUpdate.id,
+    title: userToUpdate.title,
+    suffix: userToUpdate.suffix,
+  });
+  
+  setUserUpdate(true);
+};
+
+const userUpdateModalCancel = () => {
+  form.setFieldsValue({
+    title: "",
+    suffix: "",
+  });
+  setUserUpdate(false);
+};
+
+const handleUpdate=async()=>{
+try {
+  const response  = await axios.put
+  (`http://127.0.0.1:8083/api/departments/department_update?companyId=${user?.user.companyId}&departmentId=${form.getFieldValue("id")}`,{
+    title:form.getFieldValue("title"),
+    suffix:form.getFieldValue("suffix")
+  },
+  {
+    headers: {
+      Authorization: user?.accessToken,
+      // Add other headers if needed
+    },
+  }
+)
+  message.success(response.data.message)
+  userUpdateModalCancel()
+  fetchData()
+} catch (error) {
+        console.error("Error updating departments:", error?.message);
+}
+
+}
+
   const addUser = (record) => {
   // You can use the record data if needed
    console.log("Add user for department:", record['id']);
@@ -543,6 +615,9 @@ setDepartmentId(record['id']);
   const [userOptions, setUserOptions] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [record, setRecord] = useState(null);
+  const [form] = Form.useForm();
+  const [userUpdate, setUserUpdate] = useState(false);
+  const [userToUpdate, setUserToUpdate] = useState(null);
 
   const [data, setData] = useState([]);
   const departmentModalShow = () => {
@@ -663,7 +738,7 @@ setDepartmentId(record['id']);
       );
       console.log(response.data);
       const data = response.data
-      const filter = data.filter(item=>item.delete==false)
+      const filter = data.filter(item=>item.removed==0)
       setData(filter); // Assuming the response.data is an array of departments
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
@@ -783,6 +858,43 @@ setDepartmentId(record['id']);
           </Col>
         </Row>
       </Modal>
+
+      <Modal
+      title="Update Department"
+      width={416}
+      centered
+      visible={userUpdate}
+      onCancel={userUpdateModalCancel}
+      footer={null}
+      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleUpdate} // Function to handle form submission
+      >
+        <Form.Item
+          label="Department Title"
+          name="title"
+          rules={[{ required: true, message: 'Please enter the department title' }]}
+        >
+          <Input placeholder="Enter user department title" />
+        </Form.Item>
+        <Form.Item
+          label="Department Suffix"
+          name="suffix"
+          rules={[{ required: true, message: 'Please enter the department suffix' }]}
+        >
+          <Input placeholder="Enter user department suffix" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Update
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
       <Modal
         title="Add User"
         width={400}

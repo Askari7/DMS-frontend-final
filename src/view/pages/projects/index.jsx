@@ -697,6 +697,7 @@ import { DownOutlined } from '@ant-design/icons';
 
 import {notification,
   Button,Form,Row,Col,Space,Table,Select,Input,Dropdown,Menu,DatePicker,TimePicker,Modal,message,Checkbox,Upload,
+  Tooltip,
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
@@ -705,6 +706,7 @@ import ProtectedAppPage from "../Protected";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import ProgressComp from "./Progress";
+import { Create, DeleteOutlined, EditOutlined } from "@mui/icons-material";
 export default function Projects() {
 
   const [searchText, setSearchText] = useState('');
@@ -729,12 +731,16 @@ export default function Projects() {
   const [dataArray, setDataArray] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [record, setRecord] = useState(null);
+  const [api, contextHolder] = notification.useNotification();
 
   const [departmentOptions, setDepartmentOptions] = useState([]);
   const [departmentInfo,setDepartmentInfo] = useState([])
   const [projectOptions, setProjects] = useState([]);
   const [clients,setClients] = useState([])
   const [clientName,setClientName] = useState([])
+  const [form] = Form.useForm();
+  const [projectUpdate, setProjectUpdate] = useState(false);
+  const [projectToUpdate, setProjectToUpdate] = useState();
 
   const [projectId, setProjectId] = useState("");
   const history = useHistory();
@@ -757,6 +763,25 @@ export default function Projects() {
     setData(ongoingData)
 
   }
+
+  const handleCreateMDR = () => {
+    history.push('./mdr'); // Replace with the path to your MDR page
+
+  };
+
+  const openNotification = (pauseOnHover) => () => {
+    {
+       api.open({
+        message: 'Notification Title',
+        description:
+          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        showProgress: true,
+        pauseOnHover,
+      });
+    }
+  };
+
+
 
   const handleClose = ()=>{
     console.log('closing');
@@ -967,7 +992,31 @@ filters: [
     render: (_, record) => (
       
       <Space size="middle">
-          <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a>
+          <Tooltip title="Delete">
+  <Button
+    size="middle"
+    icon={<DeleteOutlined />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+
+<Tooltip title="Create MDR">
+  <Button
+    size="middle"
+    icon={<Create />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={handleCreateMDR}
+  />
+</Tooltip>
+
+          {/* <Button
+            size="middle"
+            icon={<EditOutlined />}
+            onClick={() => projectUpdateModalShow(record)}
+          /> */}
+
+          {/* <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a> */}
       </Space>
       
     ),
@@ -1040,6 +1089,29 @@ const handleDelete = async (record) => {
       console.error("Error fetching departments:", error?.message);
     }
   };
+
+  const handleUpdate=async()=>{
+    try {
+      const response  = await axios.put
+      (`http://127.0.0.1:8083/api/projects?companyId=${user?.user.companyId}&id=${form.getFieldValue("id")}`,
+      {
+        title:form.getFieldValue("title"),
+        code:form.getFieldValue("code"),
+      },
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    )
+      message.success(response.data.message)
+      projectUpdateModalCancel()
+      fetchData()
+    } catch (error) {
+            console.error("Error updating departments:", error?.message);
+    }
+  }
 
   const projectModalShow = () => {
 
@@ -1117,8 +1189,9 @@ if (!projName || !clientEmail ) {
           backgroundColor: '#52c41a', // Red color background
           color: '#fff', // White text color
         },
-      }
+      },
     )
+
       setProjectModalVisible(false);      
       fetchData();
     } catch (error) {
@@ -1156,7 +1229,7 @@ if (!projName || !clientEmail ) {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
+        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}&id=${user?.user.id}&firstName=${user?.user.firstName}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1190,17 +1263,8 @@ if (!projName || !clientEmail ) {
       const roleId = user?.user.roleId
 
       console.log(userId,'userId');
-
-      // if (userId !== undefined && roleId !==1) {
-      //   const userProjects = formattedData.filter(project => project.departmentIds.split(',').includes(userId.toString()));
-      //   console.log("User's Projects:", userProjects);
-      //   setData(userProjects);
-      // } 
-      // else{
-
-      const filter = formattedData.filter(item=>item.delete == false)
+      const filter = formattedData.filter(item=>item.removed == false)
         setData(filter)
-      // }
       setDataArray(formattedData)
       const options = [];
       for (const item of response?.data) {
@@ -1212,6 +1276,31 @@ if (!projName || !clientEmail ) {
       console.error("Error fetching projects:", error?.message);
     }
   };
+
+
+
+  const projectUpdateModalShow = (record) => {
+    setProjectToUpdate(record)
+
+    console.log(record.id,'record id');
+    console.log(typeof(record.id));
+    
+    
+    // Populate the form fields with the userToUpdate object when the modal is opened
+    form.setFieldsValue({
+      id:projectToUpdate.id||"",
+      title: projectToUpdate.title || "",
+      code: projectToUpdate.code || "",
+
+    });
+    
+    setProjectUpdate(true);
+  };
+
+  const projectUpdateModalCancel = () => {
+    setProjectUpdate(false);
+  };
+
 
   const fetchDepartments = async () => {
     try {
@@ -1352,6 +1441,45 @@ if (!projName || !clientEmail ) {
           </Row>
         </Form>
       </Modal>
+
+
+      <Modal
+      title="Update Project"
+      width={416}
+      centered
+      visible={projectUpdate}
+      onCancel={projectUpdateModalCancel}
+      footer={null}
+      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleUpdate} // Function to handle form submission
+      >
+        <Form.Item
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: 'Please enter the project title' }]}
+        >
+          <Input placeholder="Enter Project title" onChange={(e) => form.setFieldsValue({ title: e.target.value })} />
+        </Form.Item>
+        <Form.Item
+          label="Project Code"
+          name="code"
+          rules={[{ required: true, message: 'Please enter Project code' }]}
+        >
+          <Input placeholder="Enter Project code" onChange={(e) => form.setFieldsValue({ code: e.target.value })} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Update
+          </Button>
+          
+        </Form.Item>
+      </Form>
+    </Modal>
 
       <Modal
   title="Delete Project"

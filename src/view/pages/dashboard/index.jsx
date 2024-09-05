@@ -117,7 +117,7 @@ const fetchDepartments = async () => {
       console.log(response.data);
       setData(response.data); 
       const companyName = data.companyName; // Accessing the value associated with the key 'companyName'
-      const array = companyName.value; // Accessing the array stored within the 'value' property of the 'companyName' object
+      // const array = companyName.value; // Accessing the array stored within the 'value' property of the 'companyName' object
       // console.log(array,'array pe ');
       
       // Now, you can access the 'name' property of the dictionaries within the array
@@ -127,6 +127,11 @@ const fetchDepartments = async () => {
  
       console.log("data",data);// Assuming the response.data is an array of departments
       console.log("data",response?.data);
+
+        
+      
+
+
     } catch (error) {
       console.error("Error fetching stats", error?.message);
     }
@@ -226,6 +231,8 @@ setDepartmentCounts(userDepartmentCount)
       console.error("Error fetching mdr:", error?.message);
     }
   };
+
+  
   
   useEffect(() => {
     setUser(JSON.parse(localStorage?.getItem("user")));

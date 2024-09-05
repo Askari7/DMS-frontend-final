@@ -13,7 +13,8 @@ import {
   Modal,
   message,
   Select,Divider,
-  DatePicker,notification
+  DatePicker,notification,
+  Tooltip
 
 } from "antd";
 import { RiMore2Line, RiMenuFill, RiCloseFill } from "react-icons/ri";
@@ -22,6 +23,7 @@ import Breadcrumbs from "../../../layout/components/content/breadcrumbs";
 import CustomizedTables from "../../common/BaseTable";
 import { options } from "less";
 import FormItem from "antd/lib/form/FormItem";
+import { EmojiPeopleOutlined, People, Person } from "@mui/icons-material";
 // import InfoProfile from "./personel-information";
 // import MenuProfile from "./menu";
 // import PasswordProfile from "./password-change";
@@ -54,9 +56,27 @@ export default function Projects() {
       key: "action",
       render: (_, r) => (
         <Space size="middle">
-          {/* <a>Change Actions</a> */}
-          <a onClick={() => statusModalShow(r)}>Show Employees</a>
-          {/* <a>Delete</a> */}
+        {/* <Button
+          size="middle"
+          icon={<People />}
+          onClick={() => statusModalShow(r)}
+        /> */}
+            <Tooltip title="Add Client">
+  <Button
+    size="middle"
+    icon={<Person />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => showModalShow(r)}
+  />
+</Tooltip>
+        <Tooltip title="View Officials">
+  <Button
+    size="middle"
+    icon={<People />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => statusModalShow(r)}
+  />
+</Tooltip>
         </Space>
       ),
     },
@@ -69,6 +89,8 @@ export default function Projects() {
   ];
   const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [showModalVisible, setShowModalVisible] = useState(false);
+  const [record, setRecord] = useState();
+
 // const[record,setRecord ] = useState("")
 
 const [employee,setEmployee] = useState([])
@@ -131,7 +153,7 @@ const fetchEmployees = async(record)=>{
 }
 const addClient = async () => {
   // Perform form field validation
-  if (!companyName || !companyAddress || !companyContact) {
+  if (!companyName) {
     // If any required field is missing, display a validation error notification
     notification.error({
       message: 'Validation Error',
@@ -162,7 +184,6 @@ const addClient = async () => {
       }
     );
 
-    // Handle successful response
     console.log(response);
     notification.success({
       message: `${response?.data?.message}`,
@@ -203,8 +224,9 @@ const addClientOfficials = async () => {
       `http://127.0.0.1:8083/api/clients`,
       {
         clientName,
-        companyId:clientCompany,
+        companyId:record.id,
         Email:email,
+        userCompanyId:user.user.companyId
       },
       {
         headers: {
@@ -216,6 +238,20 @@ const addClientOfficials = async () => {
 
     // Handle the response as needed
     console.log(response);
+    if(response?.data?.message==='This email already exist!'){
+      console.log('ERROR');
+      
+      notification.error({
+        message: `${response?.data?.message}`,
+        style: {
+          backgroundColor: '#ff0000', // Red color background
+          color: '#fff', // White text color
+        },
+      }
+    )
+    }
+    else{
+      console.log('SUCCESS');
     notification.success({
       message: `${response?.data?.message}`,
       style: {
@@ -223,7 +259,7 @@ const addClientOfficials = async () => {
         color: '#fff', // White text color
       },
     }
-  )    
+  )}
     fetchData();
     showModalCancel();
   } catch (error) {
@@ -280,7 +316,8 @@ const clientModalCancel = () => {
   setClientModalVisible(false);
 };
 
-const showModalShow = () => {
+const showModalShow = (r) => {
+  setRecord(r)
   setShowModalVisible(true);
 };
 
@@ -457,7 +494,7 @@ const handleStatusChange = (selectedStatus) => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
                 label="Company"
                 name="company"
                 rules={[
@@ -473,7 +510,7 @@ const handleStatusChange = (selectedStatus) => {
                   onChange={(value) => setClientCompany(value)}
                 />              
                 </Form.Item>
-                
+                 */}
           {/* <Form.Item
             label="Contact :"
             name="companyContact"
@@ -525,13 +562,13 @@ const handleStatusChange = (selectedStatus) => {
           Add Company
         </Button>
 
-        <Button
+        {/* <Button
           type="primary"
           onClick={showModalShow}
           disabled={user?.user?.roleId != 1}
         >
           Add Client
-        </Button>
+        </Button> */}
       </div>
 {user?.user?.roleId === 1 ? (
   

@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function HeaderText() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [companyName, setCompanyName] = useState(null);
   const [companyEmail, setCompanyEmail] = useState(null);
   const [ownerEmail, setOwnerEmail] = useState(null);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage?.getItem("user")));
-    // fetchDetails()
+    fetchDetails()
   }, []);
 
   const roleMapping = {
@@ -38,8 +38,8 @@ export default function HeaderText() {
       const {name,companyEmail,owner,ownerEmail} = response.data
       setCompanyName(name)
       setCompanyEmail(companyEmail)
-      setOwner(owner)
-      setOwnerEmail(ownerEmail)
+      // setOwner(owner)
+      // setOwnerEmail(ownerEmail)
     } catch (error) {
       console.log(error)
     }

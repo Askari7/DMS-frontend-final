@@ -5,7 +5,7 @@
 // import { useLocation } from 'react-router-dom';
 // import jsondata from './data.json';
 // import { saveData, loadData, getAllKeys } from '../../storage';
-// console.log(jsondata);
+// 
 
 //   const MdrTemplate = ({ projectCode, mdrCode }) => {
 //     const [customModalVisible, setCustomModalVisible] = useState(false);
@@ -44,16 +44,16 @@
 
 
 //     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
-//     // console.log("hehe",departmentOptionSuffixes)
+//     // 
 //     const departmentOptions = JSON.parse(departmentOptionsString);
-//     // console.log("department",departmentOptions);
+//     // 
 //     const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
-//     // console.log("departmentmap",departmentOptionsMap);
+//     // 
 //     const departmentIds = departmentId.split(',').map(Number);
 //     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
-//     // console.log("id",departmentIds,"labels",departmentLabels);
+//     // 
 //     const departmentLabelsString = departmentLabels.join(', ');
-//     // console.log("strings",departmentLabelsString);
+//     // 
 
 //     const dataArrayWithIndexes = Object.entries(jsondata).map(([index, value]) => ({  ...value, index: parseInt(index), checked: false }));
     
@@ -157,7 +157,7 @@
 //         const updatedCounts = { ...prevCounts };
 //         const currentCount = updatedCounts[record.document] || 1;
 //         updatedCounts[record.document] = currentCount + 1;
-//         // console.log("documents", updatedCounts);
+//         // 
 //         return updatedCounts;
 //       });
 //     };
@@ -165,14 +165,14 @@
 //     const templateModalShow = () => {
 //       setTemplateModalVisible(true);  
 //       const updatedData = [...data];
-//       // console.log(updatedData,"updatedData");
+//       // 
 //       let allInfos = [];
 //       selectedRows.forEach((index, sequenceNumber) => {
 //         const count = documentCounts[data[index].document] || 1;
-//         // console.log(count, "counting");        
+//         //         
 //         for (let i = 0; i < count; i++) {
 //           let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-//           // console.log("document",newDocument);
+//           // 
 //           // Save the document name in allInfos array
 //           if (!allInfos[index]) {
 //             allInfos[index] = {};
@@ -183,15 +183,15 @@
 //             ...data[index],
 //             count: documentCounts[data[index].document]
 //           };
-//         // console.log(updatedData[index],"updating count");
+//         // 
           
 //         }
       
 //       });
-//       console.log(documentCounts,"counts");
+//       
 //       setInformation(allInfos)
-//       // console.log(allInfos,"allInfos");
-//       // console.log("Updated", updatedData);
+//       // 
+//       // 
 //       setData(updatedData);
       
 //     };
@@ -204,7 +204,7 @@
 //         ...newDocumentInfo[index][i],
 //         title,
 //       };
-//       // console.log(newDocumentInfo,"newDataInfo");
+//       // 
 
 //       return newDocumentInfo;
 //     });
@@ -234,15 +234,15 @@
 //     });
 //   };
 //   const onChange = (pagination, filters, sorter, extra) => {
-//     console.log('params', pagination, filters, sorter, extra);
+//     
 //   };
   
 //   const change=(selectedRows,selectedRowKeys)=>{
-//     // console.log(selectedRows,'row',selectedRowKeys);
+//     // 
 //     const updatedSelectedRowKeys = selectedRowKeys.map(row => ({ ...row, checked: true }));
-//     console.log(updatedSelectedRowKeys);
+//     
 //     const indexes = updatedSelectedRowKeys.map(row => row.index);
-//     // console.log(indexes,"indexes");
+//     // 
 //     setSelectedRows(indexes)
 //   }
   
@@ -287,22 +287,22 @@
 //       const departmentOptions = await JSON.parse(departmentOptionsString);
 //       try {
 //         var title=getMdrTitle;
-//         // console.log(title,"title for adding document");
+//         // 
 //         var mdrCode=getMdrCode;
-//         // console.log(mdrCode,"mdrcode for adding document");
+//         // 
 //         mdrCode=mdrCode.replace(/\s/g, '');
-//         // console.log(mdrCode,"mdrcode for adding document");
+//         // 
 //         var count = selectedRows.length
-//         // console.log(count,"selectedCount of docs");
+//         // 
 //         selectedRows.forEach(async (index) => {
 
 //           let documentValue = data[index].document;
 //           let count = data[index].count||1
-//           // console.log(documentValue,count||1,"doc related Infomation");
+//           // 
 //           const masterDocumentName=title;
 //           const assignedBy=user.user.roleId;
 //           const assignedFrom=user.user.id;
-//           console.log(count,'count for loop');
+//           
 //           for (let i = 0; i < count; i++) {
 //             try {
 //               var docTitle = documentInfo[index][i].title;
@@ -311,7 +311,7 @@
 //               var title=information[index][i];
 //               var version='000';
 
-//               console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
+//               
 //               const responseDoc = await axios.post(
 //                 "http://127.0.0.1:8083/api/documents/",
 //                 {
@@ -342,7 +342,7 @@
 //                 }
 //               );
 //             } catch (error) {
-//               console.log(error,"error Adding Docs");
+//               
 //             }  
 //           }
           
@@ -374,7 +374,7 @@
 //           );     
 //         }else{
 
-//           console.log(departmentId,projectId,"ye jarha ha")
+//           
 //           const response = await axios.post(
 //             "http://127.0.0.1:8083/api/documents/mdr",
 //             {
@@ -417,7 +417,7 @@
 //     };
 
 //     const handleDepartmentClick = (name) => {
-//       console.log("name",name);
+//       
 //       setSelectedDepartment(name);
 //       departmentWiseCancel();
 //       filterData(name);
@@ -431,28 +431,28 @@
 //     //       filteredData.push(data);
 //     //     }
 //     //   }
-//     //   console.log("filteredData",filteredData);
+//     //   
 //     //   setData(filteredData);
 //     // };
   
 //     const filterData = (selectedDepartment) => {
-//       console.log(selectedRows,"selectedRows");
-//       console.log(selectedDepartment,"selected");
+//       
+//       
 //       const filteredIndexes = dataArray
 //       .filter(item => item.category.toUpperCase() === selectedDepartment.toUpperCase())
     
 //       const filteredRowKeys = dataArray
 //       .filter((row, index) => selectedRows.includes(index) && row.checked)
 //       .map(row => row.index);
-//       console.log(filteredRowKeys,"keys");
+//       
 //     // Call setSelectedRows to update the selected rows
 //       setSelectedRows(filteredRowKeys);
   
-//       console.log(filteredIndexes,"filteredIndexes");
+//       
 //         // const filteredDataWithIndexes = filteredIndexes.map(index => dataArrayWithIndexes[index]);
 //       // const filteredDataValues = filteredDataWithIndexes.map(({ value }) => value);
       
-//       // console.log(filteredDataValues,filteredDataWithIndexes,"index");
+//       // 
 //       setData(filteredIndexes);
 //       // setFilteredValues(filteredDataWithIndexes); // Assuming you have a state variable for storing filtered values
 //     };
@@ -474,7 +474,7 @@
     
 //     const mydocumentSaved = async() => {
       
-//       console.log(data,"data",documentCounts,"counts",documentInfo,"documentInfo");
+//       
 //       await addDocument();
 //       notification.success({
 //         message: `Documents Successfully Added`,
@@ -485,7 +485,7 @@
 //       }
 //     )      // selectedRows.forEach((index) => {
 //       //   const savedData = loadData(`doc-${index}`);
-//       //   console.log(`Saved Data for Key ${index}:`, savedData);
+//       //   
 //       // });
     
 //       templateModalCancel();
@@ -511,7 +511,7 @@
 //     };
     
 //     const getAllCodes = async () => {
-//       console.log(user?.user?.companyId);
+//       
 
 //       try {
 //         const response = await axios.get(
@@ -535,7 +535,7 @@
 
 //     useEffect(() => {
 //       // This will be executed after the state is updated
-//       // console.log('Updated Information:', information);
+//       // 
 //     }, [information]);
 
 //     const customModalShow = () => {
@@ -614,7 +614,7 @@
 //                 <Input
 //                   value={code}
 //                   onChange={(e) =>{ setTitle(e.target.value);
-//                     console.log('');
+//                     
 //                   }}
 //                 />
 //                 </Form.Item>
@@ -855,7 +855,7 @@
 // // import { useLocation } from 'react-router-dom';
 // // import jsondata from './data.json';
 // // import { saveData, loadData, getAllKeys } from '../../storage';
-// // console.log(jsondata);
+// // 
 
 // //   const MdrTemplate = ({ projectCode, mdrCode }) => {
 // //     const [customModalVisible, setCustomModalVisible] = useState(false);
@@ -901,16 +901,16 @@
 
     
 // //     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
-// //     // console.log("hehe",departmentOptionSuffixes)
+// //     // 
 // //     const departmentOptions = JSON.parse(departmentOptionsString);
-// //     // console.log("department",departmentOptions);
+// //     // 
 // //     const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
-// //     // console.log("departmentmap",departmentOptionsMap);
+// //     // 
 // //     const departmentIds = departmentId.split(',').map(Number);
 // //     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
-// //     // console.log("id",departmentIds,"labels",departmentLabels);
+// //     // 
 // //     const departmentLabelsString = departmentLabels.join(', ');
-// //     // console.log("strings",departmentLabelsString);
+// //     // 
 
 // //     const dataArrayWithIndexes = Object.entries(jsondata).map(([index, value]) => ({  ...value, index: parseInt(index), checked: false }));
     
@@ -1016,42 +1016,42 @@
 // //         const updatedCounts = { ...prevCounts };
 // //         const currentCount = updatedCounts[record.document] || 1;
 // //         updatedCounts[record.document] = currentCount + 1;
-// //         // console.log("documents", updatedCounts);
+// //         // 
 // //         return updatedCounts;
 // //       });
 // //     };
 
 // //     const templateModalShow = () => {
-// //       console.log(customData,"Custom Data");
+// //       
 
 // //       setTemplateModalVisible(true);  
 // //       const updatedData = [...data];
-// //       // console.log(updatedData,"updatedData");
+// //       // 
 // //       let allInfos = [];
 // //       let allCustomInfos = [];
 
 // // // customData.forEach((index, sequenceNumber) => {
-// //     console.log("log here");
+// //     
 // //         const count = customData.count;
-// //         // console.log(count, "counting");        
+// //         //         
         
 // //         for (let i = 0; i < count; i++) {
 // //           let newDocument = customData.document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-// //           // console.log("document",newDocument);
+// //           // 
 // //           // Save the document name in allInfos array
 // //           if (!allCustomInfos[i]) {
 // //             allCustomInfos[i] = {};
 // //           }
 // //           allCustomInfos[i] = newDocument;        
 // //         }
-// //       console.log(allCustomInfos,"customInfos");
+// //       
 
 // //       selectedRows.forEach((index, sequenceNumber) => {
 // //         const count = documentCounts[data[index].document] || 1;
-// //         // console.log(count, "counting");        
+// //         //         
 // //         for (let i = 0; i < count; i++) {
 // //           let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-// //           // console.log("document",newDocument);
+// //           // 
 // //           // Save the document name in allInfos array
 // //           if (!allInfos[index]) {
 // //             allInfos[index] = {};
@@ -1062,20 +1062,20 @@
 // //             ...data[index],
 // //             count: documentCounts[data[index].document]
 // //           };
-// //         // console.log(updatedData[index],"updating count");
+// //         // 
           
 // //         }
       
 // //       });
-// //       console.log(documentCounts,"counts");
-// //       console.log(allInfos,'All Infos');
+// //       
+// //       
 // //       setCustomInformation(allCustomInfos)
 
 // //       setInformation(allInfos)
-// //       // console.log(allInfos,"allInfos");
-// //       // console.log("Updated", updatedData);
+// //       // 
+// //       // 
 // //       setData(updatedData);
-// //       console.log(updatedData,'Updated Data');
+// //       
 
       
 // //     };
@@ -1088,7 +1088,7 @@
 // //         ...newDocumentInfo[index][i],
 // //         title,
 // //       };
-// //       // console.log(newDocumentInfo,"newDataInfo");
+// //       // 
 
 // //       return newDocumentInfo;
 // //     });
@@ -1118,15 +1118,15 @@
 // //     });
 // //   };
 // //   const onChange = (pagination, filters, sorter, extra) => {
-// //     console.log('params', pagination, filters, sorter, extra);
+// //     
 // //   };
   
 // //   const change=(selectedRows,selectedRowKeys)=>{
-// //     // console.log(selectedRows,'row',selectedRowKeys);
+// //     // 
 // //     const updatedSelectedRowKeys = selectedRowKeys.map(row => ({ ...row, checked: true }));
-// //     console.log(updatedSelectedRowKeys);
+// //     
 // //     const indexes = updatedSelectedRowKeys.map(row => row.index);
-// //     // console.log(indexes,"indexes");
+// //     // 
 // //     setSelectedRows(indexes)
 // //   }
   
@@ -1171,23 +1171,23 @@
 // //       const departmentOptions = await JSON.parse(departmentOptionsString);
 // //       try {
 // //         var title=getMdrTitle;
-// //         // console.log(title,"title for adding document");
+// //         // 
 // //         var mdrCode=getMdrCode;
-// //         // console.log(mdrCode,"mdrcode for adding document");
+// //         // 
 // //         mdrCode=mdrCode.replace(/\s/g, '');
-// //         // console.log(mdrCode,"mdrcode for adding document");
+// //         // 
 // //         var count = selectedRows.length
-// //         // console.log(count,"selectedCount of docs");
+// //         // 
         
 
 // //         selectedRows.forEach(async (index) => {
 // //           let documentValue = data[index].document;
 // //           let count = data[index].count||1
-// //           // console.log(documentValue,count||1,"doc related Infomation");
+// //           // 
 // //           const masterDocumentName=title;
 // //           const assignedBy=user.user.roleId;
 // //           const assignedFrom=user.user.id;
-// //           console.log(count,'count for loop');
+// //           
 // //           for (let i = 0; i < count; i++) {
 // //             try {
 // //               var docTitle = documentInfo[index][i].title;
@@ -1196,7 +1196,7 @@
 // //               var title=information[index][i];
 // //               var version='000';
 
-// //               console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
+// //               
 // //               const responseDoc = await axios.post(
 // //                 "http://127.0.0.1:8083/api/documents/",
 // //                 {
@@ -1227,19 +1227,19 @@
 // //                 }
 // //               );
 // //             } catch (error) {
-// //               console.log(error,"error Adding Docs");
+// //               
 // //             }  
 // //           }
 // //         });
 
-// // console.log('reached here');
-// // console.log(documentInfo,'docInfo');
+// // 
+// // 
 // //         // selectedRows.forEach(async (index) => {
 // //           let countCustom = customData.count||1
 // //           const masterDocumentName=title;
 // //           const assignedBy=user.user.roleId;
 // //           const assignedFrom=user.user.id;
-// //           console.log(count,'count for loop');
+// //           
 // //           for (let i = 0; i < countCustom; i++) {
 // //             try {
 // //               var docTitle = documentInfo[0][i].title;
@@ -1248,7 +1248,7 @@
 // //               var title=customInformation[i];
 // //               var version='000';
 
-// //               console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
+// //               
 // //               const responseDoc = await axios.post(
 // //                 "http://127.0.0.1:8083/api/documents/",
 // //                 {
@@ -1279,7 +1279,7 @@
 // //                 }
 // //               );
 // //             } catch (error) {
-// //               console.log(error,"error Adding Docs");
+// //               
 // //             }  
 // //           }
 // //         // });
@@ -1309,7 +1309,7 @@
 // //           );     
 // //         }else{
 
-// //           console.log(departmentId,projectId,"ye jarha ha")
+// //           
 // //           const response = await axios.post(
 // //             "http://127.0.0.1:8083/api/documents/mdr",
 // //             {
@@ -1352,7 +1352,7 @@
 // //     };
 
 // //     const handleDepartmentClick = (name) => {
-// //       console.log("name",name);
+// //       
 // //       setSelectedDepartment(name);
 // //       departmentWiseCancel();
 // //       filterData(name);
@@ -1366,28 +1366,28 @@
 // //     //       filteredData.push(data);
 // //     //     }
 // //     //   }
-// //     //   console.log("filteredData",filteredData);
+// //     //   
 // //     //   setData(filteredData);
 // //     // };
   
 // //     const filterData = (selectedDepartment) => {
-// //       console.log(selectedRows,"selectedRows");
-// //       console.log(selectedDepartment,"selected");
+// //       
+// //       
 // //       const filteredIndexes = dataArray
 // //       .filter(item => item.category.toUpperCase() === selectedDepartment.toUpperCase())
     
 // //       const filteredRowKeys = dataArray
 // //       .filter((row, index) => selectedRows.includes(index) && row.checked)
 // //       .map(row => row.index);
-// //       console.log(filteredRowKeys,"keys");
+// //       
 // //     // Call setSelectedRows to update the selected rows
 // //       setSelectedRows(filteredRowKeys);
   
-// //       console.log(filteredIndexes,"filteredIndexes");
+// //       
 // //         // const filteredDataWithIndexes = filteredIndexes.map(index => dataArrayWithIndexes[index]);
 // //       // const filteredDataValues = filteredDataWithIndexes.map(({ value }) => value);
       
-// //       // console.log(filteredDataValues,filteredDataWithIndexes,"index");
+// //       // 
 // //       setData(filteredIndexes);
 // //       // setFilteredValues(filteredDataWithIndexes); // Assuming you have a state variable for storing filtered values
 // //     };
@@ -1408,8 +1408,8 @@
 // //     };
     
 // //     const mydocumentSaved = async() => {      
-// //       console.log(data,"data",documentCounts,"counts",documentInfo,"documentInfo");
-// //       console.log();
+// //       
+// //       
 // //       await addDocument();
 // //       notification.success({
 // //         message: `Documents Successfully Added`,
@@ -1420,7 +1420,7 @@
 // //       }
 // //     )      // selectedRows.forEach((index) => {
 // //       //   const savedData = loadData(`doc-${index}`);
-// //       //   console.log(`Saved Data for Key ${index}:`, savedData);
+// //       //   
 // //       // });
     
 // //       templateModalCancel();
@@ -1446,7 +1446,7 @@
 // //     };
     
 // //     const getAllCodes = async () => {
-// //       console.log(user?.user?.companyId);
+// //       
 
 // //       try {
 // //         const response = await axios.get(
@@ -1470,7 +1470,7 @@
 
 // //     useEffect(() => {
 // //       // This will be executed after the state is updated
-// //       // console.log('Updated Information:', information);
+// //       // 
 // //     }, [information]);
 
 // //     const customModalShow = () => {
@@ -1517,7 +1517,7 @@
 // //         document:document,
 // //       };
 
-// //       console.log(customData,'customData');
+// //       
 // //       setCustomData(customData)
   
 // //       // Update the data array with the new custom data
@@ -1553,7 +1553,7 @@
 // //                 <Input
 // //                   value={code}
 // //                   onChange={(e) =>{ setTitle(e.target.value);
-// //                     console.log('');
+// //                     
 // //                   }}
 // //                 />
 // //                 </Form.Item>
@@ -1876,7 +1876,7 @@ import axios from 'axios'
 import { useLocation } from 'react-router-dom';
 import jsondata from './data.json';
 import { saveData, loadData, getAllKeys } from '../../storage';
-console.log(jsondata);
+
 
   const MdrTemplate = ({ projectCode, mdrCode }) => {
     const [customModalVisible, setCustomModalVisible] = useState(false);
@@ -1907,6 +1907,8 @@ console.log(jsondata);
     const [title,setTitle] = useState('')
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [departmentWise, setDepartmentWise] = useState(false);
+    // const [documentValidation, setDocumentValidation] = useState(true);
+
     const [loading, setLoading] = useState(true);
     const [displayNames, setDisplayNames] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -1922,16 +1924,16 @@ console.log(jsondata);
 
     
     const departmentOptionSuffixes = JSON.parse(departmentOptionSuffix);
-    // console.log("hehe",departmentOptionSuffixes)
+    // 
     const departmentOptions = JSON.parse(departmentOptionsString);
-    // console.log("department",departmentOptions);
+    // 
     const departmentOptionsMap = new Map(departmentOptions.map(option => [option.value, option.label]));
-    // console.log("departmentmap",departmentOptionsMap);
+    // 
     const departmentIds = departmentId.split(',').map(Number);
     const departmentLabels = departmentIds.map(id => departmentOptionsMap.get(id));
-    // console.log("id",departmentIds,"labels",departmentLabels);
+    // 
     const departmentLabelsString = departmentLabels.join(', ');
-    // console.log("strings",departmentLabelsString);
+    // 
 
     const dataArrayWithIndexes = Object.entries(jsondata).map(([index, value]) => ({  ...value, index: parseInt(index), checked: false }));
     
@@ -2017,8 +2019,10 @@ console.log(jsondata);
         key: "noOfDocuments",
         render: (_, record) => (
           <Space size="middle" align="center">
-            <Button onClick={() => handleCount(record)}>Add </Button>
+            <Tag style={{ color: "white", backgroundColor: "blue" }} onClick={() => handleCount(record,"add")}>+</Tag>
             <Tag style={{ color: "white", backgroundColor: "blue" }}>{documentCounts[record.document] || 1}</Tag>
+            <Tag style={{ color: "white", backgroundColor: "blue" }} onClick={() => handleCount(record,"sub")}>-</Tag>
+
           </Space>
         ),
       },
@@ -2032,47 +2036,54 @@ console.log(jsondata);
       return () => clearTimeout(timeout);
     }, [])
 
-    const handleCount = (record) => {
+    const handleCount = (record,a) => {
       setDocumentCounts(prevCounts => {
         const updatedCounts = { ...prevCounts };
         const currentCount = updatedCounts[record.document] || 1;
-        updatedCounts[record.document] = currentCount + 1;
-        // console.log("documents", updatedCounts);
+        if(a=="add"){
+          updatedCounts[record.document] = currentCount + 1;
+        }
+        else{
+          updatedCounts[record.document] = currentCount -1;
+
+        }
+        // 
         return updatedCounts;
       });
     };
 
     const templateModalShow = () => {
-      console.log(customData,"Custom Data");
+      
+      
 
       setTemplateModalVisible(true);  
       const updatedData = [...data];
-      // console.log(updatedData,"updatedData");
+      // 
       let allInfos = [];
       let allCustomInfos = [];
 
 // customData.forEach((index, sequenceNumber) => {
-    console.log("log here");
+    
         const count = customData.count;
-        // console.log(count, "counting");        
+        //         
         
         for (let i = 0; i < count; i++) {
           let newDocument = customData.document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-          // console.log("document",newDocument);
+          // 
           // Save the document name in allInfos array
           if (!allCustomInfos[i]) {
             allCustomInfos[i] = {};
           }
           allCustomInfos[i] = newDocument;        
         }
-      console.log(allCustomInfos,"customInfos");
+      
 
       selectedRows.forEach((index, sequenceNumber) => {
         const count = documentCounts[data[index].document] || 1;
-        // console.log(count, "counting");        
+        //         
         for (let i = 0; i < count; i++) {
           let newDocument = data[index].document.replace('00X', (i + 1).toString().padStart(3, '0')).replace("xxxx",ProjectCode)
-          // console.log("document",newDocument);
+          // 
           // Save the document name in allInfos array
           if (!allInfos[index]) {
             allInfos[index] = {};
@@ -2083,20 +2094,19 @@ console.log(jsondata);
             ...data[index],
             count: documentCounts[data[index].document]
           };
-        // console.log(updatedData[index],"updating count");
+        // 
           
         }
       
       });
-      console.log(documentCounts,"counts");
-      console.log(allInfos,'All Infos');
+      
+      
       setCustomInformation(allCustomInfos)
-
       setInformation(allInfos)
-      // console.log(allInfos,"allInfos");
-      // console.log("Updated", updatedData);
+      // 
+      // 
       setData(updatedData);
-      console.log(updatedData,'Updated Data');
+      
 
       
     };
@@ -2109,7 +2119,7 @@ console.log(jsondata);
         ...newDocumentInfo[index][i],
         title,
       };
-      // console.log(newDocumentInfo,"newDataInfo");
+      // 
 
       return newDocumentInfo;
     });
@@ -2139,15 +2149,15 @@ console.log(jsondata);
     });
   };
   const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
+    
   };
   
   const change=(selectedRows,selectedRowKeys)=>{
-    // console.log(selectedRows,'row',selectedRowKeys);
+    // 
     const updatedSelectedRowKeys = selectedRowKeys.map(row => ({ ...row, checked: true }));
-    console.log(updatedSelectedRowKeys);
+    
     const indexes = updatedSelectedRowKeys.map(row => row.index);
-    // console.log(indexes,"indexes");
+    // 
     setSelectedRows(indexes)
   }
   
@@ -2192,23 +2202,23 @@ console.log(jsondata);
       const departmentOptions = await JSON.parse(departmentOptionsString);
       try {
         var title=getMdrTitle;
-        // console.log(title,"title for adding document");
+        // 
         var mdrCode=getMdrCode;
-        // console.log(mdrCode,"mdrcode for adding document");
+        // 
         mdrCode=mdrCode.replace(/\s/g, '');
-        // console.log(mdrCode,"mdrcode for adding document");
+        // 
         var count = selectedRows.length
-        // console.log(count,"selectedCount of docs");
+        // 
         
 
         selectedRows.forEach(async (index) => {
           let documentValue = data[index].document;
           let count = data[index].count||1
-          // console.log(documentValue,count||1,"doc related Infomation");
+          // 
           const masterDocumentName=title;
           const assignedBy=user.user.roleId;
           const assignedFrom=user.user.id;
-          console.log(count,'count for loop');
+          
           for (let i = 0; i < count; i++) {
             try {
               var docTitle = documentInfo[index][i].title;
@@ -2217,7 +2227,7 @@ console.log(jsondata);
               var title=information[index][i];
               var version='000';
 
-              console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
+              
               const responseDoc = await axios.post(
                 "http://127.0.0.1:8083/api/documents/",
                 {
@@ -2248,19 +2258,21 @@ console.log(jsondata);
                 }
               );
             } catch (error) {
-              console.log(error,"error Adding Docs");
+              
             }  
           }
         });
 
-console.log('reached here');
-console.log(documentInfo,'docInfo');
+
+
+
         // selectedRows.forEach(async (index) => {
-          let countCustom = customData.count||1
+          if(customData.count !=null ||''){
+            let countCustom = customData.count||1
           const masterDocumentName=title;
           const assignedBy=user.user.roleId;
           const assignedFrom=user.user.id;
-          console.log(count,'count for loop');
+          
           for (let i = 0; i < countCustom; i++) {
             try {
               var docTitle = documentInfo[0][i].title;
@@ -2269,7 +2281,7 @@ console.log(documentInfo,'docInfo');
               var title=customInformation[i];
               var version='000';
 
-              console.log("doc data",docTitle,startedDate,expectedEndedDate,title,version);
+              
               const responseDoc = await axios.post(
                 "http://127.0.0.1:8083/api/documents/",
                 {
@@ -2300,8 +2312,10 @@ console.log(documentInfo,'docInfo');
                 }
               );
             } catch (error) {
-              console.log(error,"error Adding Docs");
+              
             }  
+                }
+            
           }
         // });
 
@@ -2330,7 +2344,7 @@ console.log(documentInfo,'docInfo');
           );     
         }else{
 
-          console.log(departmentId,projectId,"ye jarha ha")
+          
           const response = await axios.post(
             "http://127.0.0.1:8083/api/documents/mdr",
             {
@@ -2352,16 +2366,18 @@ console.log(documentInfo,'docInfo');
               },
             }
             
+            
           );
+          notification.success({
+            message: `${response?.data?.message}`,
+            style: {
+              backgroundColor: '#52c41a', // Red color background
+              color: '#fff', // White text color
+            },
+          }
+        )
         }
-        notification.success({
-                message: `${response?.data?.message}`,
-                style: {
-                  backgroundColor: '#52c41a', // Red color background
-                  color: '#fff', // White text color
-                },
-              }
-            )
+        
             if (selectedRows.length === 0) {
           message.error('Please select at least one row.');
           return;
@@ -2370,10 +2386,18 @@ console.log(documentInfo,'docInfo');
         // Handle errors
         console.error("Error adding MDR:", error);
       }
+      notification.success({
+        message: `Documents Successfully Added`,
+        style: {
+          backgroundColor: '#52c41a', // Red color background
+          color: '#fff', // White text color
+        },
+      }
+    )     
     };
 
     const handleDepartmentClick = (name) => {
-      console.log("name",name);
+      
       setSelectedDepartment(name);
       departmentWiseCancel();
       filterData(name);
@@ -2387,28 +2411,28 @@ console.log(documentInfo,'docInfo');
     //       filteredData.push(data);
     //     }
     //   }
-    //   console.log("filteredData",filteredData);
+    //   
     //   setData(filteredData);
     // };
   
     const filterData = (selectedDepartment) => {
-      console.log(selectedRows,"selectedRows");
-      console.log(selectedDepartment,"selected");
+      
+      
       const filteredIndexes = dataArray
       .filter(item => item.category.toUpperCase() === selectedDepartment.toUpperCase())
     
       const filteredRowKeys = dataArray
       .filter((row, index) => selectedRows.includes(index) && row.checked)
       .map(row => row.index);
-      console.log(filteredRowKeys,"keys");
+      
     // Call setSelectedRows to update the selected rows
       setSelectedRows(filteredRowKeys);
   
-      console.log(filteredIndexes,"filteredIndexes");
+      
         // const filteredDataWithIndexes = filteredIndexes.map(index => dataArrayWithIndexes[index]);
       // const filteredDataValues = filteredDataWithIndexes.map(({ value }) => value);
       
-      // console.log(filteredDataValues,filteredDataWithIndexes,"index");
+      // 
       setData(filteredIndexes);
       // setFilteredValues(filteredDataWithIndexes); // Assuming you have a state variable for storing filtered values
     };
@@ -2427,23 +2451,83 @@ console.log(documentInfo,'docInfo');
       departmentWiseCancel();
       setData(dataArray)
     };
-    
+    const mdrValidation = async() => {   
+      let count = data[index].count||1
+      for (let i = 0; i < count; i++) {
+      
+       
+        
+
+       };}
     const mydocumentSaved = async() => {      
-      console.log(data,"data",documentCounts,"counts",documentInfo,"documentInfo");
-      console.log();
-      await addDocument();
-      notification.success({
-        message: `Documents Successfully Added`,
-        style: {
-          backgroundColor: '#52c41a', // Red color background
-          color: '#fff', // White text color
-        },
-      }
-    )      // selectedRows.forEach((index) => {
-      //   const savedData = loadData(`doc-${index}`);
-      //   console.log(`Saved Data for Key ${index}:`, savedData);
-      // });
+      
+      let documentValidation=true;
+
+      
     
+      selectedRows.forEach(async (index) => {
+        let count = data[index].count||1
+      const  documentInfo1 = documentInfo.filter(item => item !== undefined);
+      console.log("count",count);
+      
+      console.log("DOC INFO1",documentInfo1);
+
+        for (let i = 0; i < documentInfo1.length; i++) {
+          console.log("OUTER LOOP I",i);
+
+//          if(documentInfo[i]==null){
+//           setDocumentValidation(true);
+// message.error('Fill all the fields first')
+//          } 
+console.log(documentInfo1[i],'DOC ARRAY');
+
+for (let index1 = 0; index1 < documentInfo1[i].length; index1++) {
+  console.log("INNER LOOP INDEX1",index1);
+
+
+          if (
+
+          !documentInfo1[i][index1].hasOwnProperty('title') || 
+          !documentInfo1[i][index1].hasOwnProperty('startDate') || 
+          !documentInfo1[i][index1].hasOwnProperty('endDate') ||
+          documentInfo1[i][index1]['title'] === null || 
+          documentInfo1[i][index1]['startDate'] === null || 
+          documentInfo1[i][index1]['endDate'] === null
+        ) {
+          console.log("IF CONDITION");
+
+
+          documentValidation=true;
+          message.error('Fill all the fields first');
+          break;
+
+        }
+      else{
+        console.log("ELSE CONDITION");
+
+        documentValidation=false;
+        
+
+       
+
+
+      }}
+
+         
+        }
+     
+      }
+      
+    )
+    if(documentValidation==false){
+      await addDocument();}
+      // selectedRows.forEach((index) => {
+      //   const savedData = loadData(`doc-${index}`);
+      //   
+      // });
+      
+
+       
       templateModalCancel();
 
     };
@@ -2467,7 +2551,7 @@ console.log(documentInfo,'docInfo');
     };
     
     const getAllCodes = async () => {
-      console.log(user?.user?.companyId);
+      
 
       try {
         const response = await axios.get(
@@ -2491,7 +2575,7 @@ console.log(documentInfo,'docInfo');
 
     useEffect(() => {
       // This will be executed after the state is updated
-      // console.log('Updated Information:', information);
+      // 
     }, [information]);
 
     const customModalShow = () => {
@@ -2505,7 +2589,8 @@ console.log(documentInfo,'docInfo');
     const handleCustomFieldChange = (fieldName, value) => {
       setCustomFieldValues({ ...customFieldValues, [fieldName]: value });
     };
-    const handleDone = (value) => {
+    const 
+    handleDone = (value) => {
       if (selectedRowData) {
         const updatedData = [...data];
         const index = selectedRowData.key;
@@ -2538,7 +2623,7 @@ console.log(documentInfo,'docInfo');
         document:document,
       };
 
-      console.log(customData,'customData');
+      
       setCustomData(customData)
   
       // Update the data array with the new custom data
@@ -2574,7 +2659,7 @@ console.log(documentInfo,'docInfo');
                 <Input
                   value={code}
                   onChange={(e) =>{ setTitle(e.target.value);
-                    console.log('');
+                    
                   }}
                 />
                 </Form.Item>
@@ -2593,7 +2678,6 @@ console.log(documentInfo,'docInfo');
     <Modal
       title="Upload Document"
       width={400}
-      centered
       visible={templateModalVisible}
       onCancel={templateModalCancel}
       footer={null}
@@ -2648,7 +2732,7 @@ console.log(documentInfo,'docInfo');
           </ul>
 
         
-          <ul style={{ margin: "2px", padding: "2px" }}>
+          {customData.count !=null ||'' && <ul style={{ margin: "2px", padding: "2px" }}>
       {Array.from({ length: customData.count || 1 }, (_, i) => (
 
         <li key={i} style={{ margin: "2px", padding: "2px" }}>
@@ -2685,18 +2769,27 @@ console.log(documentInfo,'docInfo');
           </Form.Item>
         </li>
       ))}
-    </ul>
+    </ul>}
 
          
         </div>
       </Row>
-      <Button
-        type="primary"
-        onClick={mydocumentSaved}
-        // disabled={user?.user?.roleId != 1}
-      >
-        Done
-      </Button>
+
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <Button
+    type="primary"
+    onClick={mydocumentSaved}
+    
+    // disabled={user?.user?.roleId != 1}
+    disabled={
+    documentInfo.length==0
+    }
+    style={{}}
+  >
+    Done
+  </Button>
+</div>
+
     </Modal>
 
     <Modal

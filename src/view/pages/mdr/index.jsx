@@ -28,7 +28,8 @@ import {
   message,
   Upload,
   Checkbox,
-  Typography
+  Typography,
+  Tooltip
 } from "antd";
 const { Title, Text } = Typography;
 const imageUrl = '..//..//..//assets/images/logo/novacon.png'
@@ -44,6 +45,7 @@ import ProtectedAppPage from "../Protected";
 import { useLocation } from 'react-router-dom';
 import { string } from "prop-types";
 import ProgressComp from "./Progress";
+import { DeleteOutlined, DocumentScannerOutlined, EditOutlined, OpenInFull, OpenInFullOutlined, OpenInFullSharp, Update, UpdateSharp } from "@mui/icons-material";
 
 
 
@@ -69,6 +71,7 @@ export default function MDR() {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
+  const [form] = Form.useForm();
 
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
@@ -108,15 +111,42 @@ export default function MDR() {
 
   const [userOption, setUserDatalist] = useState([]);
   const [record,setRecord] = useState()
+
+  const [updateModalVisible,   setUpdateModalVisible] =useState(false);
+  
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const [recordMdr,setRecordMdr] = useState()
+  const [recordMDR,setRecordMDR] = useState()
 
   const [projectCode,setProjectCode] = useState()
   const location = useLocation();
   const { matchingRecord } = location.state || {}
   // console.log(matchingRecord,"recordinggggg");
   // console.log(location,"location");
+
+  const handleUpdate=async()=>{
+    try {
+      const response  = await axios.put
+      (`http://127.0.0.1:8083/api/documents/mdr_update?companyId=${user?.user.companyId}&id=${form.getFieldValue("id")}`,
+      {
+        title:form.getFieldValue("title"),
+        mdrCode:form.getFieldValue("mdrCode"),
+      },
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    )
+      message.success(response.data.message)
+      editModalCancel()
+      fetchData()
+    } catch (error) {
+            console.error("Error updating departments:", error?.message);
+    }
+  }
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -145,9 +175,6 @@ export default function MDR() {
     fetchData()
   
   };
-  const handleAll=()=>{
-    setData(dataArray)
-  }
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -203,22 +230,7 @@ export default function MDR() {
       ),
   });
 
-  const handleCompleted=()=>{
-    const completedData = dataArray.filter(item => item.status === 'completed');
-    setData(completedData)
-  }
-  const handleOnGoing=()=>{
-    const ongoingData = dataArray.filter(item => item.status === 'Ongoing');
-    setData(ongoingData)
 
-  }
-const menu = (
-  <Menu>
-    <Menu.Item onClick={() => handleAll()}>All</Menu.Item>
-    <Menu.Item onClick={() => handleCompleted()}>Completed</Menu.Item>
-    <Menu.Item onClick={() => handleOnGoing()}>Ongoing</Menu.Item>
-  </Menu>
-);
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
   };
@@ -244,6 +256,8 @@ const menu = (
       });
       return; // Exit early if validation fails
     }
+
+
     const project = projectOptions.find((item) => item?.value == projectId);
     // console.log('departmentOptions',departmentOptions);
     const serializedDepartmentOptions = JSON.stringify(departmentOptions);
@@ -255,7 +269,9 @@ const menu = (
     history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}
     &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
     &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
-    &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)};
+    &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}&reviewer=${serializedSelectedReviewer}`)
+  
+  };
     
     const navigateToMdrTemplateForUpdate = () => {
       if (!title || !projectId ||!selectedReviewer ||!selectedApprover ) {
@@ -286,6 +302,39 @@ const menu = (
       &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}
       &reviewer=${serializedSelectedReviewer}&record=${serializedRecord}`)};
   
+
+
+      const navigateToUpdate = () => {
+        if (!title || !projectId ||!selectedReviewer ||!selectedApprover ) {
+          // If any required field is missing, display a validation error notification
+          notification.error({
+            message: 'Validation Error',
+            description: 'Please fill in all required fields.',
+            style: {
+              backgroundColor: '#f5222d', // Red color background
+              color: '#fff', // White text color
+            },
+          });
+          return; // Exit early if validation fails
+        }
+        const project = projectOptions.find((item) => item?.value == projectId);
+        // console.log('departmentOptions',departmentOptions);
+        const serializedDepartmentOptions = JSON.stringify(departmentOptions);
+        const serializedDepartmentOption = JSON.stringify(departmentOption);
+        const serializedRecord = JSON.stringify(record);
+        // console.log(serializedRecord,"serializedRecord");
+        // console.log("serialized",serializedDepartmentOption)
+        const serializedProjectOptions = JSON.stringify(projectOptions);
+        const serializedSelectedApprover = JSON.stringify(selectedApprover);
+        const serializedSelectedReviewer = JSON.stringify(selectedReviewer);
+        history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}
+        &departmentOption=${serializedDepartmentOption}&departmentOptions=${serializedDepartmentOptions}
+        &projectOptions=${serializedProjectOptions}&projectId=${projectId}&projectCode=${projectCode}
+        &departmentId=${selectedDepartments}&title=${title}&approver=${serializedSelectedApprover}
+        &reviewer=${serializedSelectedReviewer}&record=${serializedRecord}`)};
+  
+        
+
 
     const navigate = () => {
     const project = record.projectId;
@@ -347,16 +396,28 @@ let count=0;
     setShowModalVisible(true);
   };
 
-  const editModalShow = (record) => {
-    console.log(recordMdr,"record1");
-    setRecordMdr(record)
-    setEditModalVisible(true);
-    console.log(recordMdr,"record2");
 
+  const updateModalShow = (record) => {
+    console.log('record',record)
+   setRecord(record)
+  //  showDocs(record)
+   setUpdateModalVisible(true);
+ };
+
+  const editModalShow = (record) => {
+    setRecordMDR(record)
+    console.log(recordMDR.mdrCode,'mdrCode');
+    
+    form.setFieldsValue({
+      id:recordMDR.id,
+      title:recordMDR.title||"",
+      mdrCode: recordMDR.mdrCode || "",
+    });
+
+    setEditModalVisible(true);
   };
 
   const editModalCancel = () => {
-
     setEditModalVisible(false);
   };
   const showModalCancel = () => {
@@ -543,7 +604,7 @@ const handleExport = async (record, imageUrl) => {
 
 const fetchDepartmentDocs = async (record) => {
   try {
-    // console.log('recorddd',record);
+    console.log('recorddd',record);
     const response = await axios.get(
       `http://127.0.0.1:8083/api/documents?masterDocumentId=${record.mdrCode}&projectId=${record.projectId}&companyId=${record.companyId}`,
       {
@@ -665,9 +726,8 @@ useEffect(() => {
   }
   const handleEdit = async()=>{
     try {
-      console.log(recordMdr,"recordMdr");
+      console.log(recordMDR,"recordMdr");
     } catch (error) {
-      
     }
   }
   const addDocument = async () => {
@@ -1281,7 +1341,7 @@ console.log('dataaaaaa',data);
         </Row>
       </Modal>
       
-      <Modal
+      {/* <Modal
   title="MDR Information"
   width={400}
   centered
@@ -1289,9 +1349,9 @@ console.log('dataaaaaa',data);
   onCancel={editModalCancel}
   footer={null}
   closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
->
+> */}
 
-  {recordMdr ? (
+  {/* {recordMdr ? (
     <div style={{ textAlign: "center" }}>
       <div style={{ textAlign: "left" }}>
     <Title level={3}>Title: {recordMdr.title || null}</Title><br />
@@ -1316,10 +1376,100 @@ console.log('dataaaaaa',data);
       </div>
       <Button type="primary" style={{ marginTop: "16px" }} onClick={handleEdit}>Add More Documents</Button>
     </div>
-  ) : null}
-</Modal>
+  ) : null} */}
+
+{/* <Row justify="space-between" align="center">
+          <Col span={20}>
+            <Form layout="vertical" name="basic" form={form} onFinish={handleEdit}>
+              <Form.Item
+                label="MDR Title"
+                name="docTitle"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your title",
+                  },
+                ]}
+              >
+                
+                <Input
+                placeholder="Enter title"
+                  onChange={(e) => form.setFieldsValue({ title: e.target.value })}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="MDR Code"
+                name="docCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your code",
+                  },
+                ]}
+                
+              >
+                <Input
+                placeholder="Enter mdr Code"
+                  onChange={(e) => form.setFieldsValue({ mdrCode: e.target.value })}
+                />
+              </Form.Item>
+              
+              <Row>           
+              <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+                  <Button block onClick={navigateToMdrTemplateForUpdate} type="primary"htmlType="submit">MDR template</Button>
+                </Col>
+          
+              </Row>
+            </Form>
+          </Col>
+        </Row>
+</Modal> */}
 
 
+
+
+<Modal
+      title="Update MDR"
+      width={416}
+      centered
+      visible={editModalVisible}
+      onCancel={editModalCancel}
+      footer={null}
+      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={
+          handleUpdate
+        } // Function to handle form submission
+      >
+        <Form.Item
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: 'Please enter the mdr title' }]}
+        >
+          <Input placeholder="Enter MDR title" onChange={(e) => form.setFieldsValue({ title: e.target.value })} />
+        </Form.Item>
+        <Form.Item
+          label="MDR Code"
+          name="mdrCode"
+          rules={[{ required: true, message: 'Please enter mdr code' }]}
+        >
+          <Input placeholder="Enter MDR code" onChange={(e) => form.setFieldsValue({ mdrCode: e.target.value })} />
+        </Form.Item>
+
+        <Form.Item>
+        <Row md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+          <Button onClick={navigateToUpdate} type="primary"htmlType="submit">MDR template</Button>
+          <Button type="primary" htmlType="submit" >
+            Update
+          </Button>     
+          </Row>
+        </Form.Item>
+      </Form>
+    </Modal>
 
 
       <Modal
@@ -1455,7 +1605,17 @@ console.log('dataaaaaa',data);
             ],
             onFilter:  (value, record) =>record.status === value,
           },
-          
+          {
+            title: "Progress Per Document",
+            key: "percentage",
+            render: (_, record) => (
+              <Space>
+                {record.percentage !== null ? (
+                  <ProgressComp percentage={record.percentage.toFixed(1)} />
+                ) : null}
+              </Space>
+            )
+          },
           {
             title: "Action",
             key: "action",
@@ -1470,14 +1630,25 @@ console.log('dataaaaaa',data);
                   >
                     Export
                   </Button> */}
+
                   {
-                    <Button
-                    key={record?.id}
-                    onClick={()=>exportToCSV(record)}
-                    disabled={user?.user?.roleId != 1}
-                  >
-                    Export CSV 
-                  </Button>
+                  //   <Button
+                  //   key={record?.id}
+                  //   onClick={()=>exportToCSV(record)}
+                  //   disabled={user?.user?.roleId != 1}
+                  //   icon={<DocumentScannerOutlined/>}
+                  // />
+
+                  <Tooltip title="Export CSV">
+                  <Button
+                    size="middle"
+                    icon={<DocumentScannerOutlined />}
+                    disabled={user?.user?.roleId !== 1}
+                    onClick={() => exportToCSV(record)}
+                  />
+                </Tooltip>
+                    // Export CSV 
+                  /* </Button> */
                   
                   }
                   {user.user.roleId !== 1 && record.authorId === user?.user.id  && record.status =="Assigned" &&(
@@ -1491,42 +1662,46 @@ console.log('dataaaaaa',data);
     
                   {user.user.roleId==1 &&       
                   <>
-                  <Button
+                  {/* <Button
                     key={record?.id}
-                    onClick={() => {showModalShow(record)                      
-                    }}
-                  >
-                    Open
-                  </Button>
+                    onClick={() => {showModalShow(record)}}
+                    icon={<OpenInFullSharp/>}
+                  /> */}
+                  <Tooltip title="View MDR Docs">
+  <Button
+    size="middle"
+    icon={<OpenInFullSharp />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => showModalShow(record)}
+  />
+</Tooltip>
 
                   {/* <Button
                     key={record?.id}
-                    onClick={() => {editModalShow(record)                      
-                    }}
-                  >
-                    Edit
-                  </Button> */}
+                    onClick={() => {editModalShow(record)}}
+                    icon={<EditOutlined/>}
+                  /> */}
+                    {/* Open */}
+                  {/* </Button> */}
                   </>
                   
                   }    
-                               <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a>
+                            <Tooltip title="Delete">
+  <Button
+    size="middle"
+    icon={<DeleteOutlined />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+                  {/* <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a> */}
 
                 </Space>
 
               </>
             ),
           },
-          {
-            title: "Progress Per Document",
-            key: "percentage",
-            render: (_, record) => (
-              <Space>
-                {record.percentage !== null ? (
-                  <ProgressComp percentage={record.percentage.toFixed(1)} />
-                ) : null}
-              </Space>
-            )
-          },
+
              
         ]}
         size="middle"

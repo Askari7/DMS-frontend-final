@@ -29,7 +29,6 @@ const ChangePersonalProfileImagePage =  () => {
         Authorization: user?.accessToken,
       }
     })
-    await getprofile()
     console.log(logo.data,"result");
   }
 

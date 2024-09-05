@@ -49,10 +49,11 @@ export default function MenuHeader(props) {
   useEffect(()=>{
     // fetchData()
   },[])
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users/notifications?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/users/notifications?companyId=${user?.user.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -60,10 +61,8 @@ export default function MenuHeader(props) {
           },
         }
       );
-      console.log(response.data);
-      const data = response.data
-      const filter = data.filter(item=>item.delete==0)
-      setData(filter); // Assuming the response.data is an array of departments
+      console.log(response.data,'response.data')
+
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
@@ -103,7 +102,7 @@ export default function MenuHeader(props) {
         <Col>
           <Row align="middle">
             <HeaderText/>
-            {/* <HeaderNotifications/> */}
+            <HeaderNotifications/>
             <HeaderUser />
           </Row>
         </Col>

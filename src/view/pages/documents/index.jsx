@@ -1054,7 +1054,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
 import MyTreeView from "../treeview/MyTreeView";
 import { DownOutlined } from '@ant-design/icons';
-import {Row,Col,Divider,notification,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload,
+import {Row,Col,Divider,notification,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload, Tooltip,
 } from "antd";
 import { Radio } from "antd";
 import axios from "axios";
@@ -1067,6 +1067,7 @@ import "react-quill/dist/quill.snow.css";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useRef } from "react";
+import { Assignment, DeleteOutlined, OpenInFull } from "@mui/icons-material";
 
 const uploadProps = {
   name: "file",
@@ -1186,6 +1187,45 @@ export default function Document() {
 
   const history = useHistory();
 
+
+
+
+
+  const [assignModalVisible, setAssignModalVisible] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [documentModalVisible, setDocumentModalVisible] = useState(false);
+  const [docTitle, setDocTitle] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [departmentId, setDepartmentId] = useState("");
+  const [extension, setExtension] = useState("");
+  const [mdr, setMDR] = useState("");
+  const [file, setFile] = useState(null);
+  const [textEditorValue, setTextEditorValue] = useState("");
+  const [departmentOptions, setDepartments] = useState([]);
+  const [projectOptions, setProjects] = useState([]);
+  const [mdrOptions, setMdrData] = useState([]);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  const [data, setData] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
+  const [projectCode, setProjectCode] = useState("");
+  const [areaCode, setAreaCode] = useState("");
+  const [deptSuffix, setDeptSuffix] = useState("");
+  const [departments,setDepartment] = useState([])
+  const [projects,setProject] = useState([])
+  const [showTreeView, setShowTreeView] = useState(false);
+  const [userOption, setUserDatalist] = useState([]);
+  const [Users, setUsers] = useState();
+
+  const [assignedEmployees, setAssignedEmployees] = useState([]);
+  const [record, setRecord] = useState(null);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  const [myrecord,setMyRecord]=useState({});
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+
+
   const columns = [
     {
       title: "Mdr Code",
@@ -1245,7 +1285,29 @@ export default function Document() {
       title: "Assigned To",
       dataIndex: "assignedToName",
       key: "assignedToName",
+      render: (_, record) => {
+    
+        // Check if assignedToName is already present
+        if (record.assignedToName) {
+          return record.assignedToName;
+        }
+    
+        // If assignedToName is not present, proceed with splitting and mapping
+        const assigned = record.assignedTo;
+        const assignedToNames = assigned?.split(",");
+    
+        return (
+          assignedToNames && 
+          <Space size="middle">
+            {assignedToNames.map((name, index) => (
+              <span key={index}>{Users && Users[name]}</span>
+            ))}
+          </Space>
+        );
+      },
     },
+    
+    
     {
       title: "Action",
       key: "action",
@@ -1258,73 +1320,108 @@ export default function Document() {
              
 
             </input>
-            <a onClick={() => assignModalShow(record)}>Assign Document</a>
+
+            {/* <Button
+            size="middle"
+            icon={<Assignment />}
+            onClick={() => assignModalShow(record)}
+          /> */}
+
+<Tooltip title="Assign Doc">
+  <Button
+    size="middle"
+    icon={<Assignment />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => assignModalShow(record)}
+  />
+</Tooltip>
+
+            {/* <a onClick={() => assignModalShow(record)}>Assign Document</a> */}
 
             </Space>
 
             
           ) : user.user.id == record.assignedTo ?(
             <Space size="middle">
-            <a onClick={() => handleOpen(record)}>Open</a>
+
+            {/* <a onClick={() => handleOpen(record)}>Open</a> */}
+            <Tooltip title="Open">
+  <Button
+    size="middle"
+    icon={<OpenInFull />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => handleOpen(record)}
+  />
+</Tooltip>
             
             <input type="file" onChange={(e)=>handleFileChange(e,record)}/>
             </Space>
 
           ): (
             <>
-<a onClick={() => handleOpen(record)}>Open</a>
+          {/* <a onClick={() => handleOpen(record)}>Open</a> */}
+          <Tooltip title="Open">
+  <Button
+    size="middle"
+    icon={<OpenInFull />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => handleOpen(record)}
+  />
+</Tooltip>
               {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.title}`)}>Open</a> */}
               {/* <a onClick={() => statusModalShow(record)}>Add Status</a> */}
             </>
-          ):record.status =='Initialized'?              <a onClick={() => assignModalShow(record)}>Assign Document</a>
+          ):record.status =='Initialized'?              
+        //   <Button
+        //   size="middle"
+        //   icon={<Assignment />}
+        //   onClick={() => assignModalShow(record)}
+        // />
+        <Tooltip title="Assign Doc">
+  <Button
+    size="middle"
+    icon={<Assignment />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => assignModalShow(record)}
+  />
+</Tooltip>
+          // <a onClick={() => assignModalShow(record)}>Assign Document</a>
           :(
             <>
-<a onClick={() => handleOpen(record)}>Open</a>
+        {/* <a onClick={() => handleOpen(record)}>Open</a> */}
+        <Tooltip title="Open">
+  <Button
+    size="middle"
+    icon={<OpenInFull />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => handleOpen(record)}
+  />
+</Tooltip>
               {/* <a onClick={() => history.push(`/pages/mypdf?documentId=${record.title}`)}>Open</a> */}
               {/* <a onClick={() => statusModalShow(record)}>Add Status</a> */}
             </>
           )}
-          <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a>
+          {/* <Button
+            size="middle"
+            icon={<DeleteOutlined />}
+            disabled={user?.user?.roleId !== 1}
+            onClick={() => deleteModalShow(record)}
+          />
+           */}
+           <Tooltip title="Delete">
+  <Button
+    size="middle"
+    icon={<DeleteOutlined />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+          {/* <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a> */}
 
         </Space>
       ),
     }
   ];
-
-
-
-  const [assignModalVisible, setAssignModalVisible] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState(null);
-  const [documentModalVisible, setDocumentModalVisible] = useState(false);
-  const [docTitle, setDocTitle] = useState("");
-  const [projectId, setProjectId] = useState("");
-  const [departmentId, setDepartmentId] = useState("");
-  const [extension, setExtension] = useState("");
-  const [mdr, setMDR] = useState("");
-  const [file, setFile] = useState(null);
-  const [textEditorValue, setTextEditorValue] = useState("");
-  const [departmentOptions, setDepartments] = useState([]);
-  const [projectOptions, setProjects] = useState([]);
-  const [mdrOptions, setMdrData] = useState([]);
-  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-  const [data, setData] = useState([]);
-  const [dataArray, setDataArray] = useState([]);
-  const [projectCode, setProjectCode] = useState("");
-  const [areaCode, setAreaCode] = useState("");
-  const [deptSuffix, setDeptSuffix] = useState("");
-  const [departments,setDepartment] = useState([])
-  const [projects,setProject] = useState([])
-  const [showTreeView, setShowTreeView] = useState(false);
-  const [userOption, setUserDatalist] = useState([]);
-  const [assignedEmployees, setAssignedEmployees] = useState([]);
-  const [record, setRecord] = useState(null);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
-  const [myrecord,setMyRecord]=useState({});
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
-  const searchInput = useRef(null);
-
   const deleteModalShow = (record) => {
     setRecord(record)
     setDeleteModalVisible(true);
@@ -1504,7 +1601,8 @@ if(user.user.roleId == 1){
   for (const item of response?.data) {
     console.log(myrecord,myrecord.departmentId,item.departmentId,"data");
     options[item.id] = `${item.firstName}`
-   if(item.roleId ==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
+  //  if(item.roleId ==2  && myrecord.departmentId.indexOf(item.departmentId) !== -1){
+    if(item.roleId ==2){
 
     role =`Head of ${item.department}`
     option.push({
@@ -1550,6 +1648,7 @@ if(user.user.roleId==2 ){
          } }
          console.log("option",option);
       setUserDatalist(option);
+      setUsers(options)
        // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
       console.error("Error fetching Users:", error?.message);
@@ -1638,7 +1737,7 @@ if(user.user.roleId==2 ){
       console.log(response.data,"received");
       const data = response.data
       console.log(data,'dat');
-      const filter = data.filter(item  => item.delete == null)
+      const filter = data.filter(item  => item.removed == 0)
       console.log(filter,'filter');
       setDataArray([...filter])
       setData([...filter]);
@@ -1763,8 +1862,9 @@ useEffect(() => {
   fetchDepartments();
   fetchProjects();
   fetchMDR();
-  fetchData();
   fetchUsers()
+
+  fetchData();
 }, [myrecord]); // Add updatedData as a dependency
 
 useEffect(() => {
@@ -1783,7 +1883,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
       (item) => item?.value == departmentId
     );
     const response = await axios.put(
-      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
+      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&companyId=${user.user.companyId}&docName=${myrecord.title}`,
       {},
       {
         headers: {

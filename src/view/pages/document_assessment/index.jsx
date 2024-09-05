@@ -1153,8 +1153,9 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import {
-  Button,Form, Row,Col,Space,Table,Select,Input,DatePicker,TimePicker,Modal,message,Upload,Timeline} from "antd";
-import { RiCloseFill, RiCalendarLine  } from "react-icons/ri";
+  Button,Form, Row,Col,Space,Table,Select,Input,DatePicker,TimePicker,Modal,message,Upload,Timeline,
+  Tooltip} from "antd";
+import { RiCloseFill, RiCalendarLine, RiCustomerService2Fill  } from "react-icons/ri";
 import axios from "axios";
 import { Checkbox } from "antd";
 import ExcelJS from "exceljs";
@@ -1168,6 +1169,9 @@ import NotificationCardOne from "../../main/widgets/cards/advance/notificationCa
 import NotificationCardTwo from "../../main/widgets/cards/advance/notificationCardTwo";
 import SocailMediaCard from "../../main/widgets/cards/advance/socialMediaCard";
 import SubscribeCard from "../../main/widgets/cards/advance/subscribeCard";
+import { AddReaction, AddSharp, Assignment, DocumentScannerOutlined, OpenInFull, Person, PersonPin, TimelineOutlined } from "@mui/icons-material";
+import { TimelineContent, TimelineDot } from "@material-ui/lab";
+import { Status } from "iconsax-react";
 
 // import InfoProfile from "./personel-information";
 // import MenuProfile from "./menu";
@@ -1329,12 +1333,82 @@ export default function DocumentPermissions() {
         key: "action",
         render: (_, record) => (
           <Space size="middle">
-           
-              <a onClick={() => handleOpen(record)}>Open</a>
+            <Tooltip title="Open">
+  <Button
+    size="middle"
+    icon={<OpenInFull />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => handleOpen(record)}
+  />
+</Tooltip>
+          {/* <Button
+            size="middle"
+            icon={<Assignment />}
+            onClick={() => handleOpen(record)}
+          /> */}
+
+          {/* <Button
+            size="middle"
+            icon={<AddSharp />}
+            onClick={() => statusModalShow(record)}
+          /> */}
+          <Tooltip title="Add Status">
+  <Button
+    size="middle"
+    icon={<AddSharp />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => statusModalShow(record)}
+  />
+</Tooltip>
+          {/* <Button
+            size="middle"
+            icon={<Person />}
+            onClick={() => clientModalShow(record)}
+          /> */}
+
+<Tooltip title="Send To Client">
+  <Button
+    size="middle"
+    icon={<Person />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => clientModalShow(record)}
+  />
+</Tooltip>
+          {/* <Button
+            size="middle"
+            icon={<TimelineOutlined />}
+            onClick={() => timelineModalShow(record)}
+          /> */}
+
+          
+<Tooltip title="View Timeline">
+  <Button
+    size="middle"
+    icon={<TimelineOutlined />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => timelineModalShow(record)}
+  />
+</Tooltip>
+
+
+          {/* <Button
+            size="middle"
+            icon={<DocumentScannerOutlined />}
+            onClick={() => handleExport(record)}
+          /> */}
+          <Tooltip title="Export CSV">
+  <Button
+    size="middle"
+    icon={<DocumentScannerOutlined />}
+    // disabled={user?.user?.roleId !== 1}
+    onClick={() => handleExport(record)}
+  />
+</Tooltip>
+              {/* <a onClick={() => handleOpen(record)}>Open</a>
               <a onClick={() => statusModalShow(record)}>Add Status</a>
               <a onClick={() => clientModalShow(record)}>Send to Client</a>
               <a onClick={() => timelineModalShow(record)}>Show Doc History</a> 
-              <a onClick={() => handleExport(record)}>Export Comments</a> 
+              <a onClick={() => handleExport(record)}>Export Comments</a>  */}
 
           </Space>
         ),
@@ -1878,7 +1952,8 @@ setComments(dataWithoutUnwantedFields);
           roleId:user.user.roleId,
           companyId:user?.user?.companyId,
           url:myUrl,
-          clientName:selectedEmail
+          clientName:selectedEmail,
+
         },
         {
           headers: {
@@ -1922,7 +1997,7 @@ setComments(dataWithoutUnwantedFields);
         
       console.log(response.data,"received");
       const clients = response.data.map(client => ({
-        value: client.Email,
+        value: {"clientId" : client.id,"clientEmail":client.Email},
         label: client.Email,
       }));
       console.log("clients",clients);
@@ -2348,8 +2423,11 @@ console.log(organizedData,"organizedData");
           `http://127.0.0.1:8083/api/documents/review?yourRole=${myrecord.yourRole}&version=${myrecord.version}`,
           {
             revStatusArr: statusForRev.join(','), // Convert array to string
+            app:approveId.join(","),
+            rev:reviewId.join(","),
             appStatusArr: statusForApp.join(','), // Convert array to string
             docName: myrecord.docName,
+            companyId:user?.user.companyId
           },
           {
             headers: {
@@ -2556,7 +2634,10 @@ console.log(organizedData,"organizedData");
           ]}
         >
           <Select
-            options={clients}
+ options={clients.map(client => ({
+  label: client.id, // Displayed in the dropdown
+  value: client.id // This will be the value on selection
+}))}
             value={selectedEmail}
             onChange={(value) => setSelectedEmail(value)}
           />

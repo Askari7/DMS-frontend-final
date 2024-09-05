@@ -20,14 +20,26 @@ const DocumentNumberingForm = () => {
 
   const handlePrefixChange = (index, field, value) => {
     const newPrefixes = [...prefixes];
-    if (field === 'length' && parseInt(value) < 0) {
-      // If length becomes negative, set it to 0
-      newPrefixes[index][field] = 0;
+    
+    if (field === 'length') {
+      const lengthValue = parseInt(value);
+  
+      // Ensure the length is within the 0-5 range
+      if (lengthValue < 0) {
+        newPrefixes[index][field] = 0;
+      } else if (lengthValue > 5) {
+        newPrefixes[index][field] = 5;
+        message.warning('Prefix length cannot exceed 5.');
+      } else {
+        newPrefixes[index][field] = lengthValue;
+      }
     } else {
       newPrefixes[index][field] = value;
     }
+    
     setPrefixes(newPrefixes);
   };
+  
 
   const generateDocumentNumber = () => {
     const generatedNumber = prefixes

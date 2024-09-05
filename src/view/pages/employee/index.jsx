@@ -1,6 +1,6 @@
 // EmployeeForm.js
 import React, { useEffect } from 'react';
-import { Form, Input, Select, Button,message,Checkbox } from 'antd';
+import { Form, Input, Select, Button,message,Checkbox, Radio } from 'antd';
 import { useHistory } from 'react-router-dom'; 
 import { useState } from 'react';
 import { AddUser } from 'react-iconly';
@@ -17,11 +17,13 @@ const EmployeeForm = ({ onSubmit }) => {
   const [lastName, setLastName] = useState("");
   const handleSubmit = () => {
     console.log("data from form",email,firstName,lastName,roleId,department);
+
     form.validateFields().then((values) => {
         addUser()
       onSubmit(values);
       form.resetFields();
     });
+
   };
   const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
 
@@ -82,7 +84,8 @@ const EmployeeForm = ({ onSubmit }) => {
 
       // Handle the response as needed
       console.log(response,"response");
-      message.success(response?.data?.message);
+
+      message.success("Employee created successfully!");
   
     } catch (error) {
       // Handle errors
@@ -145,13 +148,14 @@ fetchDepartments()
         </Select>
       </Form.Item>
       <Form.Item name="department" label="Department" rules={[{ required: true }]}>
-      <Checkbox.Group options={departmentOptions} value={department} onChange={setDepartment} />
+      <Radio.Group options={departmentOptions} value={department} onChange={setDepartment} />
       </Form.Item>
       <Form.Item style={{ textAlign: 'center' }}>
   <Button type="primary" htmlType="submit">
     Add Employee
   </Button>
-</Form.Item> <div style={{ textAlign: 'center', marginTop: 20 }}>
+</Form.Item> 
+<div style={{ textAlign: 'right', marginTop: 20 }}>
         <Button type="primary" htmlType="submit" onClick={navigateToMdrTemplate}>
           Proceed
         </Button>

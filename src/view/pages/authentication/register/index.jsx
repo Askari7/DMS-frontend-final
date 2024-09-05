@@ -64,22 +64,18 @@ export default function SignUp() {
           name
         }
       );
-        console.log(response);
-      // Handle success, you can access the response data in the 'data' property
-      console.log("Response:", response);
-
-      if (response?.data) {
+      
+        console.log(response,'response');
+        if(response.status == 409){
+        message.destroy("Company already exists");
+        } 
+        else{     
         message.success(response?.data?.message);
         localStorage.setItem("user", JSON.stringify(response?.data));
         history.push("/pages/config_dept");
-      }
-      // message.success("Registered");
+        }
     } catch (error) {
-      // Handle error, you can access the error information in the 'response' property
-      if (error?.message == "Request failed with status code 409") {
-        message.error(response?.data?.message);
-      }
-      console.error("Error:", error);
+        message.error("Company already exists");
     }
   };
   return (
@@ -116,7 +112,7 @@ export default function SignUp() {
               <Form.Item
                 label={<FormattedMessage id="first-name" />}
                 name="firstName"
-                rules={[{ required: true }, { type: "string", min: 4 }]}
+                rules={[{ required: true }, { type: "string", min: 3 }]}
               >
                 <Input
                   id="firstName"
@@ -128,7 +124,7 @@ export default function SignUp() {
               <Form.Item
                 label={<FormattedMessage id="last-name" />}
                 name="lastName"
-                rules={[{ required: true }, { type: "string", min: 4 }]}
+                rules={[{ required: true }, { type: "string", min: 3 }]}
               >
                 <Input
                   id="lastName"
