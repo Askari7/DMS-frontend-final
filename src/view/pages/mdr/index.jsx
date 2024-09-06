@@ -632,7 +632,7 @@ const fetchDepartmentDocs = async (record) => {
 console.log("response",response.data);
 const fieldsToRemove = ['version', 'companyId','departmentId','projectId','masterDocumentId','masterDocumentName','content','extension','fileName'];
 const modified = response.data.map((obj) => {
-  const { version, companyId, departmentId, projectId, masterDocumentId, masterDocumentName, content, extension, fileName, ...newObj } = obj;
+  const { companyId, departmentId, projectId, masterDocumentId, masterDocumentName, content, extension, fileName, ...newObj } = obj;
   return newObj;
 });
 
@@ -1502,6 +1502,8 @@ console.log('dataaaaaa',data);
                 {values.map((item, itemIndex) => (
                   <li key={itemIndex}>
                     <strong>Document Title:</strong> {item.docTitle} <br />
+                    <strong>Code:</strong> {item.title} <br />
+                    <strong>Version:</strong> {item.version} <br />
                     {/* Add other properties as needed */}
                   </li>
                 ))}
@@ -1546,7 +1548,7 @@ console.log('dataaaaaa',data);
       <Table
         columns={[
           {
-            title: "Document Title",
+            title: "MDR Title",
             dataIndex: "title",
             key: "title",
             ...getColumnSearchProps('title'),
@@ -1706,7 +1708,7 @@ console.log('dataaaaaa',data);
         ]}
         size="middle"
         bordered
-      title={() => 'All Department Documents'}
+      title={() => 'MDRs'}
       footer={() => 'You may filter MDR'}
         dataSource={data}
         rowClassName={(record) => {

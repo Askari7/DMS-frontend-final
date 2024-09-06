@@ -1305,28 +1305,39 @@ export default function DocumentPermissions() {
         title: "Your Role",
         dataIndex: "yourRole",
         key: "yourRole",
+        ...getColumnSearchProps('yourRole'),
       },
       {
         title: "Your Status",
         dataIndex: "yourStatus",
         key: "yourStatus",
+        ...getColumnSearchProps('yourStatus'),
       },
     
       {
         title: "Overall Approver Status",
         dataIndex: "approverStatuss",
         key: "approverStatuss",
+        ...getColumnSearchProps('approverStatuss'),
       },
       {
         title: "Overall Reviewer Status",
         dataIndex: "reviewerStatuss",
         key: "reviewerStatuss",
+        ...getColumnSearchProps('reviewerStatuss'),
+      },
+      {
+        title: "Client Status",
+        dataIndex: "clientStatus",
+        key: "clientStatus",
+        ...getColumnSearchProps('clientStatus'),
       },
     
       {
         title: "Version",
         dataIndex: "version",
         key: "version",
+        ...getColumnSearchProps('version'),
       },
       {
         title: "Action",
@@ -1743,6 +1754,7 @@ export default function DocumentPermissions() {
         docName: item.docName,
         version: item.version,
         Inhouse:item.Inhouse,
+
         Resolved: item.Resolved,
         Approved: item.Approved,
         createdAt: formatDate(item.createdAt),
@@ -1997,7 +2009,7 @@ setComments(dataWithoutUnwantedFields);
         
       console.log(response.data,"received");
       const clients = response.data.map(client => ({
-        value: {"clientId" : client.id,"clientEmail":client.Email},
+        value: client.Email,
         label: client.Email,
       }));
       console.log("clients",clients);
@@ -2634,10 +2646,7 @@ console.log(organizedData,"organizedData");
           ]}
         >
           <Select
- options={clients.map(client => ({
-  label: client.id, // Displayed in the dropdown
-  value: client.id // This will be the value on selection
-}))}
+ options={clients}
             value={selectedEmail}
             onChange={(value) => setSelectedEmail(value)}
           />

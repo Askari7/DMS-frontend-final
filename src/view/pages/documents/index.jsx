@@ -1228,7 +1228,7 @@ export default function Document() {
 
   const columns = [
     {
-      title: "Mdr Code",
+      title: "Document Code",
       dataIndex: "masterDocumentId",
       key: "masterDocumentId",
       ...getColumnSearchProps('masterDocumentId'),
