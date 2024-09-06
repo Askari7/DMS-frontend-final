@@ -82,6 +82,9 @@ export default function MDR() {
 
   const [params,setParams] = useState()
 
+  const [AssignForm] = Form.useForm();
+  const [CreateForm] = Form.useForm();
+
 
   const [title, setTitle] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -127,6 +130,21 @@ export default function MDR() {
 
   // console.log(matchingRecord,"recordinggggg");
   // console.log(location,"location");
+
+  const handleSubmit = () => {
+    AssignForm.validateFields().then((values) => {
+      assignMDR(assignedEmployees,allUsers)
+      AssignForm.resetFields();
+    });
+  };
+
+  const handleCreateSubmit = () => {
+    CreateForm.validateFields().then((values) => {
+      assignMDR(assignedEmployees,allUsers)
+      CreateForm.resetFields();
+    });
+  };
+
 
   const handleUpdate=async()=>{
     try {
@@ -1372,7 +1390,7 @@ console.log('dataaaaaa',data);
       >
         <Row justify="space-between" align="center">
           <Col span={20}>
-            <Form layout="vertical" name="basic">
+            <Form form={AssignForm}  onFinish={handleSubmit}layout="vertical" name="basic">
               <Form.Item
                 label="Project Name"
                 name="projectName"
@@ -1407,7 +1425,9 @@ console.log('dataaaaaa',data);
                 </Form.Item>
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button block onClick={()=>assignMDR(assignedEmployees,allUsers)} type="primary"htmlType="submit">Assigned</Button>
+                  <Button block 
+                  // onClick={()=>assignMDR(assignedEmployees,allUsers)} 
+                  type="primary"htmlType="submit">Assigned</Button>
                 </Col>
               </Row>
 

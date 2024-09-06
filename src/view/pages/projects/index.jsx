@@ -732,7 +732,7 @@ export default function Projects() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [record, setRecord] = useState(null);
   const [api, contextHolder] = notification.useNotification();
-
+  const[projectForm]= Form.useForm()
   const [departmentOptions, setDepartmentOptions] = useState([]);
   const [departmentInfo,setDepartmentInfo] = useState([])
   const [projectOptions, setProjects] = useState([]);
@@ -744,6 +744,12 @@ export default function Projects() {
 
   const [projectId, setProjectId] = useState("");
   const history = useHistory();
+  const handleSubmit = () => {
+    projectForm.validateFields().then((values) => {
+      addProject()
+      projectForm.resetFields();
+    });
+  };
 
   const rowClickHandler=(record)=>{
     history.push({
@@ -1355,7 +1361,7 @@ if (!projName || !clientEmail ) {
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
         }
       >
-        <Form layout="vertical" name="basic">
+        <Form layout="vertical" name="basic" onFinish={handleSubmit} form={projectForm}>
         <Form.Item label="Project Code" name="projCode" rules={[
                   {
                     required: true,
@@ -1422,7 +1428,7 @@ if (!projName || !clientEmail ) {
                 block
                 type="primary"
                 htmlType="submit"
-                onClick={() => addProject()}
+                // onClick={() => addProject()}
               >
                 Add
               </Button>

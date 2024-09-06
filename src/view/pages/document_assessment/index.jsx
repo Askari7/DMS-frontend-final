@@ -1186,6 +1186,7 @@ export default function DocumentPermissions() {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
   
+  const [form] = Form.useForm();
 
   // const handleRowClick = (record) => {
   //   alert("Hello")
@@ -1198,7 +1199,13 @@ export default function DocumentPermissions() {
     alert("hello")
     history.push('/pages/timeline');
   };
-  
+  const handleSubmit = () => {
+    form.validateFields().then((values) => {
+      handleStatusChange(selectedStatus)      
+      form.resetFields();
+    });
+  };
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -2510,7 +2517,7 @@ console.log(organizedData,"organizedData");
 >
   <Row justify="space-between" align="center">
     <Col span={20}>
-      <Form layout="vertical" name="basic">
+      <Form form={form}  onFinish = {handleSubmit} layout="vertical" name="basic">
         <Form.Item
           label="Select Status"
           name="selectedStatus"
@@ -2551,7 +2558,7 @@ console.log(organizedData,"organizedData");
               block
               type="primary"
               htmlType="submit"
-              onClick={() => handleStatusChange(selectedStatus)}
+              // onClick={() => handleStatusChange(selectedStatus)}
             >
               Submit
             </Button>

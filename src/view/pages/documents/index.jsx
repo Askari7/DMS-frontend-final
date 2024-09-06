@@ -1225,6 +1225,9 @@ export default function Document() {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
+  const [form] = Form.useForm();
+
+
 
   const columns = [
     {
@@ -1422,6 +1425,14 @@ export default function Document() {
       ),
     }
   ];
+
+  const handleSubmit = () => {
+    form.validateFields().then((values) => {
+      assignDoc(assignedEmployees,myrecord)
+    form.resetFields();
+    });
+  };
+
   const deleteModalShow = (record) => {
     setRecord(record)
     setDeleteModalVisible(true);
@@ -2008,7 +2019,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
       >
         <Row justify="space-between" align="center">
           <Col span={20}>
-            <Form layout="vertical" name="basic">
+            <Form form={form} onFinish={handleSubmit} layout="vertical" name="basic">
                 <Form.Item
                 label="Assign Document to"
                 name="assignDoc"
@@ -2028,7 +2039,9 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
 
               <Row>           
               <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button block onClick={()=>assignDoc(assignedEmployees,myrecord)} type="primary"htmlType="submit">Assign</Button>
+                  <Button block 
+                  // onClick={()=>assignDoc(assignedEmployees,myrecord)} 
+                  type="primary"htmlType="submit">Assign</Button>
                 </Col>
               
               </Row>

@@ -33,6 +33,26 @@ import { EmojiPeopleOutlined, People, Person } from "@mui/icons-material";
 export default function Projects() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [clients, setClients] = useState([]);
+  const [form] = Form.useForm();
+  const [officialform] = Form.useForm();
+
+
+  const handleSubmit = () => {
+    form.validateFields().then((values) => {
+      addClient()
+      // onSubmit(values);
+      form.resetFields();
+    });
+  };
+
+  const handleOfficialSubmit = () => {
+    officialform.validateFields().then((values) => {
+      addClientOfficials()
+      // onSubmit(values);
+      officialform.resetFields();
+    });
+  };
+
   const columns = [
 
     {
@@ -392,7 +412,7 @@ const handleStatusChange = (selectedStatus) => {
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
         }
       >
-        <Form layout="vertical" name="basic">
+        <Form form={form}  onFinish={handleSubmit}layout="vertical" name="basic">
           <Form.Item
             label="Company Name:"
             name="firstName"
@@ -435,7 +455,7 @@ const handleStatusChange = (selectedStatus) => {
                 block
                 type="primary"
                 htmlType="submit"
-                onClick={() => addClient()}
+                // onClick={() => addClient()}
               >
                 Add Company
               </Button>
@@ -461,7 +481,7 @@ const handleStatusChange = (selectedStatus) => {
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
         }
       >
-        <Form layout="vertical" name="basic">
+        <Form form={officialform} onFinish={handleOfficialSubmit} layout="vertical" name="basic">
           <Form.Item
             label="Client Name:"
             name="clientName"
@@ -534,7 +554,7 @@ const handleStatusChange = (selectedStatus) => {
                 block
                 type="primary"
                 htmlType="submit"
-                onClick={() => addClientOfficials()}
+                // onClick={() => addClientOfficials()}
               >
                 Add Client
               </Button>

@@ -1,6 +1,6 @@
 // EmployeeForm.js
 import React, { useEffect } from 'react';
-import { Form, Input, Select, Button,message,Checkbox, Radio } from 'antd';
+import { Form, Input, Select, Button,message,Checkbox } from 'antd';
 import { useHistory } from 'react-router-dom'; 
 import { useState } from 'react';
 import { AddUser } from 'react-iconly';
@@ -23,7 +23,6 @@ const EmployeeForm = ({ onSubmit }) => {
       onSubmit(values);
       form.resetFields();
     });
-
   };
   const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
 
@@ -148,7 +147,7 @@ fetchDepartments()
         </Select>
       </Form.Item>
       <Form.Item name="department" label="Department" rules={[{ required: true }]}>
-      <Radio.Group options={departmentOptions} value={department} onChange={setDepartment} />
+      <Checkbox.Group options={departmentOptions} value={department} onChange={setDepartment} />
       </Form.Item>
       <Form.Item style={{ textAlign: 'center' }}>
   <Button type="primary" htmlType="submit">
