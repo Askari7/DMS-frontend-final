@@ -653,7 +653,6 @@ setDepartmentId(record['id']);
           companyId: user?.user?.companyId,
           userId: userData,
           departmentCreator:0 ,
-          noOfUsers:noOfUsers+1,
           departmentId:departmentId
         },
         {

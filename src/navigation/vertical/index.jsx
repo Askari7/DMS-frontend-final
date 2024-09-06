@@ -12,7 +12,7 @@ const user = JSON.parse(localStorage?.getItem("user"));
 if (user?.user.roleId === 6) {
   navigation = [...dashboards, ...apps, ...pages_lead, ...userInterface];
 }
-if (user?.user.roleId === 2) {
+if (user?.user.roleId === 2||user?.user.roleId === 3||user?.user.roleId === 4||user?.user.roleId === 5) {
   navigation = [...dashboards, ...apps, ...pages_client, ...userInterface];
 }
 

@@ -6,34 +6,14 @@ import { UserOutlined } from '@ant-design/icons';
 import { Col, Avatar,Space, Badge, Menu } from "antd";
 import {
   User,
-  Notification,
-  Activity,
-  Setting,
-  Password,
-  Heart,
 } from "react-iconly";
 
 import menuImg from "../../../assets/images/pages/profile/menu-img.svg";
-import avatar from "../../../assets/images/users/1.jpg";
 
 export default function MenuProfile(props) {
   const [ profile,setProfile] = useState(null)
-  const getprofile = async ()=>{
-      
-      const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
-        headers:{
-          Authorization: user?.accessToken,
-        }
-      }) 
-      console.log(getProfile.data.msg.image,"logo");
-      setProfile(getProfile.data.msg.image)
-    }
-    // useEffect(()=>{
-    //   getprofile() 
-    // },[])
   console.log(props,"props aye hain");
   const menuIconClass = "remix-icon hp-mr-8";
-
   function menuFooterItem() {
     if (props.footer !== "none") {
       return (
@@ -44,35 +24,26 @@ export default function MenuProfile(props) {
     }
   }
 
-  function moreBtn() {
-    if (props.moreBtnCheck !== "none") {
-      return (
-        <Col className="hp-menu-header-btn hp-pr-16 hp-mb-12 hp-text-right">
-          {props.moreBtn()}
-        </Col>
-      );
-    }
-  }
 
   const location = useLocation();
   const { pathname } = location;
   const splitLocation = pathname.split("/");
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const customise = useSelector((state) => state.customise);
-  // const[profile,setProfile] = useState(null)
-  // const getprofile = async ()=>{
+  const getprofile = async ()=>{
     
-  //   const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
-  //     headers:{
-  //       Authorization: user?.accessToken,
-  //     }
-  //   }) 
-  //   console.log(getProfile.data.msg.image,"logo");
-  //   setProfile(getProfile.data.msg.image)
-  // }
+    const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+      headers:{
+        Authorization: user?.accessToken,
+      }
+    }) 
+    console.log(getProfile.data.msg.image,"logo");
+    setProfile(getProfile.data.msg.image)
+  }
   useEffect(()=>{
     getprofile() 
   },[])
+
   return (
     <Col flex="240px" className="hp-profile-menu hp-py-24">
       <div className="hp-w-100">

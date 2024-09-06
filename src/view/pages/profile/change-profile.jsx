@@ -4,36 +4,37 @@ import React, { useEffect, useState } from 'react'
 const ChangeProfileImagePage =  () => {
   const [image,setImage] = useState(null)
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-  const [logo,setLogo] = useState()
-  const [profile,setProfile] = useState(null)
+  // const [logo,setLogo] = useState()
+  // const [profile,setProfile] = useState(null)
 
   
-  const getprofile = async ()=>{
+  // const getprofile = async ()=>{
     
-    const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
-      headers:{
-        Authorization: user?.accessToken,
-      }
-    }) 
-    console.log(getProfile.data.msg.image,"logo");
-    setProfile(getProfile.data.msg.image)
-  }
-  useEffect(()=>{
-    getprofile() 
-  },[])
-  const getLogo = async ()=>{
+  //   const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+  //     headers:{
+  //       Authorization: user?.accessToken,
+  //     }
+  //   }) 
+  //   console.log(getProfile.data.msg.image,"logo");
+  //   setProfile(getProfile.data.msg.image)
+  // }
+  // useEffect(()=>{
+  //   getprofile() 
+  // },[])
+
+  // const getLogo = async ()=>{
     
-    const getLogo = await axios.post(`http://127.0.0.1:8083/getLogo`,{companyId:user?.user.companyId},{
-      headers:{
-        Authorization: user?.accessToken,
-      }
-    }) 
-    // console.log(getLogo.data.msg.logo,"logo");
-    setLogo(getLogo.data.msg.logo)
-  }
-  useEffect(()=>{
-    getLogo() 
-  },[])
+  //   const getLogo = await axios.post(`http://127.0.0.1:8083/getLogo`,{companyId:user?.user.companyId},{
+  //     headers:{
+  //       Authorization: user?.accessToken,
+  //     }
+  //   }) 
+  //   // console.log(getLogo.data.msg.logo,"logo");
+  //   setLogo(getLogo.data.msg.logo)
+  // }
+  // useEffect(()=>{
+  //   getLogo() 
+  // },[])
 
   const onSubmit = async(e)=>{
     e.preventDefault()
@@ -50,7 +51,7 @@ const ChangeProfileImagePage =  () => {
     })
     console.log(logo,"logo response");
     
-    await getLogo()
+    // await getLogo()
     // console.log(logo.data,"result");
   }
 
