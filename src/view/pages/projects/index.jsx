@@ -915,8 +915,6 @@ const columns = [
     dataIndex: "clientName",
     key: "clientName",
     ...getColumnSearchProps('clientName'),
-    
-    
   },
   // {
   //   title: "No of Users",
@@ -1246,13 +1244,10 @@ if (!projName || !clientEmail ) {
         const formattedEndDate = new Date(project.endedDate).toLocaleDateString('en-GB');
         console.log(project.clientId,"Yaha aya");
         
-        const value = clientName[project.clientId]
-        console.log(value,"Yaha aya");
 
         // Create a new object with formatted dates
         return {
           ...project,
-          clientName:clientName[project.clientId] ,
           startedDate: formattedStartDate,
           endedDate: formattedEndDate,
         };

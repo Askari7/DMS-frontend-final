@@ -51,12 +51,12 @@ const pages_lead = [
     navLink: "/pages/projects",
   },
 
-  // {
-  //   id: "mdr",
-  //   title: <IntlMessages id="sidebar-pages-mdr" />,
-  //   icon: <Work size={30} />,
-  //   navLink: "/pages/mdr",
-  // },
+  {
+    id: "MDR",
+    title: <IntlMessages id="sidebar-pages-mdr" />,
+    icon: <Work size={30} />,
+    navLink: "/pages/mdr",
+  },
   {
     header: <IntlMessages id="Document Information" />,
 },

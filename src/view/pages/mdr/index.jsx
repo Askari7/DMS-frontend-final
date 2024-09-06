@@ -46,6 +46,7 @@ import { useLocation } from 'react-router-dom';
 import { string } from "prop-types";
 import ProgressComp from "./Progress";
 import { DeleteOutlined, DocumentScannerOutlined, EditOutlined, OpenInFull, OpenInFullOutlined, OpenInFullSharp, Update, UpdateSharp } from "@mui/icons-material";
+import { version } from "less";
 
 
 
@@ -122,6 +123,8 @@ export default function MDR() {
   const [projectCode,setProjectCode] = useState()
   const location = useLocation();
   const { matchingRecord } = location.state || {}
+  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
+
   // console.log(matchingRecord,"recordinggggg");
   // console.log(location,"location");
 
@@ -632,7 +635,7 @@ const fetchDepartmentDocs = async (record) => {
 console.log("response",response.data);
 const fieldsToRemove = ['version', 'companyId','departmentId','projectId','masterDocumentId','masterDocumentName','content','extension','fileName'];
 const modified = response.data.map((obj) => {
-  const { companyId, departmentId, projectId, masterDocumentId, masterDocumentName, content, extension, fileName, ...newObj } = obj;
+  const {companyId, departmentId, projectId, masterDocumentId, masterDocumentName, content, extension, fileName, ...newObj } = obj;
   return newObj;
 });
 
@@ -816,7 +819,7 @@ useEffect(() => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}&roleId=${user?.user.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -841,6 +844,20 @@ useEffect(() => {
           item.departmentId.split(",").includes((user?.user?.departmentId))  || item.authorId === user?.user?.id    
           );       
 console.log('dataaaaaa',data);
+        const d =  data.map((d)=>d.projectId)
+
+        setPro(d)
+
+        setData(data);
+        setDataArray(data);
+      }
+      else if(user?.user?.roleId ===6){
+        
+        console.log(user?.user?.departmentId,'departmentId')
+        const data = response.data.filter(item => 
+          item.clientId == user?.user.companyId    
+          );       
+        console.log('dataaaaaa',data);
         const d =  data.map((d)=>d.projectId)
 
         setPro(d)
@@ -1027,7 +1044,7 @@ console.log('dataaaaaa',data);
           },
         }
       );
-  
+      
       // Use Set to store unique titles
       const uniqueTitlesSet = new Set();
   
@@ -1051,6 +1068,66 @@ console.log('dataaaaaa',data);
       console.error("Error fetching departments:", error?.message);
     }
   };
+  const fetchAppRev = async (title) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+        
+
+
+      console.log(response.data,"received");
+      return response.data;
+    
+    } catch (error) {
+      console.error("Error fetching documents:", error?.message);
+    }
+  };
+  const handleOpen = async (record) => {
+    console.log(record, 'record');
+    
+    const responseData = await fetchAppRev(record.title);
+    console.log('helllooo', responseData);
+    
+    const docName = record.title;
+    const url = `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf`;
+    console.log(user.user.roleId, user.user.firstName, user);
+    
+    let allowed = 'false';
+    if (responseData) {
+      allowed = 'true';
+    }
+  
+    // Check if the document exists
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${docName}&version=${record.version}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      if (response.data.status) {
+        // Document exists, proceed with redirect
+        window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+      } else {
+        // Document does not exist, show an alert
+        message.warning('Document not uploaded yet.');
+      }
+    } catch (error) {
+      console.error('Error checking document:', error);
+      alert('An error occurred while checking the document.');
+    }
+  };
+  
 
   const fetchUsers = async () => {
     try {
@@ -1472,50 +1549,70 @@ console.log('dataaaaaa',data);
     </Modal>
 
 
-      <Modal
-        title="Show MDR Documents "
-        width={400}
-        centered
-        visible={showModalVisible}
-        onCancel={showModalCancel}
-        footer={null}
-        closeIcon={
-          <RiCloseFill className="remix-icon text-color-black-100" size={24} />
-        }
-      >
-        <Row justify="space-between" align="center">
-          <Col span={20}>
-          <div>
-          <h3>MDR Documents</h3>
-          {/* <ul>
-            {selectedRows.map((row, index) => (
-              <li key={index}>{row+1}</li>
-            ))}
-          </ul> */}
-    <ul>
-      {docData.map((doc, index) => (
-        <li key={index}>
-          {Object.entries(doc).map(([key, values]) => (
-            <div key={key}>
-              <strong>{key}:</strong>
-              <ul>
-                {values.map((item, itemIndex) => (
-                  <li key={itemIndex}>
-                    <strong>Document Title:</strong> {item.docTitle} <br />
+    <Modal
+  title="Show MDR Documents"
+  width={400}
+  centered
+  visible={showModalVisible}
+  onCancel={showModalCancel}
+  footer={null}
+  closeIcon={
+    <RiCloseFill className="remix-icon text-color-black-100" size={24} />
+  }
+>
+  <Row justify="space-between" align="center">
+    <Col span={20}>
+      <div>
+        <h3>MDR Documents</h3>
+        <ul>
+          {docData.map((doc, index) => (
+            <li key={index}>
+              {Object.entries(doc).map(([key, values]) => (
+                <div key={key}>
+                  <strong>{key}:</strong>
+                  <ul>
+                    {values.map((item, itemIndex) => (
+                      <li
+                        key={itemIndex}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding:"4px"
+                        }}
+                      >
+                        <div>
+                        <strong>Document Title:</strong> {item.docTitle} <br />
                     <strong>Code:</strong> {item.title} <br />
-                    <strong>Version:</strong> {item.version} <br />
-                    {/* Add other properties as needed */}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    <strong>Version:</strong> {item.version} <br />
+                        </div>
+                        <button
+                          style={{
+                            backgroundColor: "#1890ff",
+                            color: "#fff",
+                            border: "none",
+                            padding: "3px 10px",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleOpen(item)} // Adjust as needed
+                        >
+                          Open
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </li>
           ))}
-        </li>
-      ))}
-    </ul>        </div>
-          </Col>
-        </Row>
-      </Modal>
+        </ul>
+      </div>
+    </Col>
+  </Row>
+</Modal>
+
+
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
         {
           user?.user.roleId == 1 &&       
@@ -1548,7 +1645,7 @@ console.log('dataaaaaa',data);
       <Table
         columns={[
           {
-            title: "MDR Title",
+            title: "Document Title",
             dataIndex: "title",
             key: "title",
             ...getColumnSearchProps('title'),
@@ -1645,7 +1742,6 @@ console.log('dataaaaaa',data);
                   <Button
                     size="middle"
                     icon={<DocumentScannerOutlined />}
-                    disabled={user?.user?.roleId !== 1}
                     onClick={() => exportToCSV(record)}
                   />
                 </Tooltip>
@@ -1662,7 +1758,6 @@ console.log('dataaaaaa',data);
                     </Button>
                   )}
     
-                  {user.user.roleId==1 &&       
                   <>
                   {/* <Button
                     key={record?.id}
@@ -1673,7 +1768,6 @@ console.log('dataaaaaa',data);
   <Button
     size="middle"
     icon={<OpenInFullSharp />}
-    disabled={user?.user?.roleId !== 1}
     onClick={() => showModalShow(record)}
   />
 </Tooltip>
@@ -1687,7 +1781,7 @@ console.log('dataaaaaa',data);
                   {/* </Button> */}
                   </>
                   
-                  }    
+                   
                             <Tooltip title="Delete">
   <Button
     size="middle"
@@ -1708,7 +1802,7 @@ console.log('dataaaaaa',data);
         ]}
         size="middle"
         bordered
-      title={() => 'MDRs'}
+      title={() => 'All Department Documents'}
       footer={() => 'You may filter MDR'}
         dataSource={data}
         rowClassName={(record) => {

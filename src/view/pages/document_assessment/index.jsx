@@ -2041,19 +2041,43 @@ setComments(dataWithoutUnwantedFields);
     }
   };
   const handleOpen = async (record) => {
-    const responseData=await fetchAppRev(record.docName);
-    console.log('helllooo',responseData);
-     // Replace 'John' with the actual doc's name
-     const docName = record.docName;
-     const url= `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf` 
-     console.log(user.user.roleId,user.user.firstName,user);
-     let allowed='false';
- if(responseData){
- allowed='true';
- }
-     // Redirect to the external URL
-      window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
-   };
+    console.log(record, 'record');
+    
+    const responseData = await fetchAppRev(record.title);
+    console.log('helllooo', responseData);
+    
+    const docName = record.title;
+    const url = `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf`;
+    console.log(user.user.roleId, user.user.firstName, user);
+    
+    let allowed = 'false';
+    if (responseData) {
+      allowed = 'true';
+    }
+  
+    // Check if the document exists
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${docName}&version=${record.version}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      if (response.data.status) {
+        // Document exists, proceed with redirect
+        window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+      } else {
+        // Document does not exist, show an alert
+        message.warning('Document not uploaded yet.');
+      }
+    } catch (error) {
+      console.error('Error checking document:', error);
+      alert('An error occurred while checking the document.');
+    }
+  };
   const addPermission = async () => {
     try {
       const response = await axios.post(
