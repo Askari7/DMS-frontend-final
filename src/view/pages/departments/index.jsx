@@ -7,7 +7,7 @@ import { RiCloseFill, } from "react-icons/ri";
 import ProtectedAppPage from "../Protected";
 import "react-quill/dist/quill.snow.css";
 import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
-import { UserAdd } from "iconsax-react";
+import { Edit, UserAdd } from "iconsax-react";
 export default function Depatments() {
 const columns = [
   {
@@ -53,6 +53,14 @@ const columns = [
     icon={<UserAdd />}
     disabled={user?.user?.roleId !== 1}
     onClick={() => addUser(record)}
+  />
+</Tooltip>
+<Tooltip title="Update Department">
+  <Button
+    size="middle"
+    icon={<Edit />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => userUpdateModalShow(record)}
   />
 </Tooltip>
       </Space>
@@ -126,31 +134,33 @@ const fetchDept = async () => {
 
 const userUpdateModalShow = (record) => {
   setUserToUpdate(record)
-  console.log(record,'record');
-  
-  form.setFieldsValue({
-    id:userToUpdate.id,
-    title: userToUpdate.title,
-    suffix: userToUpdate.suffix,
+  updateForm.setFieldsValue({
+    id:record.id,
+    title: record.title,
+    suffix: record.suffix,
   });
   
   setUserUpdate(true);
 };
 
 const userUpdateModalCancel = () => {
-  form.setFieldsValue({
-    title: "",
-    suffix: "",
-  });
   setUserUpdate(false);
 };
 
-const handleUpdate=async()=>{
+const handleUpdateUser = () => {
+  updateForm.validateFields().then((values) => {
+    handleUpdate(values);
+    updateForm.resetFields();
+  });
+};
+const handleUpdate=async(values)=>{
+  console.log(values,'valuesvalues');
+  
 try {
   const response  = await axios.put
-  (`http://127.0.0.1:8083/api/departments/department_update?companyId=${user?.user.companyId}&departmentId=${form.getFieldValue("id")}`,{
-    title:form.getFieldValue("title"),
-    suffix:form.getFieldValue("suffix")
+  (`http://127.0.0.1:8083/api/departments/department_update?companyId=${user?.user.companyId}&departmentId=${updateForm.getFieldValue("id")}`,{
+    title:values.title,
+    suffix:values.suffix
   },
   {
     headers: {
@@ -190,6 +200,8 @@ setDepartmentId(record['id']);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [record, setRecord] = useState(null);
   const [form] = Form.useForm();
+  const [updateForm] = Form.useForm();
+
   const [associateForm] = Form.useForm();
   const [userUpdate, setUserUpdate] = useState(false);
   const [userToUpdate, setUserToUpdate] = useState(null);
@@ -457,9 +469,9 @@ setDepartmentId(record['id']);
       closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
     >
       <Form
-        form={form}
+        form={updateForm}
         layout="vertical"
-        onFinish={handleUpdate} // Function to handle form submission
+        onFinish={handleUpdateUser} // Function to handle form submission
       >
         <Form.Item
           label="Department Title"

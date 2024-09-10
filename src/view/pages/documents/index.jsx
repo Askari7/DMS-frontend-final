@@ -2228,7 +2228,6 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
         <Button
           type="primary"
           onClick={handleDocumentWiseClick}
-          disabled={user?.user?.roleId == 3}
           onDoubleClick={handleDoubleClick}
         >Document Tree
         </Button>

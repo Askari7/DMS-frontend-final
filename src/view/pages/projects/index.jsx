@@ -707,12 +707,12 @@ import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import ProgressComp from "./Progress";
 import { Create, DeleteOutlined, EditOutlined } from "@mui/icons-material";
+import { Edit } from "iconsax-react";
 export default function Projects() {
 
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
-
   const [progresses,setProgresses] = useState()
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [departmentName,setDepartmentName] = useState('')
@@ -741,9 +741,10 @@ export default function Projects() {
   const [form] = Form.useForm();
   const [projectUpdate, setProjectUpdate] = useState(false);
   const [projectToUpdate, setProjectToUpdate] = useState();
-
   const [projectId, setProjectId] = useState("");
   const history = useHistory();
+  const [updateForm] = Form.useForm();
+
   const handleSubmit = () => {
     projectForm.validateFields().then((values) => {
       addProject()
@@ -1004,6 +1005,14 @@ filters: [
     onClick={() => deleteModalShow(record)}
   />
 </Tooltip>
+<Tooltip title="Update Project">
+  <Button
+    size="middle"
+    icon={<Edit />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => projectUpdateModalShow(record)}
+  />
+</Tooltip>
 
 <Tooltip title="Create MDR">
   <Button
@@ -1097,10 +1106,10 @@ const handleDelete = async (record) => {
   const handleUpdate=async()=>{
     try {
       const response  = await axios.put
-      (`http://127.0.0.1:8083/api/projects?companyId=${user?.user.companyId}&id=${form.getFieldValue("id")}`,
+      (`http://127.0.0.1:8083/api/projects?companyId=${user?.user.companyId}&id=${updateForm.getFieldValue("id")}`,
       {
-        title:form.getFieldValue("title"),
-        code:form.getFieldValue("code"),
+        title:updateForm.getFieldValue("title"),
+        code:updateForm.getFieldValue("code"),
       },
       {
         headers: {
@@ -1312,16 +1321,11 @@ if (!projName || !clientEmail ) {
   const projectUpdateModalShow = (record) => {
     setProjectToUpdate(record)
 
-    console.log(record.id,'record id');
-    console.log(typeof(record.id));
-    
-    
     // Populate the form fields with the userToUpdate object when the modal is opened
-    form.setFieldsValue({
-      id:projectToUpdate.id||"",
-      title: projectToUpdate.title || "",
-      code: projectToUpdate.code || "",
-
+    updateForm.setFieldsValue({
+      id:record.id,
+      title: record.title,
+      code: record.code,
     });
     
     setProjectUpdate(true);
@@ -1483,7 +1487,7 @@ if (!projName || !clientEmail ) {
       closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
     >
       <Form
-        form={form}
+        form={updateForm}
         layout="vertical"
         onFinish={handleUpdate} // Function to handle form submission
       >
@@ -1494,6 +1498,7 @@ if (!projName || !clientEmail ) {
         >
           <Input placeholder="Enter Project title" onChange={(e) => form.setFieldsValue({ title: e.target.value })} />
         </Form.Item>
+        
         <Form.Item
           label="Project Code"
           name="code"
@@ -1502,11 +1507,11 @@ if (!projName || !clientEmail ) {
           <Input placeholder="Enter Project code" onChange={(e) => form.setFieldsValue({ code: e.target.value })} />
         </Form.Item>
 
+
         <Form.Item>
           <Button type="primary" htmlType="submit" block>
             Update
           </Button>
-          
         </Form.Item>
       </Form>
     </Modal>

@@ -69,15 +69,19 @@ const permissionsOptions = [
 ];
 
 export default function DocumentPermissions() {
-  const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =
-    useState(false);
+  const [DocumentPermissionModalVisible, setDocumentPermissionModalVisible] =useState(false);
   const [mdrOptions, setMdrData] = useState([]);
   const [projectOptions, setProjectData] = useState([]);
+  const [docsData, setDocsData] = useState([]);
 
   const [userOptions, setUserData] = useState([]);
   const [permissionUser, setpermissionUser] = useState("");
 
   const [mdr, setMDR] = useState("");
+  const [permissionDoc, setpermissionDoc] = useState("");
+
+  
+  const [permissionForm] = Form.useForm();
 
   const [project, setProject] = useState("");
 
@@ -91,15 +95,21 @@ export default function DocumentPermissions() {
   const [DocumentPermissionId, setDocumentPermissionId] = useState("");
 
   const DocumentPermissionModalShow = () => {
+
     setDocumentPermissionModalVisible(true);
   };
+  // useEffect(()=>{
+  //   fetchDocs()
+  // },[mdr])
+
   const addPermission = async () => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8083/api/documents/permissions",
         {
-          project:project,
+          // project:project,
           masterDocumentId: mdr,
+          doc:permissionDoc,
           userId: permissionUser,
           companyId: user?.user?.companyId,
           createDocument: checked?.includes("Creator"),
@@ -118,7 +128,6 @@ export default function DocumentPermissions() {
       message.success(response?.data?.message);
       setMDR("");
       setProject("");
-
       setpermissionUser("");
       setChecked([]);
       fetchData();
@@ -129,6 +138,13 @@ export default function DocumentPermissions() {
         message.error("Permission Denied to create document on this MDR");
       }
     }
+  };
+  const handleSubmit = () => {
+    permissionForm.validateFields().then((values) => {
+        addPermission()
+      // onSubmit(values);
+      permissionForm.resetFields();
+    });
   };
   const fetchMDR = async () => {
     try {
@@ -146,16 +162,16 @@ export default function DocumentPermissions() {
         options.push({
           value: item?.id,
           label: item?.title,
-          // DocumentPermissionId: item?.DocumentPermissionId,
-          // departmentId: item?.departmentId,
         });
       }
-
       setMdrData(options); // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
   };
+  // useEffect(()=>{
+  // fetchDocs(mdr)
+  // },[mdr])
   const fetchProjects= async () => {
     try {
       const response = await axios.get(
@@ -163,17 +179,14 @@ export default function DocumentPermissions() {
         {
           headers: {
             Authorization: user?.accessToken,
-            // Add other headers if needed
           },
         }
       );
       const options = [];
       for (const item of response?.data) {
         options.push({
-          value: item?.title,
+          value: item?.id,
           label: item?.title,
-          // DocumentPermissionId: item?.DocumentPermissionId,
-          // departmentId: item?.departmentId,
         });
       }
 
@@ -182,6 +195,34 @@ export default function DocumentPermissions() {
       console.error("Error fetching departments:", error?.message);
     }
   };
+
+  const fetchDocs= async (mdr) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/projects/fetchdocs?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}&mdrId=${mdr}&departmentId=${user?.user.departmentId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+          },
+        }
+      );
+      console.log(response.data,'response.data');
+      
+      const options = [];
+      for (const item of response?.data) {
+        options.push({
+          value: item?.title,
+          label: item?.title,
+        });
+      }
+      console.log(options,'options');
+      
+      setDocsData(options);
+    } catch (error) {
+      console.error("Error fetching departments:", error?.message);
+    }
+  };
+
   const onChange = (checkedValues) => {
     console.log("checked = ", checkedValues);
     setChecked(checkedValues);
@@ -252,6 +293,10 @@ export default function DocumentPermissions() {
     fetchProjects();
 
   }, []);
+  const handleMDRset=(rec)=>{
+    fetchDocs(rec)
+    setMDR(rec)
+  }
   return (
     <>
       <Modal
@@ -267,8 +312,8 @@ export default function DocumentPermissions() {
       >
           
 
-        <Form layout="vertical" name="basic">
-        <Form.Item
+        <Form layout="vertical" name="basic" form={permissionForm} onFinish={handleSubmit}>
+        {/* <Form.Item
             label="Project"
             name="Project"
             rules={[
@@ -283,7 +328,7 @@ export default function DocumentPermissions() {
               value={project}
               onChange={(value) => setProject(value)}
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="MDR"
             name="mdr"
@@ -297,9 +342,26 @@ export default function DocumentPermissions() {
             <Select
               options={mdrOptions}
               value={mdr}
-              onChange={(value) => setMDR(value)}
+              onChange={(value) =>handleMDRset(value)}
             />
           </Form.Item>
+            {mdr&& <Form.Item
+            label="Doc"
+            name="doc"
+            rules={[
+              {
+                required: true,
+                message: "Please select Doc",
+              },
+            ]}
+          >
+            <Select
+              options={docsData}
+              value={permissionDoc}
+              onChange={(value) => setpermissionDoc(value)}
+            />
+          </Form.Item>}
+
           <Form.Item
             label="Users"
             name="users"
@@ -330,7 +392,7 @@ export default function DocumentPermissions() {
                 block
                 type="primary"
                 htmlType="submit"
-                onClick={() => addPermission()}
+                // onClick={() => addPermission()}
               >
                 Add
               </Button>

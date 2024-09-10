@@ -1364,7 +1364,7 @@ export default function DocumentPermissions() {
   <Button
     size="middle"
     icon={<AddSharp />}
-    // disabled={user?.user?.roleId !== 1}
+    disabled={record?.yourRole == ""}
     onClick={() => statusModalShow(record)}
   />
 </Tooltip>
@@ -2279,7 +2279,12 @@ setComments(dataWithoutUnwantedFields);
           }
         }
         else{
-          i['yourRole']='Client';
+          if(user?.user.roleId==6){
+            i['yourRole']='Client';
+          }
+          else{
+            i['yourRole']='';
+          }
         }
        
         if (approverStatusArray.every(num => num === 0)) {

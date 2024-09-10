@@ -9,6 +9,7 @@ import OrganizationChart from "../organizationChart";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useForm } from "react-hook-form";
+import { Edit } from "iconsax-react";
 
 export default function Users() {
   const [searchText, setSearchText] = useState('');
@@ -34,6 +35,8 @@ export default function Users() {
   const [showTreeView, setShowTreeView] = useState(false);
   const users = location.state?.users || null; 
   const [form] = Form.useForm();
+  const [updateForm] = Form.useForm();
+
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -71,14 +74,12 @@ export default function Users() {
   };
 
   const userUpdateModalShow = (record) => {
-    setUserToUpdate(record)
-
-    console.log(record.id,'record id');
-    console.log(typeof(record.id));
-    setFirstName(record.firstName)
-    setLastName(record.lastName)
-    setEmail(record.email)
-    
+    setUserToUpdate(record);
+    updateForm.setFieldsValue({
+      firstName: record.firstName,
+      lastName: record.lastName,
+      email: record.email,
+    });
     setUserUpdate(true);
   };
 
@@ -86,14 +87,21 @@ export default function Users() {
     setUserUpdate(false);
   };
   
-  const handleUpdate=async()=>{
-    try {
-      const response  = await axios.post
-      (`http://127.0.0.1:8083/api/users/user_update?companyId=${user?.user.companyId}&id=${userToUpdate.id}`,
+  const handleUpdateUser = () => {
+    updateForm.validateFields().then((values) => {
+      handleUpdate(values);
+      updateForm.resetFields();
+    });
+  };
+
+  const handleUpdate = async (values) => {
+  try {
+    const response = await axios.post(
+      `http://127.0.0.1:8083/api/users/user_update?companyId=${user?.user.companyId}&id=${userToUpdate.id}`,
       {
-        firstName,
-        lastName,
-        email,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
       },
       {
         headers: {
@@ -101,14 +109,14 @@ export default function Users() {
           // Add other headers if needed
         },
       }
-    )
-      message.success(response.data.message)
-      userUpdateModalCancel()
-      fetchData()
-    } catch (error) {
-            console.error("Error updating departments:", error?.message);
-    }
+    );
+    message.success(response.data.message);
+    userUpdateModalCancel();
+    fetchData();
+  } catch (error) {
+    console.error("Error updating user:", error?.message);
   }
+};
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -245,6 +253,14 @@ export default function Users() {
     icon={<DeleteOutlined />}
     disabled={user?.user?.roleId !== 1}
     onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+<Tooltip title="Update User">
+  <Button
+    size="middle"
+    icon={<Edit />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => userUpdateModalShow(record)}
   />
 </Tooltip>
            
@@ -636,57 +652,50 @@ const data = response.data.map(item => {
      </Modal> */}
 
 <Modal
-      title="Update User"
-      width={416}
-      centered
-      visible={userUpdate}
-      onCancel={userUpdateModalCancel}
-      footer={null}
-      closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+  title="Update User"
+  width={416}
+  centered
+  visible={userUpdate}
+  onCancel={userUpdateModalCancel}
+  footer={null}
+  closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+>
+  <Form
+    layout="vertical"
+    name="basic"
+    encType="multipart/form-data"
+    form={updateForm}
+    onFinish={handleUpdateUser}
+  >
+    <Form.Item
+      label="First Name"
+      name="firstName"
+      rules={[{ required: true, message: 'Please enter the first name' }]}
     >
-      <Form
-        layout="vertical"
-        name="basic" encType="multipart/form-data"
-        // onFinish={handleUpdate} // Function to handle form submission
-      >
-        <Form.Item
-          label="First Name"
-          name="firstName"
-          rules={[{ required: true, message: 'Please enter the first name' }]}
-        >
-          <Input
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-        </Form.Item>
-        <Form.Item
-          label="Last Name"
-          name="lastName"
-          rules={[{ required: true, message: 'Please enter the last name' }]}
-        >
-          <Input
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-        </Form.Item>
+      <Input />
+    </Form.Item>
+    <Form.Item
+      label="Last Name"
+      name="lastName"
+      rules={[{ required: true, message: 'Please enter the last name' }]}
+    >
+      <Input />
+    </Form.Item>
 
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: 'Please enter the email' }]}
-        >
-          <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" block onClick={()=>handleUpdate()}>
-            Update
-          </Button>
-        </Form.Item>
-      </Form>
-    </Modal>
+    <Form.Item
+      label="Email"
+      name="email"
+      rules={[{ required: true, message: 'Please enter the email' }]}
+    >
+      <Input />
+    </Form.Item>
+    <Form.Item>
+      <Button type="primary" htmlType="submit" block>
+        Update
+      </Button>
+    </Form.Item>
+  </Form>
+</Modal>
   
 
       <div style={{ textAlign: "right", marginBottom: "16px" }}>

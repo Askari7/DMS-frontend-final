@@ -42,7 +42,7 @@ export default function MenuProfile(props) {
   }
   useEffect(()=>{
     getprofile() 
-  },[])
+  },[profile])
 
   return (
     <Col flex="240px" className="hp-profile-menu hp-py-24">

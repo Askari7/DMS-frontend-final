@@ -47,6 +47,7 @@ import { string } from "prop-types";
 import ProgressComp from "./Progress";
 import { DeleteOutlined, DocumentScannerOutlined, EditOutlined, OpenInFull, OpenInFullOutlined, OpenInFullSharp, Update, UpdateSharp } from "@mui/icons-material";
 import { version } from "less";
+import { Edit } from "iconsax-react";
 
 
 
@@ -73,6 +74,7 @@ export default function MDR() {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
   const [form] = Form.useForm();
+  const [updateForm] = Form.useForm();
 
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
@@ -145,11 +147,18 @@ export default function MDR() {
     });
   };
 
+  const handleUpdateSubmit = () => {
+    updateForm.validateFields().then((values) => {
+  handleUpdate()
+      updateForm.resetFields();
+    });
+  };
+
 
   const handleUpdate=async()=>{
     try {
       const response  = await axios.put
-      (`http://127.0.0.1:8083/api/documents/mdr_update?companyId=${user?.user.companyId}&id=${form.getFieldValue("id")}`,
+      (`http://127.0.0.1:8083/api/documents/mdr_update?companyId=${user?.user.companyId}&id=${updateForm.getFieldValue("id")}`,
       {
         title:form.getFieldValue("title"),
         mdrCode:form.getFieldValue("mdrCode"),
@@ -419,7 +428,7 @@ let count=0;
 
 
   const updateModalShow = (record) => {
-    console.log('record',record)
+    // console.log('record',record)
    setRecord(record)
   //  showDocs(record)
    setUpdateModalVisible(true);
@@ -429,10 +438,10 @@ let count=0;
     setRecordMDR(record)
     console.log(recordMDR.mdrCode,'mdrCode');
     
-    form.setFieldsValue({
-      id:recordMDR.id,
-      title:recordMDR.title||"",
-      mdrCode: recordMDR.mdrCode || "",
+    updateForm.setFieldsValue({
+      id:record.id,
+      title:record.title||"",
+      mdrCode: record.mdrCode || "",
     });
 
     setEditModalVisible(true);
@@ -1557,10 +1566,10 @@ console.log('dataaaaaa',data);
       closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
     >
       <Form
-        form={form}
+        form={updateForm}
         layout="vertical"
         onFinish={
-          handleUpdate
+          handleUpdateSubmit
         } // Function to handle form submission
       >
         <Form.Item
@@ -1580,7 +1589,7 @@ console.log('dataaaaaa',data);
 
         <Form.Item>
         <Row md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-          <Button onClick={navigateToUpdate} type="primary"htmlType="submit">MDR template</Button>
+          {/* <Button onClick={navigateToUpdate} type="primary"htmlType="submit">MDR template</Button> */}
           <Button type="primary" htmlType="submit" >
             Update
           </Button>     
@@ -1829,6 +1838,15 @@ console.log('dataaaaaa',data);
     icon={<DeleteOutlined />}
     disabled={user?.user?.roleId !== 1}
     onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+
+<Tooltip title="Update MDR">
+  <Button
+    size="middle"
+    icon={<Edit />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => editModalShow(record)}
   />
 </Tooltip>
                   {/* <a onClick={() => deleteModalShow(record)} disabled={user?.user?.roleId !== 1}>Delete</a> */}
