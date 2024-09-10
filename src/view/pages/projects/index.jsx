@@ -1187,21 +1187,50 @@ if (!projName || !clientEmail ) {
       );
       // Handle the response as needed
       console.log(response);
-      notification.success({
-        message: `${response?.data?.message}`,
-        style: {
-          backgroundColor: '#52c41a', // Red color background
-          color: '#fff', // White text color
-        },
-      },
-    )
+
+    //   notification.success({
+    //     message: `${response?.data?.message}`,
+    //     style: {
+    //       backgroundColor: '#52c41a', // Red color background
+    //       color: '#fff', // White text color
+    //     },
+    //   },
+    // )
 
       setProjectModalVisible(false);      
       fetchData();
-    } catch (error) {
-      // Handle errors
-      console.error("Error adding projects:", error);
+
+    notification.success({
+      message: 'Successfully Created',
+      description: `${response.data.message}`,
+      style: {
+        backgroundColor: '#52c41a', // Green color background
+        color: '#fff', // White text color
+      },
+    });
+  } catch (error) {
+    if (error.response?.status === 409) {
+      // Conflict error (HTTP 409)
+      notification.error({
+        message: 'Conflict Error',
+        description: 'A project with this name or code already exists. Please choose a different name or code.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+    } else {
+      // Handle other errors
+      notification.error({
+        message: 'Error',
+        description: 'An error occurred while adding the project. Please try again.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
     }
+  }
   };
   // useEffect(()=>{
   //   setCode("");
@@ -1392,7 +1421,7 @@ if (!projName || !clientEmail ) {
                 rules={[
                   {
                     required: true,
-                    message: "Please select Client Email",
+                    message: "Please select Client",
                   },
                 ]}
               >

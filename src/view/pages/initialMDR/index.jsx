@@ -2199,6 +2199,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
     };
     const addDocument = async () => {
       
+      
       const departmentOptions = await JSON.parse(departmentOptionsString);
       try {
         var title=getMdrTitle;
@@ -2209,12 +2210,127 @@ import { saveData, loadData, getAllKeys } from '../../storage';
         // 
         var count = selectedRows.length
         // 
-        
+        if(record){
+          try {
+            const response = await axios.put(
+              "http://127.0.0.1:8083/api/documents/mdr",
+              {
+                record,
+                title,
+                departmentId,
+                projectId,
+                noOfDocuments:count,
+                status:"Ongoing",
+                companyId: user?.user?.companyId,
+                authorId: user?.user?.id,
+                authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+                mdrCode,
+                projectCode: ProjectCode,
+                departmentName: departmentLabelsString,
+              },
+              {
+                headers: {
+                  Authorization: user?.accessToken,
+                },
+              }
+            );
+            notification.success({
+              message: 'Successfully Created',
+              description: `${response.data.message}`,
+              style: {
+                backgroundColor: '#52c41a', // Green color background
+                color: '#fff', // White text color
+              },
+            }); 
+          } catch (error) {
+            if (error.response?.status === 409) {
+              // Conflict error (HTTP 409)
+              notification.error({
+                message: 'Conflict Error',
+                description: 'A mdr with this name or code already exists. Please choose a different name or code.',
+                style: {
+                  backgroundColor: '#f5222d', // Red color background
+                  color: '#fff', // White text color
+                },
+              });
 
+              history.push("/pages/mdr")
+              return            
+            } else {
+              // Handle other errors
+              notification.success({
+                message: 'Successfully Created',
+                description: `${response.data.message}`,
+                style: {
+                  backgroundColor: '#52c41a', // Green color background
+                  color: '#fff', // White text color
+                },
+              });
+              
+            }    
+          }
+        }
+        else{ 
+          try {
+            const response = await axios.post(
+              "http://127.0.0.1:8083/api/documents/mdr",
+              {
+                title,
+                departmentId,
+                projectId,
+                noOfDocuments:count,
+                status:"Ongoing",
+                companyId: user?.user?.companyId,
+                authorId: user?.user?.id,
+                authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+                mdrCode,
+                projectCode: ProjectCode,
+                departmentName: departmentLabelsString,
+              },
+              {
+                headers: {
+                  Authorization: user?.accessToken,
+                },
+              }
+              
+              
+            );
+            notification.success({
+              message: 'Successfully Created',
+              description: `${response.data.message}`,
+              style: {
+                backgroundColor: '#52c41a', // Green color background
+                color: '#fff', // White text color
+              },
+            });
+          } catch (error) {
+              if (error.response?.status === 409) {
+                // Conflict error (HTTP 409)
+                notification.error({
+                  message: 'Conflict Error',
+                  description: 'A mdr with this name or code already exists. Please choose a different name or code.',
+                  style: {
+                    backgroundColor: '#f5222d', // Red color background
+                    color: '#fff', // White text color
+                  },
+                });
+                history.push("/pages/mdr")            
+                return
+              } else {
+                notification.error({
+                  message: 'Error',
+                  description: 'An error occurred while adding the mdr. Please try again.',
+                  style: {
+                    backgroundColor: '#f5222d', // Red color background
+                    color: '#fff', // White text color
+                  },
+                });
+              }
+            }
+          }
         selectedRows.forEach(async (index) => {
           let documentValue = data[index].document;
           let count = data[index].count||1
-          // 
           const masterDocumentName=title;
           const assignedBy=user.user.roleId;
           const assignedFrom=user.user.id;
@@ -2257,6 +2373,14 @@ import { saveData, loadData, getAllKeys } from '../../storage';
                   },
                 }
               );
+              notification.success({
+                message: `Documents Successfully Added`,
+                style: {
+                  backgroundColor: '#52c41a', // Red color background
+                  color: '#fff', // White text color
+                },
+              }
+            )     
             } catch (error) {
               
             }  
@@ -2311,89 +2435,28 @@ import { saveData, loadData, getAllKeys } from '../../storage';
                   },
                 }
               );
+              notification.success({
+                message: `Documents Successfully Added`,
+                style: {
+                  backgroundColor: '#52c41a', // Red color background
+                  color: '#fff', // White text color
+                },
+              }
+            )     
             } catch (error) {
               
             }  
-                }
+          }
             
           }
-        // });
 
-        if(record){
-          const response = await axios.put(
-            "http://127.0.0.1:8083/api/documents/mdr",
-            {
-              record,
-              title,
-              departmentId,
-              projectId,
-              noOfDocuments:count,
-              status:"Ongoing",
-              companyId: user?.user?.companyId,
-              authorId: user?.user?.id,
-              authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
-              mdrCode,
-              projectCode: ProjectCode,
-              departmentName: departmentLabelsString,
-            },
-            {
-              headers: {
-                Authorization: user?.accessToken,
-              },
-            }
-          );     
-        }else{
-
-          
-          const response = await axios.post(
-            "http://127.0.0.1:8083/api/documents/mdr",
-            {
-              title,
-              departmentId,
-              projectId,
-              noOfDocuments:count,
-              status:"Ongoing",
-              companyId: user?.user?.companyId,
-              authorId: user?.user?.id,
-              authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
-              mdrCode,
-              projectCode: ProjectCode,
-              departmentName: departmentLabelsString,
-            },
-            {
-              headers: {
-                Authorization: user?.accessToken,
-              },
-            }
-            
-            
-          );
-          notification.success({
-            message: `${response?.data?.message}`,
-            style: {
-              backgroundColor: '#52c41a', // Red color background
-              color: '#fff', // White text color
-            },
-          }
-        )
-        }
-        
-            if (selectedRows.length === 0) {
+        if (selectedRows.length === 0) {
           message.error('Please select at least one row.');
           return;
         }
       } catch (error) {
-        // Handle errors
         console.error("Error adding MDR:", error);
       }
-      notification.success({
-        message: `Documents Successfully Added`,
-        style: {
-          backgroundColor: '#52c41a', // Red color background
-          color: '#fff', // White text color
-        },
-      }
-    )     
     };
 
     const handleDepartmentClick = (name) => {
@@ -2602,7 +2665,6 @@ for (let index1 = 0; index1 < documentInfo1[i].length; index1++) {
         };
     
         setData(updatedData);
-        // setDataArray(updatedData);
         setSelectedRowData(null);
         selectedModalCancel();
       }

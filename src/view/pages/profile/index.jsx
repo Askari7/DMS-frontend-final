@@ -14,8 +14,6 @@ import CompanyInfo from "./company-information";
 import ChangeProfileImagePage from "./change-profile";
 import ChangePersonalProfileImagePage from "./change-personal-profile";
 
-import ComingSoon from "../errors/coming-soon";
-
 export default function Profile() {
 
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));

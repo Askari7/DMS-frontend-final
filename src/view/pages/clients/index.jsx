@@ -194,7 +194,7 @@ const addClient = async () => {
         companyName,
         companyId: user?.user?.companyId,
         companyAddress,
-        companyContact
+        companyContact,
       },
       {
         headers: {
@@ -205,21 +205,40 @@ const addClient = async () => {
     );
 
     console.log(response);
-    notification.success({
-      message: `${response?.data?.message}`,
-      style: {
-        backgroundColor: '#52c41a', // Red color background
-        color: '#fff', // White text color
-      },
-    }
-  )
+
     // Fetch updated data and close modal
     fetchData();
     clientModalCancel();
+    notification.success({
+      message: 'Successfully Created',
+      description: 'A client with this name is created.',
+      style: {
+        backgroundColor: '#52c41a', // Green color background
+        color: '#fff', // White text color
+      },
+    });
   } catch (error) {
-    // Handle API request errors
-    console.error("Error adding client:", error);
-    message.error("Failed to add client. Please try again.");
+    if (error.response?.status === 409) {
+      // Conflict error (HTTP 409)
+      notification.error({
+        message: 'Conflict Error',
+        description: 'A client with this name already exists. Please choose a different name.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+    } else {
+      // Handle other errors
+      notification.error({
+        message: 'Error',
+        description: 'An error occurred while adding the client. Please try again.',
+        style: {
+          backgroundColor: '#f5222d', // Red color background
+          color: '#fff', // White text color
+        },
+      });
+    }
   }
 };
 

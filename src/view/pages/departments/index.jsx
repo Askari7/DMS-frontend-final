@@ -218,6 +218,7 @@ setDepartmentId(record['id']);
     setTitle("");
     setUserModalVisible(false);
   };
+
   const associateUserDepartment = async () => {
     try {
       console.log(userOptions.find(user => user.value === selectedUserForAssociation),);
@@ -326,7 +327,7 @@ setDepartmentId(record['id']);
 
   const handleAddSubmit = () => {
     associateForm.validateFields().then((values) => {
-      addUser()
+      associateUserDepartment()
       associateForm.resetFields();
     });
   };

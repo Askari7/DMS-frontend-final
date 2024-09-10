@@ -1188,17 +1188,7 @@ export default function DocumentPermissions() {
   
   const [form] = Form.useForm();
 
-  // const handleRowClick = (record) => {
-  //   alert("Hello")
-  //   console.log(record);
-  //   return (
-  //     <Link to="/pages/timeline" />
-  //   );
-  // };
-  const handleRowClick = (record) => {
-    alert("hello")
-    history.push('/pages/timeline');
-  };
+
   const handleSubmit = () => {
     form.validateFields().then((values) => {
       handleStatusChange(selectedStatus)      
@@ -2054,7 +2044,7 @@ setComments(dataWithoutUnwantedFields);
     console.log('helllooo', responseData);
     
     const docName = record.title;
-    const url = `${BACKEND_URL}/uploads/${docName}-${record.version}.pdf`;
+    const url = `${BACKEND_URL}/uploads/${record.docName}-${record.version}.pdf`;
     console.log(user.user.roleId, user.user.firstName, user);
     
     let allowed = 'false';
@@ -2065,7 +2055,7 @@ setComments(dataWithoutUnwantedFields);
     // Check if the document exists
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${docName}&version=${record.version}`,
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&version=${record.version}&roleId=${user?.user.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -2075,7 +2065,7 @@ setComments(dataWithoutUnwantedFields);
       );
       if (response.data.status) {
         // Document exists, proceed with redirect
-        window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+        window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
       } else {
         // Document does not exist, show an alert
         message.warning('Document not uploaded yet.');

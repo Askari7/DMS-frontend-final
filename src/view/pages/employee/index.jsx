@@ -12,30 +12,19 @@ const EmployeeForm = ({ onSubmit }) => {
   const [form] = Form.useForm();
   const [email, setEmail] = useState("");
   const [roleId, setRole] = useState("");
-
+  const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  const[departmentOptions,setDepartmentOptions] = useState([])
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const handleSubmit = () => {
-    console.log("data from form",email,firstName,lastName,roleId,department);
-
     form.validateFields().then((values) => {
         addUser()
       onSubmit(values);
       form.resetFields();
     });
   };
-  const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
-
-  const showMdrTemplate = () => {
-    setMdrTemplateVisible(true);
-  };
-
-  const hideMdrTemplate = () => {
-    setMdrTemplateVisible(false);
-  };
-  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-
-  const[departmentOptions,setDepartmentOptions] = useState([])
+  
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -166,4 +155,3 @@ fetchDepartments()
 };
 
 export default EmployeeForm;
-// OrganizationChart.js

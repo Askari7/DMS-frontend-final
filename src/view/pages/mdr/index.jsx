@@ -140,7 +140,7 @@ export default function MDR() {
 
   const handleCreateSubmit = () => {
     CreateForm.validateFields().then((values) => {
-      assignMDR(assignedEmployees,allUsers)
+      // assignMDR(assignedEmployees,allUsers)
       CreateForm.resetFields();
     });
   };
@@ -731,18 +731,39 @@ useEffect(() => {
           },
         }
       );
-      notification.success({
-        message: `${response?.data?.message}`,
-        style: {
-          backgroundColor: '#52c41a', // Red color background
-          color: '#fff', // White text color
-        },
-      }
-      )
+      
       setAssignModalVisible(false)
       fetchData()
+      notification.success({
+        message: 'Successfully Created',
+        description: `${response.data.message}`,
+        style: {
+          backgroundColor: '#52c41a', // Green color background
+          color: '#fff', // White text color
+        },
+      });
     } catch (error) {
-      console.error("Error assigning documents:", error);
+      if (error.response?.status === 409) {
+        // Conflict error (HTTP 409)
+        notification.error({
+          message: 'Conflict Error',
+          description: 'A MDR with this name or code already exists. Please choose a different name or code.',
+          style: {
+            backgroundColor: '#f5222d', // Red color background
+            color: '#fff', // White text color
+          },
+        });
+      } else {
+        // Handle other errors
+        notification.error({
+          message: 'Error',
+          description: 'An error occurred while adding the MDR. Please try again.',
+          style: {
+            backgroundColor: '#f5222d', // Red color background
+            color: '#fff', // White text color
+          },
+        });
+      }
     }
   }
   const handleEdit = async()=>{
