@@ -1833,14 +1833,14 @@ console.log('dataaaaaa',data);
                     {/* Open */}
                   {/* </Button> */}
                   </>
-                  <Tooltip title="Update MDR">
+                  {/* <Tooltip title="Update MDR">
   <Button
     size="middle"
     icon={<Edit />}
     disabled={user?.user?.roleId !== 1}
     onClick={() => editModalShow(record)}
   />
-</Tooltip>
+</Tooltip> */}
                   
                    
                             <Tooltip title="Delete">

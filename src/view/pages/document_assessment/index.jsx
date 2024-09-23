@@ -2051,11 +2051,13 @@ setComments(dataWithoutUnwantedFields);
     if (responseData) {
       allowed = 'true';
     }
-  
+    console.log(record.version,'version');
+    const version = record.version
+
     // Check if the document exists
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&masterDocumentCode=${record.masterDocumentCode}version=${record.version}&roleId=${user?.user.roleId}`,
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&masterDocumentCode=${record.masterDocumentCode}&version=${record.version}&roleId=${user?.user.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
