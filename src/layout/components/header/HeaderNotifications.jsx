@@ -175,26 +175,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, Badge, Row, Col, Dropdown, Divider, Avatar } from "antd";
-import { NotificationBing, TickCircle } from 'iconsax-react';
+import { NotificationBing } from 'iconsax-react';
 import axios from "axios";
-import avatarImg1 from "../../../assets/images/memoji/user-avatar-1.png";
 import project from "../../../assets/images/memoji/project (1).png";
 import mdr from "../../../assets/images/memoji/mdr.png";
-
-import avatarImg2 from "../../../assets/images/memoji/user-avatar-2.png";
-import avatarImg3 from "../../../assets/images/memoji/user-avatar-3.png";
 
 export default function HeaderNotifications() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [filteredNotifications, setFilteredNotifications] = useState([]);
-  
+
   const fetchData = async () => {
     try {
       const responseData = await axios.post(
         `http://127.0.0.1:8083/api/users/notifications`,
         {
           companyId: user?.user?.companyId,
-          userId: user?.user.id,
+          userId: user?.user?.id,
+          roleId: user?.user?.roleId,
+          departmentId: user?.user?.departmentId,
         },
         {
           headers: {
@@ -202,34 +200,17 @@ export default function HeaderNotifications() {
           },
         }
       );
-      console.log(responseData.data,'responseData.data');
-      
-      // Filter notifications where typeOfLog is 2 and userId matches the current user's ID
-      const filtered = responseData.data.filter(
-        (notification) => (
-          // notification.typeOfLog == "1"||
-          // notification.typeOfLog == "2"||
-        notification.typeOfLog == "3"
-      ||notification.typeOfLog == "4"
-      ||notification.typeOfLog == "5"
-      ||notification.typeOfLog == "6" 
-      || notification.typeOfLog == "7a"
-      ||notification.typeOfLog == "7b"
-      ||notification.typeOfLog == "8"
-      ||notification.typeOfLog == "9"
-      ||notification.typeOfLog == "10"
-      ||notification.typeOfLog == "11"      
-      ||notification.typeOfLog == "12"
-      ||notification.typeOfLog == "13"
-      ||notification.typeOfLog == "14"
-      ||notification.typeOfLog == "15"
-      ||notification.typeOfLog == "16"
-      ||notification.typeOfLog == "17"
 
-      )
-        
-      );
-      
+      // Filter notifications based on typeOfLog
+      const filtered = responseData.data
+  .filter(notification =>
+    ["3", "4", "5", "6", "7a", "7b", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "20", "21", "22"]
+    .includes(notification.typeOfLog)
+  )
+  .filter((notification, index, self) =>
+    index === self.findIndex(n => n.title === notification.title)
+  );
+
       setFilteredNotifications(filtered);
     } catch (error) {
       console.error("Error fetching notifications:", error?.message);
@@ -243,44 +224,58 @@ export default function HeaderNotifications() {
   const direction = useSelector((state) => state.customise.direction);
 
   const notificationMenu = (
-    <div className="hp-notification-dropdown hp-border-radius hp-border-color-black-40 hp-bg-black-0 hp-bg-dark-100 hp-border-color-dark-80 hp-pt-24 hp-pb-18 hp-px-24" style={{ marginTop: 23 }}>
+    <div
+      className="hp-notification-dropdown hp-border-radius hp-border-color-black-40 hp-bg-black-0 hp-bg-dark-100 hp-border-color-dark-80 hp-pt-24 hp-pb-18 hp-px-24"
+      style={{ marginTop: 23 }}
+    >
       <Row wrap={false} align="middle" justify="space-between" className="hp-mb-16">
         <Col className="h5 hp-text-color-black-100 hp-text-color-dark-0 hp-mr-64">
           Notifications
         </Col>
-
         <Col className="hp-badge-text hp-font-weight-500 hp-text-color-black-80 hp-ml-24">
           {filteredNotifications.length} New
         </Col>
       </Row>
-
       <Divider className="hp-mt-0 hp-mb-4" />
+      <div
+        className="hp-overflow-y-auto hp-px-10"
+        style={{ maxHeight: 400, marginRight: -10, marginLeft: -10 }}
+      >
+        {filteredNotifications.map((notification, index) => {
+          const date = new Date(notification.createdAt);
+          const formattedDate = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+          }).format(date);
 
-      <div className="hp-overflow-y-auto hp-px-10" style={{ maxHeight: 400, marginRight: -10, marginLeft: -10 }}>
-        {filteredNotifications.map((notification, index) => (
-          <Row key={index} className="hp-cursor-pointer hp-border-radius hp-transition hp-hover-bg-primary-4 hp-hover-bg-dark-80 hp-py-12 hp-px-10" style={{ marginLeft: -10, marginRight: -10 }}>
-            <Col className="hp-mr-12">
-              <Avatar
-                size={48}
-                src={
-                  notification.typeOfLog==5?project:mdr
-                  
-                } // You can use different avatars based on the notification type or user
-                className="hp-d-flex-center-full"
-              />
-            </Col>
-
-            <Col flex="1 0 0">
-              <p className="hp-d-block hp-font-weight-500 hp-p1-body hp-text-color-black-100 hp-text-color-dark-0 hp-mb-4">
-                {notification.title}
-              </p>
-
-              <span className="hp-d-block hp-badge-text hp-font-weight-500 hp-text-color-black-60 hp-text-color-dark-40">
-                {notification.createdAt}
-              </span>
-            </Col>
-          </Row>
-        ))}
+          return (
+            <Row
+              key={index}
+              className="hp-cursor-pointer hp-border-radius hp-transition hp-hover-bg-primary-4 hp-hover-bg-dark-80 hp-py-12 hp-px-10"
+              style={{ marginLeft: -10, marginRight: -10 }}
+            >
+              <Col className="hp-mr-12">
+                <Avatar
+                  size={48}
+                  src={notification.typeOfLog == 5 ? project : mdr}
+                  className="hp-d-flex-center-full"
+                />
+              </Col>
+              <Col flex="1 0 0">
+                <p className="hp-d-block hp-font-weight-500 hp-p1-body hp-text-color-black-100 hp-text-color-dark-0 hp-mb-4">
+                  {notification.title}
+                </p>
+                <span className="hp-d-block hp-badge-text hp-font-weight-500 hp-text-color-black-60 hp-text-color-dark-40">
+                  {formattedDate}
+                </span>
+              </Col>
+            </Row>
+          );
+        })}
       </div>
     </div>
   );
@@ -294,13 +289,12 @@ export default function HeaderNotifications() {
         icon={
           <Dropdown overlay={notificationMenu} placement="bottomRight">
             <div className="hp-position-relative">
-              <div className="hp-position-absolute" style={direction === "rtl" ? { left: -5, top: -5 } : { right: -5, top: -5 }}>
-                <Badge
-                  dot
-                  status="processing"
-                />
+              <div
+                className="hp-position-absolute"
+                style={direction === "rtl" ? { left: -5, top: -5 } : { right: -5, top: -5 }}
+              >
+                <Badge dot status="processing" />
               </div>
-
               <NotificationBing size="22" className="hp-text-color-black-80 hp-text-color-dark-30" />
             </div>
           </Dropdown>

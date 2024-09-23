@@ -247,6 +247,14 @@ export default function Users() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
+          <Tooltip title="Update User">
+  <Button
+    size="middle"
+    icon={<Edit />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => userUpdateModalShow(record)}
+  />
+</Tooltip>
           <Tooltip title="Delete">
   <Button
     size="middle"
@@ -255,14 +263,7 @@ export default function Users() {
     onClick={() => deleteModalShow(record)}
   />
 </Tooltip>
-<Tooltip title="Update User">
-  <Button
-    size="middle"
-    icon={<Edit />}
-    disabled={user?.user?.roleId !== 1}
-    onClick={() => userUpdateModalShow(record)}
-  />
-</Tooltip>
+
            
         </Space>
       ),

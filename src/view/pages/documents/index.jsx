@@ -1054,10 +1054,12 @@ import { saveData, loadData, getAllKeys } from '../../storage';
 import { useHistory } from 'react-router-dom'; 
 import MyTreeView from "../treeview/MyTreeView";
 import { DownOutlined } from '@ant-design/icons';
-import {Row,Col,Divider,notification,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload, Tooltip,
+import {Row,Col,Divider,notification,Form,Menu,Dropdown,Space,Checkbox,Table,Select,Tag,Input,DatePicker,TimePicker,Button,Modal,message,Upload, Tooltip, InputNumber,
 } from "antd";
 import { Radio } from "antd";
 import axios from "axios";
+import jsondata from '../initialMDR/data.json';
+
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { UploadOutlined } from "@ant-design/icons";
@@ -1068,6 +1070,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useRef } from "react";
 import { Assignment, DeleteOutlined, OpenInFull } from "@mui/icons-material";
+
 
 const uploadProps = {
   name: "file",
@@ -1203,11 +1206,16 @@ export default function Document() {
   const [textEditorValue, setTextEditorValue] = useState("");
   const [departmentOptions, setDepartments] = useState([]);
   const [projectOptions, setProjects] = useState([]);
+  const [docTypeOptions, setDocTypeOptions] = useState([]);
+
   const [mdrOptions, setMdrData] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
   const [dataArray, setDataArray] = useState([]);
   const [projectCode, setProjectCode] = useState("");
+  const [docType, setDocType] = useState("");
+  const [count, setCount] = useState("");
+
   const [areaCode, setAreaCode] = useState("");
   const [deptSuffix, setDeptSuffix] = useState("");
   const [departments,setDepartment] = useState([])
@@ -1226,7 +1234,15 @@ export default function Document() {
   const searchInput = useRef(null);
 
   const [form] = Form.useForm();
+  const[docuementForm]= Form.useForm()
 
+
+  const handleAddDocument = () => {
+    docuementForm.validateFields().then((values) => {
+      addDocument()
+      docuementForm.resetFields();
+    });
+  };
 
 
   const columns = [
@@ -1676,7 +1692,7 @@ if(user.user.roleId==2 ){
 
 
   const addDocument = async () => {
-    if (!docTitle || !mdrObj?.departmentId || !mdrObj?.projectId) {
+    if (!docTitle || !mdr ||!projectCode ||!areaCode ||!docType|| !deptSuffix ) {
       // If any required field is missing, display a validation error notification
       notification.error({
         message: 'Validation Error',
@@ -1689,29 +1705,22 @@ if(user.user.roleId==2 ){
       return; // Exit early if validation fails
     }
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const mdrObj = mdrOptions.find((item) => item?.value == mdr);
-      console.log(mdrObj, mdr, user);
-      const obj = {
-        title: docTitle,
-        departmentId: mdrObj?.departmentId,
-        projectId: mdrObj?.projectId,
-        masterDocumentId: mdr,
-        content: textEditorValue,
-        extension,
-        companyId: user?.user?.companyId,
-        roleId: user?.user?.roleId,
-        userId: user?.user?.id,
-        userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
-      };
-      Object.entries(obj).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      console.log(formData);
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/?projectCode=${projectCode}&areaCode=${areaCode}&deptSuffix=${deptSuffix}`,        
-        formData,
+        `http://127.0.0.1:8083/api/documents/addingDoc`,        
+        {
+          title: docTitle,
+          masterDocumentCode: mdr,
+          projectCode:projectCode,
+          areaCode:areaCode,
+          docType:docType,
+          deptSuffix:deptSuffix,
+          companyId: user?.user?.companyId,
+          roleId: user?.user?.roleId,
+          userId: user?.user?.id,
+          userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+          count,
+
+        },        
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1720,18 +1729,17 @@ if(user.user.roleId==2 ){
         }
       );
       // Handle the response as needed
-      console.log(response);
+      console.log(response,'responses');
       message.success(response?.data?.message);
-     await fetchData();
+      await fetchData();
       documentModalCancel();
     } catch (error) {
-      // Handle errors
-
       if (error?.message == "Request failed with status code 403") {
         message.error("Permission Denied to create document on this MDR");
       }
     }
   };
+
   const fetchData = async () => {
     
     try {
@@ -1799,7 +1807,8 @@ if(user.user.roleId==2 ){
       console.error("Error fetching departments:", error?.message);
     }
   };
-  const fetchMDR = async () => {
+
+  const fetchMDRIndividual = async (projectCode) => {
     try {
       const response = await axios.get(
         `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
@@ -1811,13 +1820,13 @@ if(user.user.roleId==2 ){
         }
       );
       const options = [];
-      for (const item of response?.data) {
-        options.push({
-          value: item?.id,
-          label: item?.title,
-          projectId: item?.projectId,
-          departmentId: item?.departmentId,
-        });
+      for (const item of response?.data ) {
+        if(item.projectCode == projectCode){
+          options.push({
+            value: item?.mdrCode,
+            label: item?.title,
+          });
+        }
       }
 
       setMdrData(options); // Assuming the response.data is an array of projects
@@ -1825,6 +1834,31 @@ if(user.user.roleId==2 ){
       console.error("Error fetching departments:", error?.message);
     }
   };
+
+  const fetchDocType = async (departmentSuffix) => {
+    try {
+      
+      const matchingDocuments = jsondata.filter(doc => doc.departmentCode === departmentSuffix);
+      
+      // If documents are found, return the document codes (or other relevant details)
+      if (matchingDocuments.length > 0) {
+        const options = [];
+        for (const item of matchingDocuments) {
+          options.push({ value: item?.documentContentCode, label: `${item.documentTitle} (${item.documentContentCode})` });
+      }
+      setDocTypeOptions(options); // Assuming the response.data is an array of projects
+        return matchingDocuments.map(doc => doc.documentContentCode); // Return the 'document' field
+      } else {
+        throw new Error("No documents found for the specified department code");
+      }
+    } catch (error) {
+      console.error("Error fetching document codes:", error?.message);
+    }
+  };
+  
+  // Example usage:
+  
+  
   const [statusModalVisible, setStatusModalVisible] = useState(false);
 const [selectedStatus, setSelectedStatus] = useState("");
 const statusModalShow = (record) => {
@@ -1866,13 +1900,25 @@ const handleStatusChange = () => {
   }
 };
 
+const handleProjectCodeChange = (value) => {
+  setProjectCode(value);
+  fetchMDRIndividual(value); // Fetch MDR options filtered by project code
+};
+
+const handledepartmentSuffixChange = (value) => {
+  setDeptSuffix(value);
+  fetchDocType(value); // Fetch MDR options filtered by project code
+};
+
 
 useEffect(() => {
   setUser(JSON.parse(localStorage?.getItem("user")));
   // Fetch data when the component mounts
   fetchDepartments();
   fetchProjects();
-  fetchMDR();
+  // fetchDocType("PM").then(documentCodes => {
+  //   console.log("Fetched Document Codes:", documentCodes);
+  // });
   fetchUsers()
 
   fetchData();
@@ -2053,166 +2099,180 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
 
 
       <Modal
-        title="Upload Document"
-        width={1000}
-        centered
-        visible={documentModalVisible}
-        onCancel={documentModalCancel}
-        footer={null}
-        closeIcon={
-          <RiCloseFill className="remix-icon text-color-black-100" size={24} />
-        }
-      >
-        <Row justify="space-between" align="center">
-          <Col span={15}>
-            <ReactQuill
-              style={{ height: "300px" }}
-              theme="snow"
-              value={textEditorValue}
-              onChange={setTextEditorValue}
-            />
-          </Col>
-          <Col span={7}>
-            <Form layout="vertical" name="basic">
-              <Form.Item
-                label="Document Title"
-                name="docTitle"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your title",
-                  },
-                ]}
-              >
-                <Input
-                  value={docTitle}
-                  onChange={(e) => setDocTitle(e.target.value)}
-                />
-              </Form.Item>
+  title="Upload Document"
+  width={1000}
+  centered
+  visible={documentModalVisible}
+  onCancel={documentModalCancel}
+  footer={null}
+  closeIcon={
+    <RiCloseFill className="remix-icon text-color-black-100" size={24} />
+  }
+>
+  <Row justify="space-between" align="center">
+    <Col span={15}>
+      <ReactQuill
+        style={{ height: "300px" }}
+        theme="snow"
+        value={textEditorValue}
+        onChange={setTextEditorValue}
+      />
+    </Col>
+    <Col span={7}>
+      <Form layout="vertical" name="basic" form={docuementForm} onFinish={handleAddDocument}>
+        <Form.Item
+          label="Document Title"
+          name="docTitle"
+          rules={[
+            {
+              required: true,
+              message: "Please input your title",
+            },
+          ]}
+        >
+          <Input
+            value={docTitle}
+            onChange={(e) => setDocTitle(e.target.value)}
+          />
+        </Form.Item>
 
+        <Form.Item
+          label="Project Code"
+          name="projectCode"
+          rules={[
+            {
+              required: true,
+              message: "Please select Project Code",
+            },
+          ]}
+        >
+          <Select
+            options={projectOptions}
+            value={projectCode}
+            onChange={handleProjectCodeChange}
+          />
+        </Form.Item>
 
-              <Form.Item
-                label="MDR"
-                name="mdr"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select MDR",
-                  },
-                ]}
-              >
-                <Select
-                  options={mdrOptions}
-                  value={mdr}
-                  onChange={(value) => setMDR(value)}
-                />
-              </Form.Item>
+        <Form.Item
+          label="MDR"
+          name="mdr"
+          rules={[
+            {
+              required: true,
+              message: "Please select MDR",
+            },
+          ]}
+        >
+          <Select
+            options={mdrOptions}
+            value={mdr}
+            onChange={(value) => setMDR(value)}
+          />
+        </Form.Item>
 
-              <Form.Item
-                label="Project Code"
-                name="projectCode"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Project Code",
-                  },
-                ]}
-              >
-                <Select
-                  options={projectOptions}
-                  value={projectCode}
-                  onChange={(value) => setProjectCode(value)}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Area Code"
-                name="areaCode"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Area Code",
-                  },
-                ]}
-              >
-                <Select
+        <Form.Item
+          label="Area Code"
+          name="areaCode"
+          rules={[
+            {
+              required: true,
+              message: "Please select Area Code",
+            },
+          ]}
+        >
+          <Select
             options={[
               { label: "01", value: "01" },
               { label: "02", value: "02" },
-
             ]}
-                  value={areaCode}
-                  onChange={(value) => setAreaCode(value)}
-                />
-              </Form.Item>
+            value={areaCode}
+            onChange={(value) => setAreaCode(value)}
+          />
+        </Form.Item>
 
-              <Form.Item
-                label="Department Suffix"
-                name="deptSuffix"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Add Department Suffix",
-                  },
-                ]}
-              >
-                <Select
+        <Form.Item
+          label="Department Suffix"
+          name="deptSuffix"
+          rules={[
+            {
+              required: true,
+              message: "Please Add Department Suffix",
+            },
+          ]}
+        >
+          <Select
             options={departmentOptions}
-                  value={deptSuffix}
-                  onChange={(value) => setDeptSuffix(value)}
-                />
-              </Form.Item>
+            value={deptSuffix}
+            onChange={handledepartmentSuffixChange}
+          />
+        </Form.Item>
 
-              <Form.Item
-                label="Extension"
-                name="extension"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Extention",
-                  },
-                ]}
-              >
-                <Select
-                  options={[
-                    { value: ".pdf", label: ".pdf" },
-                    { value: ".docx", label: ".docx" },
-                  ]}
-                  value={extension}
-                  onChange={(value) => setExtension(value)}
-                />
-              </Form.Item>
+        <Form.Item
+          label="Document Type"
+          name="docType"
+          rules={[
+            {
+              required: true,
+              message: "Please Add Document Type",
+            },
+          ]}
+        >
+          <Select
+            options={docTypeOptions}
+            value={docType}
+            onChange={(value) => setDocType(value)}
+          />
+        </Form.Item>
 
-              {/* <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
-              </Upload> */}
-              <input type="file" onChange={handleFile} />
-              <Row>
-                <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
-                  <Button
-                    block
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => addDocument()}
-                  >
-                    Submit
-                  </Button>
-                </Col>
+        <Form.Item
+          label="Count"
+          name="count"
+          rules={[
+            {
+              required: true,
+              message: "Please input the count",
+            },
+            {
+              type: "number",
+              min: 1,
+              message: "Count must be at least 1",
+            },
+          ]}
+        >
+          <InputNumber
+            min={1}
+            value={count}
+            onChange={(value) => setCount(value)}
+            style={{ width: '100%' }}
+          />
+        </Form.Item>
 
-                <Col
-                  md={12}
-                  span={24}
-                  className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12"
-                >
-                  <Button block onClick={documentModalCancel}>
-                    Cancel
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+        <Row>
+          <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+            <Button
+              block
+              type="primary"
+              htmlType="submit"
+            >
+              Submit
+            </Button>
+          </Col>
+
+          <Col
+            md={12}
+            span={24}
+            className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12"
+          >
+            <Button block onClick={documentModalCancel}>
+              Cancel
+            </Button>
           </Col>
         </Row>
-      </Modal>
+      </Form>
+    </Col>
+  </Row>
+</Modal>
+
       <div style={{ textAlign: "right", marginBottom: "16px" ,padding:"15px", gap:"15px"}}>
         <Button
           type="primary"

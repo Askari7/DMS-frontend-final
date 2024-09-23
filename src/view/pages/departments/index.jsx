@@ -39,14 +39,6 @@ const columns = [
     render: (_, record) => (
       
       <Space size="middle">
-       <Tooltip title="Delete">
-  <Button
-    size="middle"
-    icon={<DeleteOutlined />}
-    disabled={user?.user?.roleId !== 1}
-    onClick={() => deleteModalShow(record)}
-  />
-</Tooltip>
         <Tooltip title="Add User">
   <Button
     size="middle"
@@ -55,7 +47,7 @@ const columns = [
     onClick={() => addUser(record)}
   />
 </Tooltip>
-<Tooltip title="Update Department">
+        <Tooltip title="Update Department">
   <Button
     size="middle"
     icon={<Edit />}
@@ -63,6 +55,16 @@ const columns = [
     onClick={() => userUpdateModalShow(record)}
   />
 </Tooltip>
+       <Tooltip title="Delete">
+  <Button
+    size="middle"
+    icon={<DeleteOutlined />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => deleteModalShow(record)}
+  />
+</Tooltip>
+        
+
       </Space>
       
     ),

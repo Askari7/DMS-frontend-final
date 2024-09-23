@@ -997,6 +997,22 @@ filters: [
     render: (_, record) => (
       
       <Space size="middle">
+        <Tooltip title="Create MDR">
+  <Button
+    size="middle"
+    icon={<Create />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={handleCreateMDR}
+  />
+</Tooltip>
+        <Tooltip title="Update Project">
+  <Button
+    size="middle"
+    icon={<Edit />}
+    disabled={user?.user?.roleId !== 1}
+    onClick={() => projectUpdateModalShow(record)}
+  />
+</Tooltip>
           <Tooltip title="Delete">
   <Button
     size="middle"
@@ -1005,23 +1021,9 @@ filters: [
     onClick={() => deleteModalShow(record)}
   />
 </Tooltip>
-<Tooltip title="Update Project">
-  <Button
-    size="middle"
-    icon={<Edit />}
-    disabled={user?.user?.roleId !== 1}
-    onClick={() => projectUpdateModalShow(record)}
-  />
-</Tooltip>
 
-<Tooltip title="Create MDR">
-  <Button
-    size="middle"
-    icon={<Create />}
-    disabled={user?.user?.roleId !== 1}
-    onClick={handleCreateMDR}
-  />
-</Tooltip>
+
+
 
           {/* <Button
             size="middle"
@@ -1248,6 +1250,7 @@ if (!projName || !clientEmail ) {
   //   setClientEmail("");
   //   setDepartmentId([]);
   // },[projectModalVisible])
+  
   const fetchProgress = async()=>{
     try {
       const response = await axios.get(

@@ -117,20 +117,8 @@ const fetchDepartments = async () => {
       console.log(response.data);
       setData(response.data); 
       const companyName = data.companyName; // Accessing the value associated with the key 'companyName'
-      // const array = companyName.value; // Accessing the array stored within the 'value' property of the 'companyName' object
-      // console.log(array,'array pe ');
-      
-      // Now, you can access the 'name' property of the dictionaries within the array
- 
-      // const names = array.map(item => item.name);      
-      // console.log(names,'array pe map ');
- 
       console.log("data",data);// Assuming the response.data is an array of departments
       console.log("data",response?.data);
-
-        
-      
-
 
     } catch (error) {
       console.error("Error fetching stats", error?.message);
@@ -389,7 +377,8 @@ setDepartmentCounts(userDepartmentCount)
         </Row>
       )
       }      
-      {user?.user?.roleId === 2 && ( // Check if roleId is 1
+      {(user?.user?.roleId ==2||user?.user?.roleId ==3||user?.user?.roleId ==4||
+      user?.user?.roleId ==5) && ( // Check if roleId is 1
         <Row gutter={[32, 32]} className="hp-mb-32">
           <Col span={24}>
             <Row gutter={[32, 32]}>
@@ -441,7 +430,7 @@ setDepartmentCounts(userDepartmentCount)
               <FeatureCard
                 icon={<DocumentScanner size="32" variant="Bold" />}
                 title="Pending Reviews"
-                count={data?.approverCount || "0"}
+                count={data?.reviewerCount || "0"}
                 style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
       />
               </Col>
@@ -452,7 +441,7 @@ setDepartmentCounts(userDepartmentCount)
       )
       }      
 
-{user?.user?.roleId === 3 && ( // Check if roleId is 1
+{/* {user?.user?.roleId === 3 && ( // Check if roleId is 1
         <Row gutter={[32, 32]} className="hp-mb-32">
           <Col span={24}>
             <Row gutter={[32, 32]}>
@@ -504,7 +493,7 @@ setDepartmentCounts(userDepartmentCount)
               <FeatureCard
                 icon={<DocumentScanner size="32" variant="Bold" />}
                 title="Pending Reviews"
-                count={data?.approverCount || "0"}
+                count={data?.reviewerCount || "0"}
                 style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
       />
               </Col>
@@ -513,7 +502,7 @@ setDepartmentCounts(userDepartmentCount)
           </Col>
         </Row>
       )
-      }      
+      }       */}
 
       {/* {user?.user?.roleId === 2 && ( 
         <Row gutter={[48, 48]} className="hp-mb-32">

@@ -52,12 +52,15 @@ export default function HeaderText() {
       className="hp-header-left-text hp-d-flex-center"
     >
       <div className="hp-header-left-text-item hp-p1-body hp-text-color-white-100 hp-text-color-dark-0 hp-ml-12 hp-mb-0" style={{ paddingTop: '32px', paddingBottom: '1px' }}>
+      <p style={{ textAlign: 'left', display: 'inline-block', margin: '0 0 0 4px', fontWeight: 'bold' }}>
+    {user?.user.firstName} {user?.user.lastName} <p style={{color: 'blue', display: 'inline-block', padding: '1px 8px', borderRadius: '4px', margin: '0' }}>
+    {companyName}
+  </p>
+  </p>
   <p style={{ textAlign: 'left', color: 'blue', display: 'inline-block', padding: '1px 8px', borderRadius: '4px', backgroundColor: '#e0f7fa', margin: '0' }}>
     {roleMapping[user?.user.roleId]}
   </p>
-  <p style={{ textAlign: 'left', display: 'inline-block', margin: '0 0 0 4px', fontWeight: 'bold' }}>
-    {user?.user.firstName} {user?.user.lastName} {companyName}
-  </p>
+
 </div>
 
 

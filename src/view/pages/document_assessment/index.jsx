@@ -2055,7 +2055,7 @@ setComments(dataWithoutUnwantedFields);
     // Check if the document exists
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&version=${record.version}&roleId=${user?.user.roleId}`,
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&masterDocumentCode=${record.masterDocumentCode}version=${record.version}&roleId=${user?.user.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -2293,7 +2293,7 @@ setComments(dataWithoutUnwantedFields);
         } else if (approverStatusArray.some(num => num !== 0 && num !== 2)) {
           i['approverStatuss']='Rejected';
         } else if (approverStatusArray.every(num => num === 2)) {
-          i['approverStatuss']='Sent to Client';
+          i['approverStatuss']='Approved(in-house)';
         }
         else{
           i['approverStatuss']='Pending';
@@ -2306,7 +2306,7 @@ setComments(dataWithoutUnwantedFields);
         } else if (reviewerStatusArray.every(num => num === 1)) {
           i['reviewerStatuss']='Rejected';
         } else if (reviewerStatusArray.every(num => num === 2)) {
-          i['reviewerStatuss']='Sent for Approval';
+          i['reviewerStatuss']='All Reviews Done';
         }
         else{
           i['reviewerStatuss']='Pending';
@@ -2368,7 +2368,6 @@ console.log(organizedData,"organizedData");
 
   const updateDocStatus = async (myrecord) => {
 
-    console.log(myrecord,"record dekhS");
     const myrecordId = myrecord.id;
     const revID = revIdArr.find(item => item.id === myrecordId);
     const appID = appIdArr.find(item => item.id === myrecordId);
@@ -2427,8 +2426,7 @@ console.log(organizedData,"organizedData");
     const record = JSON.stringify(myrecord);
     console.log(record,"record bhej rha hun");
     try {
-      if(rejectionMarks ){
-        
+      if(rejectionMarks){
         const response = await axios.put(
           `http://127.0.0.1:8083/api/documents/establishment?yourRole=${myrecord.yourRole}
           &version=${myrecord.version}&userName=${myrecord.userName}&approver=${myrecord.approver}&reviewer=${myrecord.reviewer}
@@ -2537,12 +2535,12 @@ console.log(organizedData,"organizedData");
               <Form.Item
                 label="Remarks"
                 name="remarks"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please provide remarks for rejection',
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: 'Please provide remarks for rejection',
+                //   },
+                // ]}
               >
                 <Input.TextArea rows={4} placeholder="Enter remarks for rejection" value={rejectionMarks} onChange={(e)=>setRejectionMarks(e.target.value)}/>
               </Form.Item>
@@ -2784,13 +2782,10 @@ console.log(organizedData,"organizedData");
       </div>
       <div style={{ overflowX: "auto" }}>
       <Table columns={user.user.roleId==6?column:columns} dataSource={data} bordered
-      scroll={{overflowX: "auto" }}
+      scroll={{overflowX: "auto", }}
       size="medium"
       title={() => 'All Documents Assessments'}
       footer={() => 'You may filter Documents'}
-      // onRow={(record) => ({
-      //   onClick: () => timelineModalShow(record),
-      // })}
       />
       </div>
     </>
