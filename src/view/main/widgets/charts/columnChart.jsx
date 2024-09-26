@@ -52,7 +52,7 @@ useEffect(() => {
           case "Completed":
             completedCount++;
             break;
-          case "Approved(In-house)":
+          case "Approved(in-house)":
             inHouseCount++;
             break;
           case "Send To Client":
@@ -320,7 +320,6 @@ const filterDataByYear = (dateString) => {
               { name: "Complete Documents", data: complete },
               { name: "Approved(In-house) Documents", data: inHouse },
               { name: "Documents send for Client's approval", data: sendToClient},
-
               { name: "Remaining Documents", data: remain },
             ]}            
             type="bar"

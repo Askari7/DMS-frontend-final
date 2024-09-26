@@ -240,7 +240,6 @@ export default function Users() {
       dataIndex: "email",
       key: "email",
       ...getColumnSearchProps('email'),
-  
     },
     {
       title: "Action",

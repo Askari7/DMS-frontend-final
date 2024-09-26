@@ -116,7 +116,7 @@ export default function Charts() {
             case "Completed":
               completedCount++;
               break;
-            case "Approved(In-house)":
+            case "Approved(in-house)":
               inHouseCount++;
               break;
             default:

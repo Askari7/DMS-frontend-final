@@ -81,9 +81,6 @@ export default function MDR() {
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [showModalVisible, setShowModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
-
-  const [params,setParams] = useState()
-
   const [AssignForm] = Form.useForm();
   const [CreateForm] = Form.useForm();
 
@@ -149,8 +146,8 @@ export default function MDR() {
 
   const handleUpdateSubmit = () => {
     updateForm.validateFields().then((values) => {
-  handleUpdate()
-      updateForm.resetFields();
+      handleUpdate()
+    updateForm.resetFields();
     });
   };
 
@@ -160,8 +157,8 @@ export default function MDR() {
       const response  = await axios.put
       (`http://127.0.0.1:8083/api/documents/mdr_update?companyId=${user?.user.companyId}&id=${updateForm.getFieldValue("id")}`,
       {
-        title:form.getFieldValue("title"),
-        mdrCode:form.getFieldValue("mdrCode"),
+        title:updateForm.getFieldValue("title"),
+        mdrCode:updateForm.getFieldValue("mdrCode"),
       },
       {
         headers: {
@@ -174,7 +171,7 @@ export default function MDR() {
       editModalCancel()
       fetchData()
     } catch (error) {
-            console.error("Error updating departments:", error?.message);
+      console.error("Error updating departments:", error?.message);
     }
   }
 
@@ -436,12 +433,11 @@ let count=0;
 
   const editModalShow = (record) => {
     setRecordMDR(record)
-    console.log(recordMDR.mdrCode,'mdrCode');
     
     updateForm.setFieldsValue({
       id:record.id,
-      title:record.title||"",
-      mdrCode: record.mdrCode || "",
+      title:record.title,
+      mdrCode: record.mdrCode,
     });
 
     setEditModalVisible(true);
@@ -1580,14 +1576,14 @@ console.log('dataaaaaa',data);
           name="title"
           rules={[{ required: true, message: 'Please enter the mdr title' }]}
         >
-          <Input placeholder="Enter MDR title" onChange={(e) => form.setFieldsValue({ title: e.target.value })} />
+          <Input placeholder="Enter MDR title" onChange={(e) => updateForm.setFieldsValue({ title: e.target.value })}/>
         </Form.Item>
         <Form.Item
           label="MDR Code"
           name="mdrCode"
           rules={[{ required: true, message: 'Please enter mdr code' }]}
         >
-          <Input placeholder="Enter MDR code" onChange={(e) => form.setFieldsValue({ mdrCode: e.target.value })} />
+          <Input placeholder="Enter MDR code" onChange={(e) => updateForm.setFieldsValue({ mdrCode: e.target.value })}/>
         </Form.Item>
 
         <Form.Item>
@@ -1833,14 +1829,14 @@ console.log('dataaaaaa',data);
                     {/* Open */}
                   {/* </Button> */}
                   </>
-                  {/* <Tooltip title="Update MDR">
+                  <Tooltip title="Update MDR">
   <Button
     size="middle"
     icon={<Edit />}
     disabled={user?.user?.roleId !== 1}
     onClick={() => editModalShow(record)}
   />
-</Tooltip> */}
+</Tooltip>
                   
                    
                             <Tooltip title="Delete">

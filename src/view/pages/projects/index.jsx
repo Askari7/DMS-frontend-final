@@ -1499,7 +1499,7 @@ if (!projName || !clientEmail ) {
           name="title"
           rules={[{ required: true, message: 'Please enter the project title' }]}
         >
-          <Input placeholder="Enter Project title" onChange={(e) => form.setFieldsValue({ title: e.target.value })} />
+          <Input placeholder="Enter Project title" onChange={(e) => updateForm.setFieldsValue({ title: e.target.value })} />
         </Form.Item>
         
         <Form.Item
@@ -1507,7 +1507,7 @@ if (!projName || !clientEmail ) {
           name="code"
           rules={[{ required: true, message: 'Please enter Project code' }]}
         >
-          <Input placeholder="Enter Project code" onChange={(e) => form.setFieldsValue({ code: e.target.value })} />
+          <Input placeholder="Enter Project code" onChange={(e) => updateForm.setFieldsValue({ code: e.target.value })} />
         </Form.Item>
 
 

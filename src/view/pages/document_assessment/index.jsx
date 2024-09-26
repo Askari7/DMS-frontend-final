@@ -1193,6 +1193,7 @@ export default function DocumentPermissions() {
     form.validateFields().then((values) => {
       handleStatusChange(selectedStatus)      
       form.resetFields();
+      setRemarks("")
     });
   };
 
@@ -1484,7 +1485,7 @@ export default function DocumentPermissions() {
       
 
     const [selectedStatus, setSelectedStatus] = useState("");
-    const [rejectionMarks,setRejectionMarks] = useState("")
+    const [remarks,setRemarks] = useState("")
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [statusModalVisible, setStatusModalVisible] = useState(false);
     const [clientModalVisible, setClientModalVisible] = useState(false);
@@ -1548,12 +1549,9 @@ export default function DocumentPermissions() {
   };
   const handleStatus = (status) => {
     setSelectedStatus(status);
-    if (status === 'Reject') {
+    if (status === 'Reject' ||status ==="Accept") {
       setShowRemarksInput(true);
-    } else {
-      setShowRemarksInput(false);
     }
-
     // Your other status change logic here
   };
 //   useEffect(() => {
@@ -1608,7 +1606,7 @@ export default function DocumentPermissions() {
     const Id = myrecord.clientId;
     const status = selectedStatus
 
-    const comment = rejectionMarks?rejectionMarks:''
+    const comment = remarks?remarks:''
     const version = myrecord.version
     
     const myrecordId = myrecord.id;
@@ -1621,7 +1619,7 @@ export default function DocumentPermissions() {
     const updatedRevStatusObj = revStatusArr.find(item => item.id === myrecordId);
     const updatedAppStatusObj = appStatusArr.find(item => item.id === myrecordId);
     try {
-      if(rejectionMarks){
+      if((remarks && status ==="Reject")||status==="Reject"){
         const response = await axios.put(
           `http://127.0.0.1:8083/api/documents/review?yourRole=${"client"}&myrecord=${myrecord}
           &version=${myrecord.version}&userName=${myrecord.userName}
@@ -1651,7 +1649,7 @@ export default function DocumentPermissions() {
           `http://127.0.0.1:8083/api/documents/review?yourRole=${"client"}&record=${record}&rev=${revID}&app=${appID}`,
           {
             version,
-
+            clientComment:remarks,
             clientStatus:"Accept",
             myrecord:myrecord,
             docName: myrecord.docName,
@@ -1665,7 +1663,7 @@ export default function DocumentPermissions() {
         );
         message.success(response.data.message)
         console.log(response.data,"data aya");
-  
+        
       }
     //   setSelectedStatus('')
       await fetchData()
@@ -1896,7 +1894,7 @@ setComments(dataWithoutUnwantedFields);
 
 
   const handleStatusChange = async (selectedStatus) => {
-    console.log("rejection",rejectionMarks);
+    // console.log("rejection",rejectionMarks);
     console.log(selectedStatus,"status bhi aya");
     // Check if the selected document is available
     if (selectedDocument) {
@@ -2392,6 +2390,11 @@ console.log(organizedData,"organizedData");
     if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Accept') {
         statusForApp[approveId.indexOf(user.user.id)] = 2;
         statusForRev[reviewId.indexOf(user.user.id)] = 2;
+        const appIndex = approveId.indexOf(user.user.id)
+      const revIndex = reviewId.indexOf(user.user.id)
+        commentForApp[appIndex] = remarks
+      commentForRev[revIndex] = remarks
+
     } else if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Reject'){
       statusForApp[approveId.indexOf(user.user.id)] = 1;
       statusForRev[reviewId.indexOf(user.user.id)] = 1;
@@ -2399,24 +2402,34 @@ console.log(organizedData,"organizedData");
       const appIndex = approveId.indexOf(user.user.id)
       const revIndex = reviewId.indexOf(user.user.id)
 
-      commentForApp[appIndex] = rejectionMarks
-      commentForRev[revIndex] = rejectionMarks
+      commentForApp[appIndex] = remarks
+      commentForRev[revIndex] = remarks
 
 
     } else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Accept') {
+      const appIndex = approveId.indexOf(user.user.id)
+      const revIndex = reviewId.indexOf(user.user.id)
+      commentForApp[appIndex] = remarks
+
       statusForApp[approveId.indexOf(user.user.id)] = 2;
     } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Accept') {
+      const appIndex = approveId.indexOf(user.user.id)
+      const revIndex = reviewId.indexOf(user.user.id)
       statusForRev[reviewId.indexOf(user.user.id)] = 2;
+      commentForRev[revIndex] = remarks
+
     } else if (myrecord.yourRole === 'Approver' && selectedStatus === 'Reject') {
+      
       statusForApp[approveId.indexOf(user.user.id)] = 1;
       const appIndex = approveId.indexOf(user.user.id)
 
-      commentForApp[appIndex] = rejectionMarks
+      commentForApp[appIndex] = remarks
     } else if (myrecord.yourRole === 'Reviewer' && selectedStatus === 'Reject') {
+      
       statusForRev[reviewId.indexOf(user.user.id)] = 1;
       const revIndex = reviewId.indexOf(user.user.id)
 
-      commentForRev[revIndex] = rejectionMarks
+      commentForRev[revIndex] = remarks
     }
 
     console.log(statusForRev,"changed Rev");
@@ -2428,7 +2441,7 @@ console.log(organizedData,"organizedData");
     const record = JSON.stringify(myrecord);
     console.log(record,"record bhej rha hun");
     try {
-      if(rejectionMarks){
+      if((remarks && selectedStatus === "Reject")||selectedStatus==="Reject"){
         const response = await axios.put(
           `http://127.0.0.1:8083/api/documents/establishment?yourRole=${myrecord.yourRole}
           &version=${myrecord.version}&userName=${myrecord.userName}&approver=${myrecord.approver}&reviewer=${myrecord.reviewer}
@@ -2465,7 +2478,9 @@ console.log(organizedData,"organizedData");
             rev:reviewId.join(","),
             appStatusArr: statusForApp.join(','), // Convert array to string
             docName: myrecord.docName,
-            companyId:user?.user.companyId
+            companyId:user?.user.companyId,
+            reviewerComment:commentForRev.join(","),
+            approverComment:commentForApp.join(","),
           },
           {
             headers: {
@@ -2544,7 +2559,7 @@ console.log(organizedData,"organizedData");
                 //   },
                 // ]}
               >
-                <Input.TextArea rows={4} placeholder="Enter remarks for rejection" value={rejectionMarks} onChange={(e)=>setRejectionMarks(e.target.value)}/>
+                <Input.TextArea rows={4} placeholder="Enter remarks" value={remarks} onChange={(e)=>setRemarks(e.target.value)}/>
               </Form.Item>
             )}        
             <Row>
