@@ -5,15 +5,32 @@ import userInterface from "./user-interface";
 import pages_lead from "./pages_lead";
 import pages_client from "./pages_client";
 
+// Function to return navigation based on user role
+const getNavigation = () => {
+  const user = JSON.parse(localStorage?.getItem("user"));
+  let navigation = [];
 
-let navigation = [...dashboards, ...apps, ...pages, ...userInterface];
+  if (user?.user?.roleId) {
+    switch (user.user.roleId) {
+      case 6:
+        navigation = [...dashboards, ...apps, ...pages_lead, ...userInterface];
+        break;
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        navigation = [...dashboards, ...apps, ...pages_client, ...userInterface];
+        break;
+      default:
+        navigation = [...dashboards, ...apps, ...pages, ...userInterface];
+    }
+  } else {
+    navigation = [...dashboards, ...apps, ...pages, ...userInterface];
+  }
 
-const user = JSON.parse(localStorage?.getItem("user"));
-if (user?.user.roleId === 6) {
-  navigation = [...dashboards, ...apps, ...pages_lead, ...userInterface];
-}
-if (user?.user.roleId === 2||user?.user.roleId === 3||user?.user.roleId === 4||user?.user.roleId === 5) {
-  navigation = [...dashboards, ...apps, ...pages_client, ...userInterface];
-}
+  return navigation;
+};
 
+// Export the computed navigation
+const navigation = getNavigation();
 export default navigation;

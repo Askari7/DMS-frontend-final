@@ -204,7 +204,7 @@ export default function HeaderNotifications() {
       // Filter notifications based on typeOfLog
       const filtered = responseData.data
   .filter(notification =>
-    ["3", "4", "5", "6", "7a", "7b", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "20", "21", "22"]
+    ["3", "4", "5", "6", "7a", "7b", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "20", "21", "22","25"]
     .includes(notification.typeOfLog)
   )
   .filter((notification, index, self) =>

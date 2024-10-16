@@ -1515,9 +1515,82 @@ export default function Document() {
 if(responseData){
 allowed='true';
 }
-    // Redirect to the external URL
-     window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
-  };
+
+try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.title}&masterDocumentCode=${record.masterDocumentId}&version=${record.version}&roleId=${user?.user.roleId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      if (response.data.status) {
+              console.log("response.data.status");
+              
+              // Document exists, proceed with redirect
+              window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+            } else {
+              // Document does not exist, show an alert
+              message.warning('Document not uploaded yet.');
+            }
+          } catch (error) {
+            console.error('Error checking document:', error);
+            alert('An error occurred while checking the document.');
+          }
+        };
+
+  //   // Redirect to the external URL
+  //    window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+  // };
+
+
+  // const handleOpen = async (record) => {
+  //   console.log(record, 'record');
+    
+  //   const responseData = await fetchAppRev(record.title);
+  //   console.log('helllooo', responseData);
+    
+  //   const docName = record.title;
+  //   const url = `${BACKEND_URL}/uploads/${record.docName}-${record.version}.pdf`;
+  //   console.log(user.user.roleId, user.user.firstName, user);
+    
+  //   let allowed = 'false';
+  //   if (responseData) {
+  //     allowed = 'true';
+  //   }
+  //   console.log(record.version,'version');
+  //   const version = record.version
+
+  //   // Check if the document exists
+  //   try {
+  //     const response = await axios.get(
+  //       `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&masterDocumentCode=${record.masterDocumentCode}&version=${record.version}&roleId=${user?.user.roleId}`,
+  //       {
+  //         headers: {
+  //           Authorization: user?.accessToken,
+  //           // Add other headers if needed
+  //         },
+  //       }
+  //     );
+  //     console.log(response,response.data.status,"checkDocuments");
+      
+  //     if (response.data.status) {
+  //       console.log("response.data.status");
+        
+  //       // Document exists, proceed with redirect
+  //       window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+  //     } else {
+  //       // Document does not exist, show an alert
+  //       message.warning('Document not uploaded yet.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking document:', error);
+  //     alert('An error occurred while checking the document.');
+  //   }
+  // };
+  
   const documentModalCancel = () => {
     setMDR("");
     setDocTitle("");

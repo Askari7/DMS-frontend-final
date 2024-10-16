@@ -2063,7 +2063,11 @@ setComments(dataWithoutUnwantedFields);
           },
         }
       );
+      console.log(response,response.data.status,"checkDocuments");
+      
       if (response.data.status) {
+        console.log("response.data.status");
+        
         // Document exists, proceed with redirect
         window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
       } else {
@@ -2368,6 +2372,7 @@ console.log(organizedData,"organizedData");
 
   const updateDocStatus = async (myrecord) => {
 
+    
     const myrecordId = myrecord.id;
     const revID = revIdArr.find(item => item.id === myrecordId);
     const appID = appIdArr.find(item => item.id === myrecordId);
@@ -2386,6 +2391,35 @@ console.log(organizedData,"organizedData");
     const commentForApp = updatedAppStatusObj.comment
     console.log(commentForRev,commentForApp,"COmment For");
     console.log(statusForApp,statusForRev,"obj");
+
+
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${myrecord.docName}&masterDocumentCode=${myrecord.masterDocumentCode}&version=${myrecord.version}&roleId=${user?.user.roleId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      console.log(response,response.data.status,"checkDocuments");
+      
+      if (response.data.status) {
+        console.log("response.data.status");
+        
+        // Document exists, proceed with redirect
+        // window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+      } else {
+        // Document does not exist, show an alert
+        message.warning('Document not uploaded yet.');
+        return
+      }
+    } catch (error) {
+      console.error('Error checking document:', error);
+      alert('An error occurred while checking the document.');
+    }
+
 
     if (myrecord.yourRole === 'Approver and Reviewer' && selectedStatus === 'Accept') {
         statusForApp[approveId.indexOf(user.user.id)] = 2;
@@ -2489,7 +2523,13 @@ console.log(organizedData,"organizedData");
             },
           }
         );
-        message.success(response.data.message)
+        if (response.status=="Complete All Review and Approve procedure for Inhouse Assessment") {
+          message.warning("Complete All Review and Approve procedure for Inhouse Assessment")
+        }
+        else{
+          message.success(response.data.message)
+
+        }
         console.log(response.data,"data aya");
 
       }
