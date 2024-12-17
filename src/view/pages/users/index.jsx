@@ -40,7 +40,7 @@ export default function Users() {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -97,7 +97,7 @@ export default function Users() {
   const handleUpdate = async (values) => {
   try {
     const response = await axios.post(
-      `http://127.0.0.1:8083/api/users/user_update?companyId=${user?.user.companyId}&id=${userToUpdate.id}`,
+      `https://novacon.live/api/users/user_update?companyId=${user?.user.companyId}&id=${userToUpdate.id}`,
       {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -281,7 +281,7 @@ export default function Users() {
       }
       console.log(selectedDepartments.id,selectedDepartments.title,"checking");
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/users?${image}`,
+        `https://novacon.live/api/users?${image}`,
         {
           roleId:roleOptions[role],
           companyId:user?.user?.companyId,
@@ -314,7 +314,7 @@ export default function Users() {
     try {
       if(user?.user.roleId==2||user?.user.roleId==3||user?.user.roleId==4||user?.user.roleId==5){
         const response = await axios.get(
-          `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&departmentId=${user.user.departmentId}`,
+          `https://novacon.live/api/users?companyId=${user?.user?.companyId}&departmentId=${user.user.departmentId}`,
           {
             headers: {
               Authorization: user?.accessToken,
@@ -347,7 +347,7 @@ const data = response.data.map(item => {
       }
       else{
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/users?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -393,7 +393,7 @@ const data = response.data.map(item => {
   };
   const handleDelete = async (record) => {
     const response = await axios.delete(
-      `http://127.0.0.1:8083/api/users?delete=1&recordId=${record.id}&companyId=${user?.user.companyId}`,
+      `https://novacon.live/api/users?delete=1&recordId=${record.id}&companyId=${user?.user.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,

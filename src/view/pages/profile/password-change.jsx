@@ -38,7 +38,7 @@ export default function PasswordProfile() {
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8083/api/users/${user?.user?.id}`,
+        `https://novacon.live/api/users/${user?.user?.id}`,
         obj,
         {
           headers: {

@@ -28,7 +28,7 @@ const EmployeeForm = ({ onSubmit }) => {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -52,7 +52,7 @@ const EmployeeForm = ({ onSubmit }) => {
       console.log(department,"department");
       console.log("firstName",firstName);
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/users`,
+        `https://novacon.live/api/users`,
         {
           email,
           firstName,

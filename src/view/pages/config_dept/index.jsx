@@ -72,7 +72,7 @@ const addDepartments = async () => {
       //   selectedSuffix.push('PIP')
       // }
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/departments/",
+        "https://novacon.live/api/departments/",
         {
           title:selectedDepartments,
           companyId: user?.user?.companyId,

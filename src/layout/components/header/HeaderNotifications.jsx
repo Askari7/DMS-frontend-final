@@ -22,7 +22,7 @@
 //     try {
       
 //       const responseData = await axios.post(
-//         `http://127.0.0.1:8083/api/users/notifications?companyId=${user?.user.companyId}`,
+//         `https://novacon.live/api/users/notifications?companyId=${user?.user.companyId}`,
         
 //         {
          
@@ -187,7 +187,7 @@ export default function HeaderNotifications() {
   const fetchData = async () => {
     try {
       const responseData = await axios.post(
-        `http://127.0.0.1:8083/api/users/notifications`,
+        `https://novacon.live/api/users/notifications`,
         {
           companyId: user?.user?.companyId,
           userId: user?.user?.id,

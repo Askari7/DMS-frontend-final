@@ -132,7 +132,7 @@
 //   });
 
 
-//   const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
+//   const BACKEND_URL = "https://novacon.live"; // Update with your backend URL
 
 //   const history = useHistory();
 
@@ -324,7 +324,7 @@
 //   const fetchAppRev = async (title) => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+//         `https://novacon.live/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -370,7 +370,7 @@
        
 
 //         const response = await axios.post(
-//           `http://127.0.0.1:8083/api/documents/upload`,        
+//           `https://novacon.live/api/documents/upload`,        
 //           formData,
 //           {
 //             headers: {
@@ -402,7 +402,7 @@
     
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+//         `https://novacon.live/api/users?companyId=${user?.user?.companyId}&roleId=2`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -541,7 +541,7 @@
 //       });
 //       console.log(formData);
 //       const response = await axios.post(
-//         `http://127.0.0.1:8083/api/documents/?projectCode=${projectCode}&areaCode=${areaCode}&deptSuffix=${deptSuffix}`,        
+//         `https://novacon.live/api/documents/?projectCode=${projectCode}&areaCode=${areaCode}&deptSuffix=${deptSuffix}`,        
 //         formData,
 //         {
 //           headers: {
@@ -567,7 +567,7 @@
     
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
+//         `https://novacon.live/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -592,7 +592,7 @@
 //   const fetchDepartments = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+//         `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -613,7 +613,7 @@
 //   const fetchProjects = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+//         `https://novacon.live/api/projects?companyId=${user?.user?.companyId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -634,7 +634,7 @@
 //   const fetchMDR = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+//         `https://novacon.live/api/documents/mdr?companyId=${user?.user?.companyId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -725,7 +725,7 @@
 //       (item) => item?.value == departmentId
 //     );
 //     const response = await axios.put(
-//       `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
+//       `https://novacon.live/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&docName=${myrecord.title}`,
 //       {},
 //       {
 //         headers: {
@@ -1186,7 +1186,7 @@ export default function Document() {
   });
 
 
-  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
+  const BACKEND_URL = "https://novacon.live"; // Update with your backend URL
 
   const history = useHistory();
 
@@ -1488,7 +1488,7 @@ export default function Document() {
     const id = record.id
     console.log(id);
     const response = await axios.delete(
-      `http://127.0.0.1:8083/api/users?delete=5&recordId=${record.id}`,
+      `https://novacon.live/api/users?delete=5&recordId=${record.id}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -1518,7 +1518,7 @@ allowed='true';
 
 try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.title}&masterDocumentCode=${record.masterDocumentId}&version=${record.version}&roleId=${user?.user.roleId}`,
+        `https://novacon.live/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.title}&masterDocumentCode=${record.masterDocumentId}&version=${record.version}&roleId=${user?.user.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1566,7 +1566,7 @@ try {
   //   // Check if the document exists
   //   try {
   //     const response = await axios.get(
-  //       `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&masterDocumentCode=${record.masterDocumentCode}&version=${record.version}&roleId=${user?.user.roleId}`,
+  //       `https://novacon.live/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${record.docName}&masterDocumentCode=${record.masterDocumentCode}&version=${record.version}&roleId=${user?.user.roleId}`,
   //       {
   //         headers: {
   //           Authorization: user?.accessToken,
@@ -1604,7 +1604,7 @@ try {
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        `https://novacon.live/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1650,7 +1650,7 @@ console.log(formData,'formdata');
        
 
         const response = await axios.post(
-          `http://127.0.0.1:8083/api/documents/upload`,        
+          `https://novacon.live/api/documents/upload`,        
           formData,
           {
             headers: {
@@ -1682,7 +1682,7 @@ console.log(formData,'formdata');
     
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `https://novacon.live/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1779,7 +1779,7 @@ if(user.user.roleId==2 ){
     }
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/addingDoc`,        
+        `https://novacon.live/api/documents/addingDoc`,        
         {
           title: docTitle,
           masterDocumentCode: mdr,
@@ -1817,7 +1817,7 @@ if(user.user.roleId==2 ){
     
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
+        `https://novacon.live/api/documents?companyId=${user?.user?.companyId}&assignedBy=${user.user.roleId}&userId=${user.user.id}&department=${user.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1841,7 +1841,7 @@ if(user.user.roleId==2 ){
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1862,7 +1862,7 @@ if(user.user.roleId==2 ){
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/projects?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1884,7 +1884,7 @@ if(user.user.roleId==2 ){
   const fetchMDRIndividual = async (projectCode) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -2013,7 +2013,7 @@ const assignDoc = async(assignedEmployees,myrecord)=>{
       (item) => item?.value == departmentId
     );
     const response = await axios.put(
-      `http://127.0.0.1:8083/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&companyId=${user.user.companyId}&docName=${myrecord.title}`,
+      `https://novacon.live/api/documents/?assignedTo=${assignedEmployees}&assignedBy=${user.user.roleId}&assignedFrom=${user.user.id}&companyId=${user.user.companyId}&docName=${myrecord.title}`,
       {},
       {
         headers: {

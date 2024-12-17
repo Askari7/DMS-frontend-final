@@ -55,7 +55,7 @@ export default function SignUp() {
     try {
       // Make the POST request using Axios with async/await
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/auth/signup",
+        "https://novacon.live/api/auth/signup",
         {
           firstName,
           lastName,

@@ -67,7 +67,7 @@ export default function CompanyInfo() {
   const fetchDetails = async()=>{
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/clients/company?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/clients/company?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -97,7 +97,7 @@ export default function CompanyInfo() {
   const handleSubmit= async()=>{
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8083/api/clients/company?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/clients/company?companyId=${user?.user?.companyId}`,
         {
           name:companyName,
           owner,
@@ -124,7 +124,7 @@ export default function CompanyInfo() {
   const handleAddLinks= async()=>{
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/clients/company?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/clients/company?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

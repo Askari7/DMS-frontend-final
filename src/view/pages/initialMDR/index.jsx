@@ -313,7 +313,7 @@
 
 //               
 //               const responseDoc = await axios.post(
-//                 "http://127.0.0.1:8083/api/documents/",
+//                 "https://novacon.live/api/documents/",
 //                 {
 //                   title,
 //                   startedDate,
@@ -351,7 +351,7 @@
 //         if(record){
           
 //           const response = await axios.put(
-//             "http://127.0.0.1:8083/api/documents/mdr",
+//             "https://novacon.live/api/documents/mdr",
 //             {
 //               record,
 //               title,
@@ -376,7 +376,7 @@
 
 //           
 //           const response = await axios.post(
-//             "http://127.0.0.1:8083/api/documents/mdr",
+//             "https://novacon.live/api/documents/mdr",
 //             {
 //               title,
 //               departmentId,
@@ -515,7 +515,7 @@
 
 //       try {
 //         const response = await axios.get(
-//           `http://127.0.0.1:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
+//           `https://novacon.live/api/documents/getCodes?companyId=${user?.user?.companyId}`,
 //           {
 //             headers: {
 //               Authorization: user?.accessToken,
@@ -1198,7 +1198,7 @@
 
 // //               
 // //               const responseDoc = await axios.post(
-// //                 "http://127.0.0.1:8083/api/documents/",
+// //                 "https://novacon.live/api/documents/",
 // //                 {
 // //                   title,
 // //                   startedDate,
@@ -1250,7 +1250,7 @@
 
 // //               
 // //               const responseDoc = await axios.post(
-// //                 "http://127.0.0.1:8083/api/documents/",
+// //                 "https://novacon.live/api/documents/",
 // //                 {
 // //                   title,
 // //                   startedDate,
@@ -1286,7 +1286,7 @@
 
 // //         if(record){
 // //           const response = await axios.put(
-// //             "http://127.0.0.1:8083/api/documents/mdr",
+// //             "https://novacon.live/api/documents/mdr",
 // //             {
 // //               record,
 // //               title,
@@ -1311,7 +1311,7 @@
 
 // //           
 // //           const response = await axios.post(
-// //             "http://127.0.0.1:8083/api/documents/mdr",
+// //             "https://novacon.live/api/documents/mdr",
 // //             {
 // //               title,
 // //               departmentId,
@@ -1450,7 +1450,7 @@
 
 // //       try {
 // //         const response = await axios.get(
-// //           `http://127.0.0.1:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
+// //           `https://novacon.live/api/documents/getCodes?companyId=${user?.user?.companyId}`,
 // //           {
 // //             headers: {
 // //               Authorization: user?.accessToken,
@@ -2213,7 +2213,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
         if(record){
           try {
             const response = await axios.put(
-              "http://127.0.0.1:8083/api/documents/mdr",
+              "https://novacon.live/api/documents/mdr",
               {
                 record,
                 title,
@@ -2273,7 +2273,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
         else{ 
           try {
             const response = await axios.post(
-              "http://127.0.0.1:8083/api/documents/mdr",
+              "https://novacon.live/api/documents/mdr",
               {
                 title,
                 departmentId,
@@ -2345,7 +2345,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
 
               
               const responseDoc = await axios.post(
-                "http://127.0.0.1:8083/api/documents/",
+                "https://novacon.live/api/documents/",
                 {
                   title,
                   startedDate,
@@ -2407,7 +2407,7 @@ import { saveData, loadData, getAllKeys } from '../../storage';
 
               
               const responseDoc = await axios.post(
-                "http://127.0.0.1:8083/api/documents/",
+                "https://novacon.live/api/documents/",
                 {
                   title,
                   startedDate,
@@ -2618,7 +2618,7 @@ for (let index1 = 0; index1 < documentInfo1[i].length; index1++) {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8083/api/documents/getCodes?companyId=${user?.user?.companyId}`,
+          `https://novacon.live/api/documents/getCodes?companyId=${user?.user?.companyId}`,
           {
             headers: {
               Authorization: user?.accessToken,

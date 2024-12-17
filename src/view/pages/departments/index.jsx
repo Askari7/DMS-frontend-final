@@ -76,7 +76,7 @@ const handleDelete = async (record) => {
   const id = record.id
   console.log(id);
   const response = await axios.delete(
-    `http://127.0.0.1:8083/api/users?delete=2&recordId=${record.id}`,
+    `https://novacon.live/api/users?delete=2&recordId=${record.id}`,
     {
       headers: {
         Authorization: user?.accessToken,
@@ -93,7 +93,7 @@ const handleDelete = async (record) => {
 const fetchUserData = async () => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+      `https://novacon.live/api/users?companyId=${user?.user?.companyId}&roleId=2`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -115,7 +115,7 @@ const [department,setDepartment] = useState([])
 const fetchDept = async () => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+      `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -160,7 +160,7 @@ const handleUpdate=async(values)=>{
   
 try {
   const response  = await axios.put
-  (`http://127.0.0.1:8083/api/departments/department_update?companyId=${user?.user.companyId}&departmentId=${updateForm.getFieldValue("id")}`,{
+  (`https://novacon.live/api/departments/department_update?companyId=${user?.user.companyId}&departmentId=${updateForm.getFieldValue("id")}`,{
     title:values.title,
     suffix:values.suffix
   },
@@ -237,7 +237,7 @@ setDepartmentId(record['id']);
     try {
       console.log(userOptions.find(user => user.value === selectedUserForAssociation),);
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/departments/associate",
+        "https://novacon.live/api/departments/associate",
         {
           title,
           companyId: user?.user?.companyId,
@@ -280,7 +280,7 @@ setDepartmentId(record['id']);
     try {
       console.log(user);
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/departments/",
+        "https://novacon.live/api/departments/",
         {
           title,
           suffix,
@@ -316,7 +316,7 @@ setDepartmentId(record['id']);
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

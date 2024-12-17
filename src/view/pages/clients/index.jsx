@@ -132,7 +132,7 @@ const [data, setData] = useState([]);
 const fetchData = async () => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
+      `https://novacon.live/api/clients?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -157,7 +157,7 @@ const fetchEmployees = async(record)=>{
   try {
     console.log(record,"id");
     const response = await axios.get(
-      `http://127.0.0.1:8083/api/clients/official?companyId=${record.id}`,
+      `https://novacon.live/api/clients/official?companyId=${record.id}`,
       {
         headers: {
           Authorization: user?.accessToken,
@@ -189,7 +189,7 @@ const addClient = async () => {
   try {
     // Make API request to add client
     const response = await axios.post(
-      `http://127.0.0.1:8083/api/clients`,
+      `https://novacon.live/api/clients`,
       {
         companyName,
         companyId: user?.user?.companyId,
@@ -260,7 +260,7 @@ const addClientOfficials = async () => {
   try {
 
     const response = await axios.post(
-      `http://127.0.0.1:8083/api/clients`,
+      `https://novacon.live/api/clients`,
       {
         clientName,
         companyId:record.id,
@@ -310,7 +310,7 @@ const addClientOfficials = async () => {
 const fetchProjects = async () => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}`,
+      `https://novacon.live/api/projects?companyId=${user?.user?.companyId}`,
       {
         headers: {
           Authorization: user?.accessToken,

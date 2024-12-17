@@ -38,7 +38,7 @@ export default function Charts() {
   const fetchData= async(req,res)=>{
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects/info?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/projects/info?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

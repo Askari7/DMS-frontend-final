@@ -15,7 +15,7 @@
 //   const fetchName = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/users/company/?companyId=${user?.user?.companyId}`,
+//         `https://novacon.live/api/users/company/?companyId=${user?.user?.companyId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -126,7 +126,7 @@
 //         >
 //           <img
           
-//           src= {node.image==null?`http://127.0.0.1:8083/R.jpg`:`http://127.0.0.1:8083/${node.image}`}
+//           src= {node.image==null?`https://novacon.live/R.jpg`:`https://novacon.live/${node.image}`}
 //           alt="Profile"
 //           style={{ width:'10%', height: '10%', borderRadius: '8px' }}
 //           />
@@ -223,7 +223,7 @@ const OrganizationChart = ({ employees }) => {
   const fetchName = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users/company/?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/users/company/?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -328,7 +328,7 @@ const OrganizationChart = ({ employees }) => {
             }}
           >
             <img
-              src={node.image == null ? `http://127.0.0.1:8083/R.jpg` : `http://127.0.0.1:8083/${node.image}`}
+              src={node.image == null ? `https://novacon.live/R.jpg` : `https://novacon.live/${node.image}`}
               alt="Profile"
               style={{ 
                 width: '90px',   // Set a fixed width for the image

@@ -62,7 +62,7 @@ const DocumentNumberingForm = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8083/api/documents/format?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/documents/format?companyId=${user?.user?.companyId}`,
         {
           documentNumberFormat: `${docNumber}`,
         },

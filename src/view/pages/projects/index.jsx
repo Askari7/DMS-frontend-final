@@ -265,7 +265,7 @@
 //   const fetchClients = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
+//         `https://novacon.live/api/clients?companyId=${user?.user?.companyId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -341,7 +341,7 @@
 //   // console.log(mappedDepartments,"department bhi agaye");
 //     try {
 //       const response = await axios.post(
-//         "http://127.0.0.1:8083/api/projects/",
+//         "https://novacon.live/api/projects/",
 //         {
 //           title: projName,
 //           departmentId:selectedDepartments,
@@ -390,7 +390,7 @@
 //   const fetchProgress = async()=>{
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/projects/progress?companyId=${user?.user.companyId}`,
+//         `https://novacon.live/api/projects/progress?companyId=${user?.user.companyId}`,
         
 //         {
 //           headers: {
@@ -410,7 +410,7 @@
 //   const fetchData = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
+//         `https://novacon.live/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -467,7 +467,7 @@
 //   const fetchDepartments = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+//         `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
 //         {
 //           headers: {
 //             Authorization: user?.accessToken,
@@ -1042,7 +1042,7 @@ const handleDelete = async (record) => {
   const id = record.id
   console.log(id);
   const response = await axios.delete(
-    `http://127.0.0.1:8083/api/users?delete=3&recordId=${record.id}`,
+    `https://novacon.live/api/users?delete=3&recordId=${record.id}`,
     {
       headers: {
         Authorization: user?.accessToken,
@@ -1067,7 +1067,7 @@ const handleDelete = async (record) => {
   const fetchClients = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/clients?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/clients?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1108,7 +1108,7 @@ const handleDelete = async (record) => {
   const handleUpdate=async()=>{
     try {
       const response  = await axios.put
-      (`http://127.0.0.1:8083/api/projects?companyId=${user?.user.companyId}&id=${updateForm.getFieldValue("id")}`,
+      (`https://novacon.live/api/projects?companyId=${user?.user.companyId}&id=${updateForm.getFieldValue("id")}`,
       {
         title:updateForm.getFieldValue("title"),
         code:updateForm.getFieldValue("code"),
@@ -1174,7 +1174,7 @@ if (!projName || !clientEmail ) {
   // console.log(mappedDepartments,"department bhi agaye");
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/projects/",
+        "https://novacon.live/api/projects/",
         {
           title: projName,
           departmentId:selectedDepartments,
@@ -1254,7 +1254,7 @@ if (!projName || !clientEmail ) {
   const fetchProgress = async()=>{
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects/progress?companyId=${user?.user.companyId}`,
+        `https://novacon.live/api/projects/progress?companyId=${user?.user.companyId}`,
         
         {
           headers: {
@@ -1274,7 +1274,7 @@ if (!projName || !clientEmail ) {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}&id=${user?.user.id}&firstName=${user?.user.firstName}`,
+        `https://novacon.live/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}&id=${user?.user.id}&firstName=${user?.user.firstName}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -1342,7 +1342,7 @@ if (!projName || !clientEmail ) {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/departments?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

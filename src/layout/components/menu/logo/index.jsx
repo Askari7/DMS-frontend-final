@@ -9,7 +9,7 @@ export default function MenuLogo(props) {
   const [ main,setMain] = useState(null)
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const getLogo = async ()=>{
-    const getLogo = await axios.post(`http://127.0.0.1:8083/getLogo`,{companyId:user?.user.companyId},{
+    const getLogo = await axios.post(`https://novacon.live/getLogo`,{companyId:user?.user.companyId},{
       headers:{
         Authorization: user?.accessToken,
       }
@@ -34,7 +34,7 @@ export default function MenuLogo(props) {
           main?        
           <img
           className="hp-logo"
-          src={(`http://127.0.0.1:8083/${main}`)}
+          src={(`https://novacon.live/${main}`)}
           style={{
             width: "160px",
             height: "120px",

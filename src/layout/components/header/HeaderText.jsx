@@ -27,7 +27,7 @@ export default function HeaderText() {
   const fetchDetails = async()=>{
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/clients/company?companyId=${user?.user.companyId}`,
+        `https://novacon.live/api/clients/company?companyId=${user?.user.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

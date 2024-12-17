@@ -100,7 +100,7 @@ const MyTreeView = () => {
     const fetchInformation = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8083/api/projects/information?companyId=${user?.user?.companyId}`,
+          `https://novacon.live/api/projects/information?companyId=${user?.user?.companyId}`,
           {
             headers: {
               Authorization: user?.accessToken,
@@ -198,7 +198,7 @@ const processData = () => {
     processData();
   }, [information]);
   const classes = useStyles();
-  const BACKEND_URL = "http://127.0.0.1:8083"; // Update with your backend URL
+  const BACKEND_URL = "https://novacon.live"; // Update with your backend URL
 
   const handleOpenDocument = async (document) => {
     // Handle open document logic here
@@ -216,7 +216,7 @@ const processData = () => {
  }
  try {
   const response = await axios.get(
-    `http://127.0.0.1:8083/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${document.docTitle}&masterDocumentCode=${"1472-1"}&version=${document.version}&roleId=${user?.user.roleId}`,
+    `https://novacon.live/api/documents/checkDocuments?companyId=${user?.user?.companyId}&docName=${document.docTitle}&masterDocumentCode=${"1472-1"}&version=${document.version}&roleId=${user?.user.roleId}`,
     {
       headers: {
         Authorization: user?.accessToken,
@@ -257,7 +257,7 @@ const processData = () => {
   const fetchAppRev = async (title) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
+        `https://novacon.live/api/documents/establishment?companyId=${user?.user?.companyId}&userId=${user.user.id}&docName=${title}`,
         {
           headers: {
             Authorization: user?.accessToken,

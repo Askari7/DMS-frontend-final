@@ -105,7 +105,7 @@ export default function DocumentPermissions() {
   const addPermission = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8083/api/documents/permissions",
+        "https://novacon.live/api/documents/permissions",
         {
           // project:project,
           masterDocumentId: mdr,
@@ -149,7 +149,7 @@ export default function DocumentPermissions() {
   const fetchMDR = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/mdr?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/documents/mdr?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -175,7 +175,7 @@ export default function DocumentPermissions() {
   const fetchProjects= async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
+        `https://novacon.live/api/projects?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -199,7 +199,7 @@ export default function DocumentPermissions() {
   const fetchDocs= async (mdr) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/projects/fetchdocs?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}&mdrId=${mdr}&departmentId=${user?.user.departmentId}`,
+        `https://novacon.live/api/projects/fetchdocs?companyId=${user?.user?.companyId}&roleId=${user?.user?.roleId}&mdrId=${mdr}&departmentId=${user?.user.departmentId}`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -230,7 +230,7 @@ export default function DocumentPermissions() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `https://novacon.live/api/users?companyId=${user?.user?.companyId}&roleId=2`,
         {
           headers: {
             Authorization: user?.accessToken,
@@ -269,7 +269,7 @@ export default function DocumentPermissions() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/documents/permissions?companyId=${user?.user?.companyId}`,
+        `https://novacon.live/api/documents/permissions?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

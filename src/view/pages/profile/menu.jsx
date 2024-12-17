@@ -32,7 +32,7 @@ export default function MenuProfile(props) {
   const customise = useSelector((state) => state.customise);
   const getprofile = async ()=>{
     
-    const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+    const getProfile = await axios.post(`https://novacon.live/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
       headers:{
         Authorization: user?.accessToken,
       }
@@ -51,12 +51,12 @@ export default function MenuProfile(props) {
           {/* {moreBtn()} */}
            
           {profile ?  <img
-          src={`http://127.0.0.1:8083/${profile}`}
+          src={`https://novacon.live/${profile}`}
           alt="Profile"
           style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
           />:
           <img
-          src={`http://127.0.0.1:8083/R.jpg`}
+          src={`https://novacon.live/R.jpg`}
           alt="Profile"
           style={{ maxWidth: '50%', maxHeight: '25%', borderRadius: '8px' }}
           />

@@ -53,7 +53,7 @@ export default function MenuHeader(props) {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users/notifications?companyId=${user?.user.companyId}`,
+        `https://novacon.live/api/users/notifications?companyId=${user?.user.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

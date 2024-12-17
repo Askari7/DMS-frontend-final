@@ -13,7 +13,7 @@ const ChangePersonalProfileImagePage =  () => {
     formData.append("companyId",user?.user?.companyId)
     formData.append("userId",user?.user.id)
 
-    const logo = await axios.put(`http://127.0.0.1:8083/profile`,formData,{
+    const logo = await axios.put(`https://novacon.live/profile`,formData,{
       headers:{
         "Content-Type":"multipart/form-data",
         Authorization: user?.accessToken,
@@ -24,7 +24,7 @@ const ChangePersonalProfileImagePage =  () => {
   }
   const getprofile = async ()=>{
     
-    const getProfile = await axios.post(`http://127.0.0.1:8083/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
+    const getProfile = await axios.post(`https://novacon.live/getProfile`,{companyId:user?.user.companyId,userId:user?.user.id},{
       headers:{
         Authorization: user?.accessToken,
       }
