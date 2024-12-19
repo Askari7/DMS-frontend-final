@@ -335,7 +335,7 @@
 //    allowed='true';
 //    }
 //        // Redirect to the external URL
-//        const myUrl = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+//        const myUrl = `https://novacon.live/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
      
 //     try {
 //       const response = await axios.post(
@@ -432,7 +432,7 @@
 //  allowed='true';
 //  }
 //      // Redirect to the external URL
-//       window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+//       window.location.href = `https://novacon.live/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
 //    };
 //   const addPermission = async () => {
 //     try {
@@ -1947,7 +1947,7 @@ setComments(dataWithoutUnwantedFields);
    allowed='true';
    }
        // Redirect to the external URL
-       const myUrl = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+       const myUrl = `https://novacon.live/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
      
     try {
       const response = await axios.post(
@@ -2069,7 +2069,7 @@ setComments(dataWithoutUnwantedFields);
         console.log("response.data.status");
         
         // Document exists, proceed with redirect
-        window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+        window.location.href = `https://novacon.live/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
       } else {
         // Document does not exist, show an alert
         message.warning('Document not uploaded yet.');
@@ -2409,7 +2409,7 @@ console.log(organizedData,"organizedData");
         console.log("response.data.status");
         
         // Document exists, proceed with redirect
-        // window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+        // window.location.href = `https://novacon.live/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
       } else {
         // Document does not exist, show an alert
         message.warning('Document not uploaded yet.');

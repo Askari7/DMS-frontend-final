@@ -22,7 +22,7 @@ export default function RecoverPassword() {
   };
 
   const recoverPassword = () => {
-    axios.post("http://127.0.0.1:3001/v1/auth/forgot-password", {email})
+    axios.post("https://novacon.live/v1/auth/forgot-password", {email})
     .then(response=>{
       console.log(response.data)
       if(response.status == 204){        

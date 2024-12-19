@@ -11,7 +11,7 @@ export default function NotificationCardOne({ data, thisOne, user }) {
     const url = `${BACKEND_URL}/uploads/${docName}-${version}.pdf`;
     const allowed = true;
 
-    window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${roleId} ${firstName}`;
+    window.location.href = `https://novacon.live/react-pdf-highlighter/?docName=${docName}.pdf&url=${url}&allowed=${allowed}&user=${roleId} ${firstName}`;
   };
 
   return (

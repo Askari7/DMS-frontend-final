@@ -17,7 +17,7 @@ export default function ResetPassword() {
 
   console.log(token)
   const onFinish = () => {
-    axios.post(`http://127.0.0.1:3001/v1/auth/reset-password?token=${token}`, {password})
+    axios.post(`https://novacon.live/v1/auth/reset-password?token=${token}`, {password})
     .then(response=> {
       console.log(response.data)
       if(response.status == 204){

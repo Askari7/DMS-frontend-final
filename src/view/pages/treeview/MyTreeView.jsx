@@ -228,7 +228,7 @@ const processData = () => {
           console.log("response.data.status");
           
           // Document exists, proceed with redirect
-          window.location.href = `http://127.0.0.1:3001/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
+          window.location.href = `https://novacon.live/react-pdf-highlighter/?docName=${record.docName}.pdf&url=${url}&allowed=${allowed}&user=${user.user.roleId} ${user.user.firstName}`;
         } else {
           // Document does not exist, show an alert
           message.warning('Document not uploaded yet.');
