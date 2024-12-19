@@ -67,7 +67,7 @@ export default function SignUp() {
       
         console.log(response,'response');
         if(response.status == 409){
-        message.destroy("Company already exists");
+        message.destroy(response?.data?.message);
         } 
         else{     
         message.success(response?.data?.message);
@@ -75,7 +75,7 @@ export default function SignUp() {
         history.push("/pages/config_dept");
         }
     } catch (error) {
-        message.error("Company already exists");
+        message.error("Company or Email already exists");
     }
   };
   return (

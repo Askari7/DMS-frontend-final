@@ -77,6 +77,7 @@ const EmployeeForm = ({ onSubmit }) => {
   
     } catch (error) {
       // Handle errors
+       message.error("Email already exists");
       console.error("Error adding user:", error);
       // message.error("Error adding user");
     }
@@ -101,7 +102,7 @@ const handleRoleChange = (value) => {
       setRole("5");
       break;
     default:
-      setRole("");
+      setRole("5");
       break;
   }
 };
